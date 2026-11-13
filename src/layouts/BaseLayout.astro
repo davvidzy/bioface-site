@@ -2,7 +2,7 @@
 /**
  * Layout base: <html lang="pt-BR">, SEO, skip link, landmarks, ClientRouter e init de motion.
  */
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter, fade } from 'astro:transitions';
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/typography.css';
@@ -22,11 +22,14 @@ type Props = SeoProps & {
 const { title, description, path, image, noindex = false, jsonLd = [], procedimento } = Astro.props;
 
 const canonical = absoluteUrl(path, Astro.site);
+// Transição de página da Fase 0: fade simples só no conteúdo. Duração = --duration-page.
+// Com prefers-reduced-motion, o Astro desliga a animação.
+const transicaoPagina = fade({ duration: '0.45s' });
 const ogImage = absoluteUrl(image ?? DEFAULT_OG_IMAGE, Astro.site);
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -66,7 +69,7 @@ const ogImage = absoluteUrl(image ?? DEFAULT_OG_IMAGE, Astro.site);
   <body>
     <SkipLink />
     <Header />
-    <main id="conteudo" tabindex="-1">
+    <main id="conteudo" tabindex="-1" transition:animate={transicaoPagina}>
       <slot />
     </main>
     <Footer />
@@ -74,7 +77,9 @@ const ogImage = absoluteUrl(image ?? DEFAULT_OG_IMAGE, Astro.site);
 
     <script>
       import { initTracking } from '@/lib/analytics';
+      import { iniciarMovimento } from '@/lib/motion/lifecycle';
       initTracking();
+      iniciarMovimento();
     </script>
   </body>
 </html>

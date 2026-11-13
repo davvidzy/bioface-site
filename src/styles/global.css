@@ -30,6 +30,26 @@ a:hover {
   text-decoration-thickness: 2px;
 }
 
+/* ---------- Lenis ----------
+ * CSS recomendado pelo Lenis: com scroll suave ativo, o scroll-behavior nativo sai do caminho.
+ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
 /* ---------- Foco ---------- */
 :focus-visible {
   outline: var(--focus-width) solid var(--color-focus-ring);
