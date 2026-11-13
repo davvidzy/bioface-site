@@ -12,7 +12,16 @@ import SkipLink from '@/components/layout/SkipLink.astro';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import FloatingWhatsApp from '@/components/layout/FloatingWhatsApp.astro';
-import { SITE_NAME, DEFAULT_OG_IMAGE, absoluteUrl, type SeoProps } from '@/lib/seo';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import {
+  SITE_NAME,
+  DEFAULT_OG_IMAGE,
+  INDEXAR,
+  absoluteUrl,
+  nomeOg,
+  type SeoProps,
+} from '@/lib/seo';
 
 type Props = SeoProps & {
   /** Nome do tratamento para o botão flutuante pré-preencher a mensagem. */
@@ -25,7 +34,11 @@ const canonical = absoluteUrl(path, Astro.site);
 // Transição de página da Fase 0: fade simples só no conteúdo. Duração = --duration-page.
 // Com prefers-reduced-motion, o Astro desliga a animação.
 const transicaoPagina = fade({ duration: '0.45s' });
-const ogImage = absoluteUrl(image ?? DEFAULT_OG_IMAGE, Astro.site);
+// Imagem OG por página (scripts/og.mjs); sem arquivo gerado, usa a padrão.
+const ogDaRota = `/og/${nomeOg(path)}.png`;
+const ogPadrao = existsSync(join(process.cwd(), 'public', ogDaRota)) ? ogDaRota : DEFAULT_OG_IMAGE;
+const ogImage = absoluteUrl(image ?? ogPadrao, Astro.site);
+const robots = noindex || !INDEXAR;
 ---
 
 <!doctype html>
@@ -36,7 +49,7 @@ const ogImage = absoluteUrl(image ?? DEFAULT_OG_IMAGE, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {robots && <meta name="robots" content="noindex, follow" />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />

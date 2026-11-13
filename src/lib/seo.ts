@@ -16,6 +16,22 @@ export interface SeoProps {
 export const SITE_NAME = site.marca;
 export const DEFAULT_OG_IMAGE = '/og/padrao.png';
 
+/**
+ * Indexação liberada só com INDEXAR=true no build (deploy definitivo).
+ * Sem isso, todas as páginas recebem noindex e o robots.txt bloqueia tudo:
+ * é uma prévia de prospecção e a cliente ainda não contratou.
+ */
+export const INDEXAR = import.meta.env['INDEXAR'] === 'true' || process.env['INDEXAR'] === 'true';
+
+/**
+ * Nome do arquivo Open Graph de uma rota, gerado por scripts/og.mjs em public/og/.
+ * "/" → "padrao", "/tratamentos/fios-de-pdo" → "tratamentos-fios-de-pdo".
+ */
+export function nomeOg(path: string): string {
+  const limpo = path.replace(/^\/+|\/+$/g, '');
+  return limpo === '' ? 'padrao' : limpo.replace(/\//g, '-');
+}
+
 export function absoluteUrl(path: string, base: URL | string | undefined): string {
   if (!base) return path;
   return new URL(path, base).toString();
