@@ -5,7 +5,8 @@
  * - astro:page-load    cria as animações da página dentro de gsap.matchMedia (que é um gsap.context)
  * - astro:before-swap  reverte o contexto e mata os ScrollTriggers da página que sai
  * - fontes e imagens   ScrollTrigger.refresh() depois de carregarem (medidas mudam)
- * - âncoras            links #ancora usam lenis.scrollTo; o foco vai para o destino
+ * - foco por teclado   elemento fora da tela é trazido na hora (com Lenis)
+ * Âncoras ficam em lib/ancoras.ts, carregado sempre.
  */
 import {
   gsap,
@@ -38,8 +39,10 @@ function montarPagina(): void {
   });
 
   // Depois de navegar, o Lenis precisa saber a altura e a posição da página nova.
+  // Na primeira montagem não: forçar a posição cancelaria uma rolagem nativa em andamento
+  // (ex.: a âncora que foi a própria primeira interação).
   const lenis = getLenis();
-  if (lenis) {
+  if (lenis && !primeiraMontagem) {
     lenis.resize();
     lenis.scrollTo(window.scrollY, { immediate: true, force: true });
   }
@@ -63,29 +66,6 @@ function agendarRefresh(): void {
   });
 }
 
-/** Links #ancora: rolagem pelo Lenis e foco no destino (teclado e leitor de tela). */
-function tratarAncoras(event: MouseEvent): void {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return;
-  const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href*="#"]');
-  if (!link) return;
-  const url = new URL(link.href);
-  if (url.pathname !== window.location.pathname || !url.hash) return;
-  const alvo = document.getElementById(decodeURIComponent(url.hash.slice(1)));
-  if (!alvo) return;
-
-  event.preventDefault();
-  history.pushState(null, '', url.hash);
-  if (!alvo.hasAttribute('tabindex') && !alvo.matches('a, button, input, select, textarea')) {
-    alvo.setAttribute('tabindex', '-1');
-  }
-  alvo.focus({ preventScroll: true });
-
-  const lenis = getLenis();
-  const offset = -parseFloat(getComputedStyle(alvo).scrollMarginTop || '0');
-  if (lenis) lenis.scrollTo(alvo, { offset });
-  else alvo.scrollIntoView({ block: 'start' });
-}
-
 /**
  * Foco por Tab precisa continuar levando o elemento para a área visível, na hora.
  * Com o Lenis ativo, a rolagem nativa do foco chega animada e fica para trás de Tabs rápidos;
@@ -95,6 +75,8 @@ function garantirFocoVisivel(event: FocusEvent): void {
   const lenis = getLenis();
   const el = event.target;
   if (!lenis || !(el instanceof HTMLElement) || el === document.body) return;
+  // tabindex="-1" só recebe foco programático (âncoras, <main>): a rolagem já é tratada lá.
+  if (el.getAttribute('tabindex') === '-1') return;
   const r = el.getBoundingClientRect();
   if (r.top >= 0 && r.bottom <= window.innerHeight) return;
   const margem = Math.min(window.innerHeight / 4, 160);
@@ -108,8 +90,6 @@ export function iniciarMovimento(): void {
 
   document.addEventListener('astro:page-load', montarPagina);
   document.addEventListener('astro:before-swap', desmontarPagina);
-  // Captura: roda antes do ClientRouter, que também trata links de hash.
-  document.addEventListener('click', tratarAncoras, { capture: true });
   document.addEventListener('focusin', garantirFocoVisivel);
 
   // Carregado sob demanda: o astro:page-load da primeira página já passou.

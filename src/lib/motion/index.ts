@@ -12,9 +12,9 @@ import { CustomEase } from 'gsap/CustomEase';
 import Lenis from 'lenis';
 import { EASE, EASE_BEZIER, type EaseName } from './tokens';
 import { MQ_REDUCE } from './reduced-motion';
+import { definirLenis, getLenis } from './instancia';
 
 let registrado = false;
-let lenis: Lenis | null = null;
 
 function bezierParaPath([x1, y1, x2, y2]: readonly number[]): string {
   return `M0,0 C${x1},${y1} ${x2},${y2} 1,1`;
@@ -35,28 +35,28 @@ export function registrarPlugins(): void {
  * Não cria com prefers-reduced-motion; destrói se a preferência mudar.
  */
 export function iniciarLenis(): Lenis | null {
-  if (lenis || window.matchMedia(MQ_REDUCE).matches) return lenis;
+  const atual = getLenis();
+  if (atual || window.matchMedia(MQ_REDUCE).matches) return atual;
 
-  lenis = new Lenis({ autoRaf: false, anchors: false });
+  // anchors: false porque âncoras são tratadas por lib/ancoras.ts (foco + rolagem).
+  const lenis = new Lenis({ autoRaf: false, anchors: false });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(tickLenis);
   gsap.ticker.lagSmoothing(0);
+  definirLenis(lenis);
   return lenis;
 }
 
 function tickLenis(time: number): void {
-  lenis?.raf(time * 1000);
+  getLenis()?.raf(time * 1000);
 }
 
 export function destruirLenis(): void {
+  const lenis = getLenis();
   if (!lenis) return;
   gsap.ticker.remove(tickLenis);
   lenis.destroy();
-  lenis = null;
+  definirLenis(null);
 }
 
-export function getLenis(): Lenis | null {
-  return lenis;
-}
-
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger, SplitText, getLenis };

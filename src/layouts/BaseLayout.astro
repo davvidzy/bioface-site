@@ -94,7 +94,9 @@ const robots = noindex || !INDEXAR;
 
     <script>
       import { initTracking } from '@/lib/analytics';
+      import { initAncoras } from '@/lib/ancoras';
       initTracking();
+      initAncoras();
 
       // O ClientRouter troca os atributos do <html> na navegação; a marca precisa voltar.
       document.addEventListener('astro:after-swap', () => {

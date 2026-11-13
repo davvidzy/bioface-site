@@ -85,9 +85,21 @@ test.describe('Movimento', () => {
     await page.locator('header a[href="/tratamentos"]').click();
     await page.waitForURL('**/tratamentos');
     await expect(page.locator('html')).toHaveAttribute('data-js', '');
+    // Durante a View Transition a camada ::view-transition cobre a página e recebe os cliques.
+    await page.waitForFunction(() =>
+      document.getAnimations().every((a) => a.playState !== 'running'),
+    );
     await page.locator('.categorias-nav a[href="#contorno"]').click();
     await expect(page.locator('#contorno')).toBeFocused();
     expect(erros).toEqual([]);
+  });
+
+  test('âncora como primeira interação: rola e foca o destino', async ({ page }) => {
+    await page.goto('/tratamentos', { waitUntil: 'networkidle' });
+    await page.locator('.categorias-nav a[href="#contorno"]').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#contorno')).toBeFocused();
+    await expect(page.locator('#contorno')).toBeInViewport();
   });
 
   test('reduced motion: sem Lenis e conteúdo visível', async ({ browser }) => {
