@@ -1,0 +1,138 @@
+/*
+ * Tokens do BioFace.
+ * Fonte: Figma, página Design System, frame "Fundações v2" (node 7:2).
+ * Coleções: Primitivos (1 modo) e Cor (modos Claro e Escuro).
+ *
+ * Regra: componentes consomem só tokens semânticos (--color-*, --font-*, --text-*),
+ * nunca primitivos (--wine-*, --gold-*, --cream-*).
+ *
+ * Os tokens de movimento estão espelhados em src/lib/motion/tokens.ts.
+ * Ao alterar um, altere o outro.
+ */
+
+:root {
+  /* ---------- Primitivos ---------- */
+  --wine-950: #2b1420;
+  --wine-900: #401e2f;
+  --wine-700: #613448;
+  --wine-500: #8a5a70;
+  --gold-100: #f3e3d2;
+  --gold-200: #edc9a7;
+  --gold-400: #d2ad8c;
+  --gold-600: #bc9477;
+  --gold-900: #5e4331;
+  --cream-50: #faf6f1;
+  --cream-100: #f2eadf;
+
+  /* ---------- Semânticos, tema claro (padrão) ----------
+   * Pares aprovados (AAA): ver CLAUDE.md seção 9.
+   * Proibido: gold/400 e gold/600 como texto sobre creme; wine/500 em texto corrido.
+   */
+  --color-bg-default: var(--cream-50);
+  --color-bg-subtle: var(--cream-100);
+  --color-text-primary: var(--wine-900);
+  --color-text-secondary: var(--wine-700);
+  --color-text-accent: var(--gold-900);
+  --color-action-primary-bg: var(--wine-900);
+  --color-action-primary-text: var(--cream-50);
+  --color-border-default: var(--wine-500);
+  --color-focus-ring: var(--wine-900);
+  --color-accent-decorative: var(--gold-400);
+
+  /* ---------- Tipografia ---------- */
+  --font-display: 'Cormorant Garamond', 'Cormorant Garamond Fallback', 'Times New Roman', serif;
+  --font-body: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --measure: 68ch; /* comprimento de linha alvo: 60 a 80 caracteres */
+
+  /*
+   * Escala fluida: mínimo mobile (375px) até o tamanho do Figma desktop (1440px).
+   * Cormorant: Regular a partir de 34px, Medium entre 24px e 34px, nunca abaixo de 24px.
+   */
+  --text-display-xl: clamp(3rem, 1.944rem + 4.507vw, 6rem); /* 48 → 96 */
+  --text-display-l: clamp(2.5rem, 1.796rem + 3.005vw, 4.5rem); /* 40 → 72 */
+  --text-h2: clamp(2.125rem, 1.729rem + 1.69vw, 3.25rem); /* 34 → 52 */
+  --text-h3: clamp(1.625rem, 1.449rem + 0.751vw, 2.125rem); /* 26 → 34 */
+  --text-body-l: clamp(1.125rem, 1.081rem + 0.188vw, 1.25rem); /* 18 → 20 */
+  --text-body-m: clamp(1.0625rem, 1.04rem + 0.094vw, 1.125rem); /* 17 → 18 */
+  --text-body-s: 1rem; /* 16 */
+  --text-label: 1rem; /* 16 */
+  --text-caption: 0.875rem; /* 14 */
+  --text-eyebrow: 0.8125rem; /* 13, só rótulo curto em caixa alta, nunca frase */
+
+  --leading-display-xl: 1;
+  --leading-display-l: 1.04;
+  --leading-h2: 1.12;
+  --leading-h3: 1.2;
+  --leading-body: 1.6;
+  --leading-body-s: 1.5;
+  --leading-label: 1.2;
+  --leading-caption: 1.45;
+  --leading-eyebrow: 1.4;
+
+  --tracking-display-xl: -0.015em;
+  --tracking-display-l: -0.01em;
+  --tracking-h2: -0.005em;
+  --tracking-eyebrow: 0.12em;
+  --tracking-label: 0.01em;
+  --tracking-caption: 0.005em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  /* ---------- Espaçamento (base 4px) ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --space-section: clamp(4rem, 2.6rem + 6vw, 8rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --container-max: 80rem;
+
+  /* ---------- Forma ---------- */
+  --radius-s: 2px;
+  --radius-m: 4px;
+  --border-width: 1px;
+
+  /* ---------- Acessibilidade ---------- */
+  --tap-min: 44px; /* alvo de toque mínimo */
+  --focus-width: 2px;
+  --focus-offset: 4px; /* sem afastamento, o anel some em botão da mesma cor */
+
+  /* ---------- Movimento ----------
+   * Espelhado em src/lib/motion/tokens.ts.
+   */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+  --duration-page: 450ms;
+  --reveal-distance: 24px;
+
+  /* ---------- Camadas ---------- */
+  --z-base: 0;
+  --z-header: 100;
+  --z-floating: 200;
+  --z-skip-link: 1000;
+}
+
+/* Seções escuras: aplicar data-theme="escuro" na <section>.
+ * O tema é por seção, não por preferência do sistema. */
+[data-theme='escuro'] {
+  --color-bg-default: var(--wine-900);
+  --color-bg-subtle: var(--wine-950);
+  --color-text-primary: var(--cream-50);
+  --color-text-secondary: var(--gold-100);
+  --color-text-accent: var(--gold-200);
+  --color-action-primary-bg: var(--gold-200);
+  --color-action-primary-text: var(--wine-900);
+  --color-border-default: var(--gold-400);
+  --color-focus-ring: var(--gold-200);
+}

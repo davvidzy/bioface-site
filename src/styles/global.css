@@ -1,0 +1,124 @@
+/*
+ * Estilos globais da Fase 0 (wireframe).
+ * Só estrutura: grid simples, espaçamento básico, foco visível.
+ * Nada aqui é design final.
+ */
+
+html {
+  background-color: var(--color-bg-default);
+  color: var(--color-text-primary);
+}
+
+body {
+  background-color: var(--color-bg-default);
+  color: var(--color-text-primary);
+}
+
+/* Toda seção com data-theme aplica o próprio fundo e cor. */
+[data-theme] {
+  background-color: var(--color-bg-default);
+  color: var(--color-text-primary);
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Foco ---------- */
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+.section--subtle {
+  background-color: var(--color-bg-subtle);
+}
+
+.stack > * + * {
+  margin-block-start: var(--stack-space, var(--space-4));
+}
+
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--space-6));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 18rem)), 1fr));
+}
+
+.section-header {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-end: var(--space-7);
+  max-width: var(--measure);
+}
+
+.eyebrow {
+  color: var(--color-text-accent);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Utilitários ---------- */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* ---------- Placeholder de conteúdo pendente ----------
+ * Marca visualmente o que ainda depende da cliente.
+ * Texto: wine/900 sobre cream/100 (contraste > 7:1).
+ */
+.placeholder {
+  border: var(--border-width) dashed var(--color-border-default);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  padding: var(--space-4);
+  font-size: var(--text-body-s);
+  line-height: var(--leading-body-s);
+}
+
+.placeholder-media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: var(--ratio, 4 / 5);
+  border: var(--border-width) dashed var(--color-border-default);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  font-size: var(--text-caption);
+  text-align: center;
+  padding: var(--space-4);
+}
+
+/* Listas sem marcador para navegação e grids de cards. */
+.list-reset {
+  list-style: none;
+  padding: 0;
+}
