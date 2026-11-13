@@ -1,0 +1,25 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# logs
+npm-debug.log*
+
+# env
+.env
+.env.*
+!.env.example
+
+# testes
+test-results/
+playwright-report/
+.lighthouseci/
+
+# editor / sistema
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
