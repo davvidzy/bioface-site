@@ -1,0 +1,7 @@
+{
+  "$comment": "Exemplo de estrutura. Não é depoimento real e nunca é renderizado em produção (pendente: true). TODO(conteudo): substituir por reviews reais do Google, com nome e inicial da autora.",
+  "autora": "TODO(conteudo): nome e inicial",
+  "texto": "TODO(conteudo): texto do review real, copiado do Google.",
+  "origem": "google",
+  "pendente": true
+}

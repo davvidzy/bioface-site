@@ -1,0 +1,44 @@
+[
+  {
+    "id": "quanto-custa",
+    "ordem": 1,
+    "pergunta": "Quanto custa?",
+    "resposta": "O valor é definido na avaliação, porque cada plano de tratamento é individual.",
+    "pendente": false
+  },
+  {
+    "id": "como-agendar",
+    "ordem": 2,
+    "pergunta": "Como agendo uma avaliação?",
+    "resposta": "Pelo WhatsApp. Envie uma mensagem e combinamos o melhor dia e horário para você.",
+    "pendente": false
+  },
+  {
+    "id": "avaliacao-paga",
+    "ordem": 3,
+    "pergunta": "A avaliação é paga?",
+    "resposta": "TODO(conteudo): confirmar com a Maria se a avaliação é paga e, se for, se o valor é abatido do tratamento.",
+    "pendente": true
+  },
+  {
+    "id": "dor",
+    "ordem": 4,
+    "pergunta": "Os procedimentos doem?",
+    "resposta": "TODO(conteudo): resposta da Maria sobre desconforto e anestesia. Não usar \"sem dor\" absoluto.",
+    "pendente": true
+  },
+  {
+    "id": "seguranca-produtos",
+    "ordem": 5,
+    "pergunta": "Os produtos usados são seguros?",
+    "resposta": "TODO(conteudo): resposta da Maria sobre registro dos produtos na Anvisa e procedência.",
+    "pendente": true
+  },
+  {
+    "id": "formas-pagamento",
+    "ordem": 6,
+    "pergunta": "Quais são as formas de pagamento?",
+    "resposta": "TODO(conteudo): formas de pagamento e parcelamento aceitos.",
+    "pendente": true
+  }
+]
