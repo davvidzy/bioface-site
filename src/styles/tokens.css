@@ -1,6 +1,7 @@
 /*
  * Tokens do BioFace.
  * Fonte: Figma, página Design System, frame "Fundações v2" (node 7:2).
+ * TODO(validar-cliente): apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond.
  * Coleções: Primitivos (1 modo) e Cor (modos Claro e Escuro).
  *
  * Regra: componentes consomem só tokens semânticos (--color-*, --font-*, --text-*),

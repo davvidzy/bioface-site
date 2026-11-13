@@ -16,6 +16,7 @@ const { eyebrow, titulo, fotos, id = 'espaco-titulo' } = Astro.props;
 
 <Section labelledby={id}>
   <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+  {/* TODO(conteudo): fotos profissionais do espaço. */}
   <ul class="list-reset grid" role="list" style="--grid-min: 14rem">
     {Array.from({ length: fotos }, (_, i) => (
       <li class="placeholder-media" style="--ratio: 4 / 3">

@@ -3,7 +3,7 @@
  * Tom: português do Brasil, sóbrio e acolhedor, frases curtas, sem travessão longo.
  * Sem promessa de resultado garantido, sem "o melhor", sem "sem dor" absoluto.
  *
- * Texto que só a Maria pode fornecer fica como "TODO(conteudo): ..." e vira placeholder visível.
+ * Texto que só a Maria pode fornecer leva o marcador de conteúdo pendente e vira placeholder visível.
  */
 import { site } from './site';
 

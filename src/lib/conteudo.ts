@@ -2,7 +2,7 @@ import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { CATEGORIAS, type CategoriaSlug } from '@/data/categorias';
 
 /**
- * Convenção de lacuna: texto que começa com "TODO(conteudo)" ou "TODO(validar-cliente)"
+ * Convenção de lacuna: texto que começa com o marcador de pendência (conteudo ou validar-cliente)
  * ainda depende da cliente e é renderizado como placeholder visível.
  */
 const PREFIXO_PENDENTE = /^\s*TODO\((conteudo|validar-cliente)\)\s*:?\s*/;

@@ -7,7 +7,7 @@ import { CATEGORIA_SLUGS } from './data/categorias';
  * Modelo de conteúdo (CLAUDE.md, seção 5).
  *
  * Convenção para lacunas: todo texto que ainda depende da cliente começa com
- * "TODO(conteudo)" e é renderizado como placeholder visível (ver src/lib/conteudo.ts).
+ * o marcador de conteúdo pendente e é renderizado como placeholder visível (ver src/lib/conteudo.ts).
  * Nunca preencher com texto clínico inventado.
  */
 

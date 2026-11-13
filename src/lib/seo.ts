@@ -94,7 +94,7 @@ export function jsonLdLocalBusiness(base: URL | string | undefined): Record<stri
 export function jsonLdFaq(
   itens: { pergunta: string; resposta: string; pendente?: boolean }[],
 ): Record<string, unknown> | null {
-  const respondidas = itens.filter((i) => !i.pendente && !i.resposta.startsWith('TODO('));
+  const respondidas = itens.filter((i) => !i.pendente && !/^\s*TODO\(/.test(i.resposta));
   if (respondidas.length === 0) return null;
   return {
     '@context': 'https://schema.org',
