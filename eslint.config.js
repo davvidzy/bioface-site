@@ -31,6 +31,9 @@ export default defineConfig(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+      // role="list" em <ul> com list-style: none é intencional: o Safari/VoiceOver
+      // descarta a semântica de lista sem ele.
+      'astro/jsx-a11y/no-redundant-roles': ['error', { ul: ['list'], ol: ['list'] }],
     },
   },
 );

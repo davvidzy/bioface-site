@@ -1,0 +1,61 @@
+---
+/**
+ * Link de agendamento pelo WhatsApp. Único caminho de conversão do site.
+ *
+ * - Nome acessível começa pelo rótulo visível (WCAG 2.5.3) e avisa que abre outro app/aba.
+ * - data-track alimenta o analytics (lib/analytics.ts) com origem e procedimento.
+ */
+import Button from './Button.astro';
+import { buildWhatsAppLink, type OrigemWhatsApp } from '@/lib/whatsapp';
+
+interface Props {
+  origem: OrigemWhatsApp;
+  procedimento?: string | undefined;
+  /** Texto visível. Padrão: "Agendar avaliação pelo WhatsApp". */
+  rotulo?: string;
+  /** Complemento só para leitor de tela, quando o rótulo visível é curto. */
+  complementoOculto?: string;
+  variante?: 'primario' | 'secundario' | 'texto';
+  class?: string | undefined;
+}
+
+const {
+  origem,
+  procedimento,
+  rotulo = 'Agendar avaliação pelo WhatsApp',
+  complementoOculto = '',
+  variante = 'primario',
+  class: className,
+} = Astro.props;
+
+const href = buildWhatsAppLink({ procedimento, origem });
+const attrs = {
+  href,
+  target: '_blank',
+  rel: 'noopener noreferrer',
+  'data-track': 'whatsapp_click',
+  'data-origem': origem,
+  'data-procedimento': procedimento,
+};
+const aviso = `${complementoOculto} (abre o WhatsApp em nova aba)`;
+---
+
+{variante === 'texto' ? (
+  <a class:list={['whatsapp-texto', className]} {...attrs}>
+    {rotulo}
+    <span class="visually-hidden">{aviso}</span>
+  </a>
+) : (
+  <Button variante={variante} class={className} {...attrs}>
+    {rotulo}
+    <span class="visually-hidden">{aviso}</span>
+  </Button>
+)}
+
+<style>
+  .whatsapp-texto {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+</style>

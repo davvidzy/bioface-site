@@ -1,0 +1,23 @@
+---
+/**
+ * Placeholder visível para conteúdo que ainda depende da cliente.
+ * Sempre marcado: "Conteúdo pendente". Nunca substitui texto por invenção.
+ */
+import { descricaoPendente } from '@/lib/conteudo';
+
+interface Props {
+  /** Texto com ou sem o prefixo TODO(...). */
+  texto?: string;
+  as?: 'p' | 'div' | 'span' | 'li';
+  class?: string | undefined;
+}
+
+const { texto = '', as: Tag = 'p', class: className } = Astro.props;
+const descricao = descricaoPendente(texto);
+---
+
+<Tag class:list={['placeholder', className]} data-pendente>
+  <strong>Conteúdo pendente</strong>
+  {descricao ? `: ${descricao}` : ''}
+  <slot />
+</Tag>

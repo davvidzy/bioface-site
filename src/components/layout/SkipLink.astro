@@ -1,0 +1,26 @@
+---
+---
+
+<a class="skip-link t-label" href="#conteudo">
+  Pular para o conteúdo
+</a>
+
+<style>
+  .skip-link {
+    position: fixed;
+    inset-block-start: var(--space-2);
+    inset-inline-start: var(--space-2);
+    z-index: var(--z-skip-link);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: var(--space-3) var(--space-5);
+    background-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+    transform: translateY(calc(-100% - var(--space-4)));
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+</style>

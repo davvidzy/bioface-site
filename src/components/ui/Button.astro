@@ -1,0 +1,57 @@
+---
+/**
+ * Botão ou link com aparência de botão.
+ * Com href vira <a>; sem href vira <button>. Alvo de toque mínimo de 44px.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
+  variante?: 'primario' | 'secundario';
+  href?: string | undefined;
+};
+
+const { variante = 'primario', href, class: className, ...rest } = Astro.props;
+const classes = ['btn', `btn--${variante}`, 't-label', className];
+---
+
+{href ? (
+  <a href={href} class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
+    <slot />
+  </a>
+) : (
+  <button type="button" class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap-min);
+    min-width: var(--tap-min);
+    padding: var(--space-3) var(--space-5);
+    border: var(--border-width) solid var(--color-action-primary-bg);
+    border-radius: var(--radius-m);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .btn--primario {
+    background-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+  }
+
+  .btn--secundario {
+    background-color: transparent;
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+  }
+
+  .btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

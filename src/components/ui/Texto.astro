@@ -1,0 +1,22 @@
+---
+/**
+ * Renderiza um texto vindo das collections, ou o placeholder se ele ainda for TODO.
+ */
+import Pendente from './Pendente.astro';
+import { isPendente } from '@/lib/conteudo';
+
+interface Props {
+  texto: string | undefined;
+  as?: 'p' | 'span' | 'div' | 'li' | 'dd';
+  class?: string | undefined;
+}
+
+const { texto, as: Tag = 'p', class: className } = Astro.props;
+const pendente = isPendente(texto);
+---
+
+{pendente ? (
+  <Pendente texto={texto ?? ''} as={Tag === 'dd' ? 'div' : Tag} class={className} />
+) : (
+  <Tag class={className}>{texto}</Tag>
+)}

@@ -1,0 +1,27 @@
+---
+/**
+ * Cabeçalho de seção: eyebrow opcional, título e introdução opcional.
+ * O título carrega data-reveal: é o único reveal de exemplo da Fase 0.
+ */
+interface Props {
+  titulo: string;
+  eyebrow?: string;
+  intro?: string;
+  nivel?: 'h1' | 'h2';
+  id?: string;
+  /** Estilo tipográfico do título. */
+  estilo?: 't-display-l' | 't-display-xl' | 't-h2';
+}
+
+const { titulo, eyebrow, intro, nivel: Tag = 'h2', id, estilo } = Astro.props;
+const classeTitulo = estilo ?? (Tag === 'h1' ? 't-display-l' : 't-h2');
+---
+
+<header class="section-header">
+  {eyebrow && <p class="eyebrow t-eyebrow">{eyebrow}</p>}
+  <Tag id={id} class={classeTitulo} data-reveal="fade">
+    {titulo}
+  </Tag>
+  {intro && <p class="t-body-l text-secondary">{intro}</p>}
+  <slot />
+</header>

@@ -1,0 +1,100 @@
+---
+/**
+ * Header: navegar e converter de qualquer ponto (Home, seção 1).
+ * Sem menu hambúrguer na Fase 0: os 3 links quebram linha no mobile, sem JS.
+ */
+import Wordmark from '@/assets/brand/wordmark-mono.svg';
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import { site } from '@/data/site';
+
+const links = [
+  { href: '/tratamentos', rotulo: 'Tratamentos' },
+  { href: '/resultados', rotulo: 'Resultados' },
+  { href: '/sobre', rotulo: 'Sobre' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const atual = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
+      <Wordmark aria-hidden="true" focusable="false" class="site-header__wordmark" />
+    </a>
+    <nav aria-label="Principal">
+      <ul class="site-header__links list-reset" role="list">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="t-label"
+              aria-current={path === link.href ? 'page' : atual(link.href) ? 'true' : undefined}
+            >
+              {link.rotulo}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <WhatsAppLink
+      origem="header"
+      rotulo="Agendar avaliação"
+      complementoOculto="pelo WhatsApp"
+      class="site-header__cta"
+    />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-block-end: var(--border-width) solid var(--color-border-default);
+    background-color: var(--color-bg-default);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+    padding-block: var(--space-3);
+  }
+
+  .site-header__marca {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    color: var(--color-text-primary);
+  }
+
+  .site-header__wordmark {
+    width: 9rem;
+    height: auto;
+  }
+
+  .site-header__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+  }
+
+  .site-header__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    text-decoration: none;
+  }
+
+  .site-header__links a:hover,
+  .site-header__links a[aria-current] {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 40rem) {
+    nav {
+      order: 3;
+      flex-basis: 100%;
+    }
+  }
+</style>

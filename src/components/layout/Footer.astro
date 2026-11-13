@@ -1,0 +1,100 @@
+---
+/**
+ * Rodapé: confiança institucional e conformidade (Home, seção 13).
+ * Responsável técnica com registro, endereço, Instagram e /privacidade.
+ */
+import { site, enderecoCompleto, faltando } from '@/data/site';
+import Pendente from '@/components/ui/Pendente.astro';
+
+const endereco = enderecoCompleto();
+const ano = new Date().getFullYear();
+---
+
+<footer class="site-footer" data-theme="escuro">
+  <div class="container site-footer__grid">
+    <section aria-labelledby="rodape-responsavel">
+      <h2 id="rodape-responsavel" class="t-eyebrow site-footer__titulo">
+        Responsável técnica
+      </h2>
+      <p>
+        {site.responsavel.nome}, {site.responsavel.titulo.toLowerCase()}
+      </p>
+      {faltando(site.responsavel.registro) ? (
+        <Pendente texto="número do CRBM" />
+      ) : (
+        <p>{site.responsavel.registro}</p>
+      )}
+    </section>
+
+    <section aria-labelledby="rodape-endereco">
+      <h2 id="rodape-endereco" class="t-eyebrow site-footer__titulo">
+        Endereço
+      </h2>
+      {endereco ? (
+        <address>{endereco}</address>
+      ) : (
+        <>
+          <p>
+            {site.endereco.bairro}, {site.endereco.cidade}/{site.endereco.uf}
+          </p>
+          <Pendente texto="endereço completo e CEP" />
+        </>
+      )}
+    </section>
+
+    <nav aria-labelledby="rodape-links">
+      <h2 id="rodape-links" class="t-eyebrow site-footer__titulo">
+        Links
+      </h2>
+      <ul class="list-reset site-footer__links" role="list">
+        <li>
+          <a href={site.instagram} target="_blank" rel="noopener noreferrer">
+            Instagram <span class="visually-hidden">(abre em nova aba)</span>
+          </a>
+        </li>
+        <li>
+          <a href="/privacidade">Política de privacidade</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container">
+    <p class="t-caption site-footer__copy">
+      © {ano} {site.marca}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-8) var(--space-6);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .site-footer__titulo {
+    color: var(--color-text-accent);
+    margin-block-end: var(--space-3);
+    font-size: var(--text-eyebrow);
+    font-family: var(--font-body);
+  }
+
+  .site-footer address {
+    font-style: normal;
+  }
+
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+
+  .site-footer__copy {
+    margin-block-start: var(--space-7);
+    color: var(--color-text-secondary);
+  }
+</style>
