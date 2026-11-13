@@ -1,0 +1,21 @@
+---
+/** Home, seção 4 (e /sobre em versão longa). Job: diferenciar pelo medo central. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Texto from '@/components/ui/Texto.astro';
+
+interface Props {
+  eyebrow?: string;
+  titulo: string;
+  texto: string;
+  id?: string;
+  tema?: 'claro' | 'escuro';
+}
+
+const { eyebrow, titulo, texto, id = 'filosofia-titulo', tema = 'escuro' } = Astro.props;
+---
+
+<Section labelledby={id} tema={tema}>
+  <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+  <Texto texto={texto} class="t-body-l" />
+</Section>

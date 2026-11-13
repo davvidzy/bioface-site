@@ -92,6 +92,18 @@ const atual = (href: string) => path === href || path.startsWith(`${href}/`);
   }
 
   @media (max-width: 40rem) {
+    .site-header__inner {
+      column-gap: var(--space-3);
+    }
+
+    .site-header__wordmark {
+      width: 7.5rem;
+    }
+
+    .site-header__inner :global(.site-header__cta) {
+      padding-inline: var(--space-4);
+    }
+
     nav {
       order: 3;
       flex-basis: 100%;

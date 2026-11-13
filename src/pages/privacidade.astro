@@ -1,0 +1,65 @@
+---
+/**
+ * Política de privacidade (LGPD).
+ * Rascunho estrutural: descreve só o que o site faz hoje (não coleta formulário,
+ * não usa cookies de analytics). TODO(validar-cliente): revisão jurídica e dados do controlador.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Pendente from '@/components/ui/Pendente.astro';
+import { privacidade as t } from '@/data/textos';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title={t.seo.title} description={t.seo.description} path="/privacidade">
+  <article class="container section prosa">
+    <h1 class="t-display-l">{t.titulo}</h1>
+
+    <Pendente texto="revisão jurídica desta política e dados do controlador (razão social, CNPJ e e-mail para solicitações sobre dados pessoais)." />
+
+    <h2 class="t-h3">Quem somos</h2>
+    <p>
+      Este site é da {site.marca}, com responsabilidade técnica de {site.responsavel.nome},{' '}
+      {site.responsavel.titulo.toLowerCase()}, no {site.endereco.bairro}, {site.endereco.cidade}/
+      {site.endereco.uf}.
+    </p>
+
+    <h2 class="t-h3">Quais dados este site coleta</h2>
+    <p>
+      O site não tem formulários e não pede dados pessoais. O agendamento é feito pelo WhatsApp: ao
+      clicar em um botão de agendamento, o WhatsApp é aberto com uma mensagem pronta, e a conversa
+      segue as regras de privacidade do próprio WhatsApp.
+    </p>
+
+    <h2 class="t-h3">Cookies e medição de audiência</h2>
+    <p>
+      No momento, o site não usa cookies de publicidade nem de medição de audiência. Se isso mudar,
+      esta página será atualizada e pediremos o seu consentimento antes de qualquer coleta.
+    </p>
+
+    <h2 class="t-h3">Mapa</h2>
+    <p>
+      O mapa só é carregado se você pedir. Ao carregá-lo, o Google pode coletar dados de acordo com
+      a política de privacidade dele.
+    </p>
+
+    <h2 class="t-h3">Fotos de antes e depois</h2>
+    <p>Publicamos apenas fotos de pacientes que autorizaram a publicação.</p>
+
+    <h2 class="t-h3">Seus direitos</h2>
+    <p>
+      Pela Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode pedir acesso, correção ou
+      exclusão dos seus dados pessoais.
+    </p>
+    <Pendente texto="canal oficial para solicitações (e-mail ou telefone)." />
+  </article>
+</BaseLayout>
+
+<style>
+  .prosa > * + * {
+    margin-block-start: var(--space-4);
+  }
+
+  .prosa h2 {
+    margin-block-start: var(--space-7);
+  }
+</style>

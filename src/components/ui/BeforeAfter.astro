@@ -1,0 +1,70 @@
+---
+/**
+ * Par antes/depois. Versão base: duas imagens lado a lado, sem JS.
+ * Só recebe resultados já filtrados por consentimento (lib/conteudo.ts → resultadosPublicaveis).
+ */
+import { Picture } from 'astro:assets';
+import type { Resultado } from '@/lib/conteudo';
+
+interface Props {
+  resultado: Resultado;
+  /** Nome do tratamento, quando informado. */
+  procedimento?: string | undefined;
+  /** Imagem acima da dobra? Desliga o lazy load. */
+  prioritaria?: boolean;
+}
+
+const { resultado, procedimento, prioritaria = false } = Astro.props;
+const { antes, depois, alt, legenda, intervalo } = resultado.data;
+const loading = prioritaria ? 'eager' : 'lazy';
+const sizes = '(min-width: 48rem) 25vw, 50vw';
+const textoLegenda = [procedimento, legenda, intervalo].filter(Boolean).join('. ');
+---
+
+<figure class="before-after">
+  <div class="before-after__par">
+    <figure>
+      <Picture
+        src={antes}
+        alt={alt.antes}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[240, 480]}
+        sizes={sizes}
+        loading={loading}
+      />
+      <figcaption class="t-caption">Antes</figcaption>
+    </figure>
+    <figure>
+      <Picture
+        src={depois}
+        alt={alt.depois}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[240, 480]}
+        sizes={sizes}
+        loading={loading}
+      />
+      <figcaption class="t-caption">Depois</figcaption>
+    </figure>
+  </div>
+  {textoLegenda && <figcaption class="t-caption">{textoLegenda}</figcaption>}
+</figure>
+
+<style>
+  .before-after__par {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  .before-after__par :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-block-start: var(--space-2);
+  }
+</style>

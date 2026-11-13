@@ -1,0 +1,72 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import Texto from '@/components/ui/Texto.astro';
+import Filosofia from '@/components/sections/Filosofia.astro';
+import Espaco from '@/components/sections/Espaco.astro';
+import Localizacao from '@/components/sections/Localizacao.astro';
+import CtaFinal from '@/components/sections/CtaFinal.astro';
+import { sobre as t, home } from '@/data/textos';
+import { jsonLdLocalBusiness } from '@/lib/seo';
+---
+
+<BaseLayout
+  title={t.seo.title}
+  description={t.seo.description}
+  path="/sobre"
+  jsonLd={[jsonLdLocalBusiness(Astro.site)]}
+>
+  <div class="container section maria">
+    <div class="placeholder-media" style="--ratio: 3 / 4">
+      <span>Foto profissional da Maria (pendente)</span>
+    </div>
+    <div class="maria__texto">
+      <h1 class="t-display-l">{t.titulo}</h1>
+      <p class="t-body-l text-secondary">{t.subtitulo}</p>
+      <h2 class="t-h3">{t.formacao.titulo}</h2>
+      <Texto texto={t.formacao.texto} />
+    </div>
+  </div>
+
+  <Filosofia id="filosofia-longa" titulo={t.filosofia.titulo} texto={t.filosofia.texto} />
+
+  <Espaco id="espaco-sobre" titulo={t.espaco.titulo} fotos={t.espaco.fotos} />
+
+  <Section labelledby="localizacao-titulo" sutil>
+    <h2 id="localizacao-titulo" class="t-h2" data-reveal="fade">
+      {t.localizacao.titulo}
+    </h2>
+    <div class="localizacao">
+      <Localizacao />
+    </div>
+  </Section>
+
+  <CtaFinal titulo={home.ctaFinal.titulo} texto={home.ctaFinal.texto} origem="sobre" />
+</BaseLayout>
+
+<style>
+  .maria {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .maria__texto {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .maria__texto h2 {
+    margin-block-start: var(--space-5);
+  }
+
+  .localizacao {
+    margin-block-start: var(--space-6);
+  }
+
+  @media (min-width: 56rem) {
+    .maria {
+      grid-template-columns: 2fr 3fr;
+    }
+  }
+</style>

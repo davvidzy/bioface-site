@@ -1,0 +1,27 @@
+---
+/**
+ * Wrapper de seção: landmark rotulado pelo título, tema por seção e container.
+ * Tema escuro: data-theme="escuro" (tokens.css). Não depende da preferência do sistema.
+ */
+interface Props {
+  /** id do heading que rotula a seção. */
+  labelledby: string;
+  tema?: 'claro' | 'escuro';
+  sutil?: boolean;
+  class?: string | undefined;
+  [key: `data-${string}`]: string | boolean | undefined;
+}
+
+const { labelledby, tema = 'claro', sutil = false, class: className, ...rest } = Astro.props;
+---
+
+<section
+  class:list={['section', { 'section--subtle': sutil }, className]}
+  aria-labelledby={labelledby}
+  data-theme={tema === 'escuro' ? 'escuro' : undefined}
+  {...rest}
+>
+  <div class="container">
+    <slot />
+  </div>
+</section>

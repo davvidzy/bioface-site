@@ -1,0 +1,26 @@
+---
+/** Home, seção 10 e /sobre. Job: ambiente premium como parte do serviço. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+
+interface Props {
+  eyebrow?: string;
+  titulo: string;
+  /** Quantas fotos o layout prevê. Enquanto não houver fotos, viram placeholders. */
+  fotos: number;
+  id?: string;
+}
+
+const { eyebrow, titulo, fotos, id = 'espaco-titulo' } = Astro.props;
+---
+
+<Section labelledby={id}>
+  <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+  <ul class="list-reset grid" role="list" style="--grid-min: 14rem">
+    {Array.from({ length: fotos }, (_, i) => (
+      <li class="placeholder-media" style="--ratio: 4 / 3">
+        <span>Foto do espaço {i + 1} (pendente)</span>
+      </li>
+    ))}
+  </ul>
+</Section>

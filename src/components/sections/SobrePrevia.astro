@@ -1,0 +1,57 @@
+---
+/** Home, seção 8. Job: autoridade e vínculo humano. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Texto from '@/components/ui/Texto.astro';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  texto: string;
+  link: string;
+}
+
+const { eyebrow, titulo, texto, link } = Astro.props;
+---
+
+<Section labelledby="sobre-titulo" sutil>
+  <div class="sobre">
+    <div class="placeholder-media" style="--ratio: 3 / 4">
+      <span>Foto profissional da Maria (pendente)</span>
+    </div>
+    <div class="sobre__texto">
+      <SectionHeader id="sobre-titulo" eyebrow={eyebrow} titulo={titulo} />
+      <Texto texto={texto} class="t-body-l" />
+      <p>
+        <a href="/sobre" class="t-label sobre__link">
+          {link}
+        </a>
+      </p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .sobre {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .sobre__texto {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .sobre__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+
+  @media (min-width: 56rem) {
+    .sobre {
+      grid-template-columns: 2fr 3fr;
+    }
+  }
+</style>

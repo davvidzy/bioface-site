@@ -1,13 +1,68 @@
 ---
+/**
+ * Home. A ordem das seções segue a decisão da paciente:
+ * quem é, o que faz, funciona, como é o processo, posso confiar, como agendo.
+ * A Home precisa funcionar sozinha.
+ */
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Credenciais, { type Credencial } from '@/components/sections/Credenciais.astro';
+import Filosofia from '@/components/sections/Filosofia.astro';
+import TratamentosCategorias from '@/components/sections/TratamentosCategorias.astro';
+import ResultadosPrevia from '@/components/sections/ResultadosPrevia.astro';
+import ComoFunciona from '@/components/sections/ComoFunciona.astro';
+import SobrePrevia from '@/components/sections/SobrePrevia.astro';
+import Depoimentos from '@/components/sections/Depoimentos.astro';
+import Espaco from '@/components/sections/Espaco.astro';
+import Faq from '@/components/sections/Faq.astro';
+import CtaFinal from '@/components/sections/CtaFinal.astro';
+
+import { home, AVISO_RESULTADOS } from '@/data/textos';
+import { site, faltando } from '@/data/site';
+import {
+  getProcedimentosPorCategoria,
+  resultadosPublicaveis,
+  nomeDoProcedimento,
+  getDepoimentos,
+  getFaqGeral,
+} from '@/lib/conteudo';
+import { jsonLdLocalBusiness, jsonLdFaq } from '@/lib/seo';
+
+const grupos = await getProcedimentosPorCategoria();
+const resultados = (await resultadosPublicaveis()).slice(0, 3);
+const resultadosItens = await Promise.all(
+  resultados.map(async (resultado) => ({
+    resultado,
+    procedimento: await nomeDoProcedimento(resultado),
+  })),
+);
+const depoimentos = await getDepoimentos();
+const faq = (await getFaqGeral()).map((f) => f.data);
+
+// Só fatos com fonte. Nota do Google e número de procedimentos entram quando a cliente informar.
+const credenciais: Credencial[] = [
+  { valor: `${site.anosAtuacao} anos`, rotulo: 'de atuação em estética facial' },
+  { valor: site.responsavel.titulo, rotulo: site.responsavel.nome },
+  faltando(site.responsavel.registro)
+    ? { valor: '', rotulo: 'número do CRBM', pendente: true }
+    : { valor: site.responsavel.registro, rotulo: 'Registro profissional' },
+];
+
+const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
+  (ld): ld is Record<string, unknown> => ld !== null,
+);
 ---
 
-<BaseLayout
-  title="BioFace Estética Avançada | Maria Guedes, biomédica esteta no Lago Sul"
-  description="Resultados naturais em estética facial com Maria Guedes, biomédica esteta há 18 anos no Lago Sul, Brasília. Agende sua avaliação pelo WhatsApp."
-  path="/"
->
-  <div class="container section">
-    <h1>BioFace Estética Avançada</h1>
-  </div>
+<BaseLayout title={home.seo.title} description={home.seo.description} path="/" jsonLd={jsonLd}>
+  <Hero {...home.hero} />
+  <Credenciais titulo={home.credenciais.titulo} itens={credenciais} />
+  <Filosofia {...home.filosofia} />
+  <TratamentosCategorias {...home.tratamentos} grupos={grupos} />
+  <ResultadosPrevia {...home.resultados} aviso={AVISO_RESULTADOS} itens={resultadosItens} />
+  <ComoFunciona {...home.comoFunciona} />
+  <SobrePrevia {...home.sobre} />
+  <Depoimentos {...home.depoimentos} depoimentos={depoimentos} />
+  <Espaco {...home.espaco} />
+  <Faq {...home.faq} itens={faq} />
+  <CtaFinal {...home.ctaFinal} origem="cta-final" comLocalizacao />
 </BaseLayout>

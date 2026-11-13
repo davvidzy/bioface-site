@@ -1,0 +1,58 @@
+---
+import Texto from './Texto.astro';
+import type { Procedimento } from '@/lib/conteudo';
+
+interface Props {
+  procedimento: Procedimento;
+  nivel?: 'h3' | 'h4';
+}
+
+const { procedimento, nivel: Tag = 'h3' } = Astro.props;
+const { nome, resumo } = procedimento.data;
+---
+
+<article class="card">
+  <Tag class="t-h3 card__titulo">
+    <a href={`/tratamentos/${procedimento.id}`} class="card__link">
+      {nome}
+    </a>
+  </Tag>
+  <Texto texto={resumo} class="t-body-s" />
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border-default);
+    border-radius: var(--radius-m);
+    background-color: var(--color-bg-default);
+  }
+
+  .card__link {
+    text-decoration: none;
+  }
+
+  /* Card inteiro clicável sem aninhar elementos interativos. */
+  .card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .card:hover .card__link {
+    text-decoration: underline;
+  }
+
+  .card:focus-within {
+    outline: var(--focus-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .card__link:focus-visible {
+    outline: none;
+  }
+</style>

@@ -1,0 +1,139 @@
+---
+/**
+ * Endereço, horários e mapa carregado sob demanda.
+ * Fallback sem JS: endereço em texto e link para o Google Maps.
+ * O iframe só é criado quando a pessoa pede, para não pesar no carregamento.
+ */
+import Pendente from '@/components/ui/Pendente.astro';
+import { site, enderecoCompleto, linkGoogleMaps } from '@/data/site';
+import { localizacao as t } from '@/data/textos';
+
+interface Props {
+  /** Nível dos subtítulos, para manter a hierarquia da página. */
+  nivel?: 'h3' | 'h4';
+}
+
+const { nivel: Tag = 'h3' } = Astro.props;
+const endereco = enderecoCompleto();
+const mapsLink = linkGoogleMaps();
+const consultaMapa =
+  endereco ?? `${site.marca}, ${site.endereco.bairro}, ${site.endereco.cidade} ${site.endereco.uf}`;
+const embedSrc = `https://www.google.com/maps?q=${encodeURIComponent(consultaMapa)}&output=embed`;
+---
+
+<div class="localizacao">
+  <div>
+    <Tag class="t-eyebrow localizacao__titulo">{t.endereco}</Tag>
+    {endereco ? (
+      <address>{endereco}</address>
+    ) : (
+      <>
+        <p>
+          {site.endereco.bairro}, {site.endereco.cidade}/{site.endereco.uf}
+        </p>
+        <Pendente texto="endereço completo e CEP" />
+      </>
+    )}
+    <p>
+      <a href={mapsLink} target="_blank" rel="noopener noreferrer" class="localizacao__link">
+        {t.mapa} <span class="visually-hidden">(abre em nova aba)</span>
+      </a>
+    </p>
+  </div>
+
+  <div>
+    <Tag class="t-eyebrow localizacao__titulo">{t.horarios}</Tag>
+    {site.horarios.length > 0 ? (
+      <dl class="horarios">
+        {site.horarios.map((h) => (
+          <div>
+            <dt>{h.rotulo}</dt>
+            <dd>
+              {h.abre} às {h.fecha}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    ) : (
+      <Pendente texto="horários de atendimento" />
+    )}
+  </div>
+
+  <div class="localizacao__mapa" data-mapa data-src={embedSrc} data-titulo={t.tituloMapa}>
+    <button type="button" class="t-label localizacao__botao" data-mapa-botao hidden>
+      {t.carregarMapa}
+    </button>
+  </div>
+</div>
+
+<style>
+  .localizacao {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .localizacao__titulo {
+    font-family: var(--font-body);
+    font-size: var(--text-eyebrow);
+    color: var(--color-text-accent);
+    margin-block-end: var(--space-3);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .localizacao__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+
+  .localizacao__mapa {
+    grid-column: 1 / -1;
+  }
+
+  .localizacao__botao {
+    min-height: var(--tap-min);
+    padding: var(--space-3) var(--space-5);
+    border: var(--border-width) solid currentColor;
+    border-radius: var(--radius-m);
+    background: transparent;
+  }
+
+  .localizacao__mapa :global(iframe) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+
+  dl div {
+    display: flex;
+    gap: var(--space-2);
+  }
+</style>
+
+<script>
+  function montarMapas() {
+    document.querySelectorAll<HTMLElement>('[data-mapa]').forEach((caixa) => {
+      const botao = caixa.querySelector<HTMLButtonElement>('[data-mapa-botao]');
+      if (!botao || botao.dataset['pronto']) return;
+      botao.dataset['pronto'] = 'true';
+      botao.hidden = false;
+      botao.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = caixa.dataset['src'] ?? '';
+        iframe.title = caixa.dataset['titulo'] ?? '';
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        iframe.tabIndex = 0;
+        caixa.replaceChildren(iframe);
+        iframe.focus();
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', montarMapas);
+</script>

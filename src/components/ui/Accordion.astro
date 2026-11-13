@@ -1,0 +1,74 @@
+---
+/**
+ * Acordeão acessível com <details>/<summary>: teclado e leitor de tela nativos, funciona sem JS.
+ * Respostas pendentes viram placeholder visível.
+ */
+import Texto from './Texto.astro';
+
+interface Props {
+  itens: { pergunta: string; resposta: string }[];
+}
+
+// Sem heading dentro do <summary>: ele tem papel de botão e anula a semântica do heading.
+const { itens } = Astro.props;
+---
+
+<div class="accordion">
+  {itens.map((item) => (
+    <details class="accordion__item">
+      <summary class="accordion__pergunta">
+        <span class="accordion__titulo">{item.pergunta}</span>
+      </summary>
+      <div class="accordion__resposta">
+        <Texto texto={item.resposta} />
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .accordion__item {
+    border-block-end: var(--border-width) solid var(--color-border-default);
+  }
+
+  .accordion__item:first-child {
+    border-block-start: var(--border-width) solid var(--color-border-default);
+  }
+
+  .accordion__pergunta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: var(--tap-min);
+    padding-block: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .accordion__pergunta::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion__pergunta::after {
+    content: '+';
+    font-size: var(--text-body-l);
+    line-height: 1;
+  }
+
+  details[open] > .accordion__pergunta::after {
+    content: '−';
+  }
+
+  .accordion__titulo {
+    font-family: var(--font-body);
+    font-size: var(--text-body-m);
+    line-height: var(--leading-body);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0;
+  }
+
+  .accordion__resposta {
+    padding-block-end: var(--space-5);
+  }
+</style>

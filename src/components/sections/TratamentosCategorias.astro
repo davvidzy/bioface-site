@@ -1,0 +1,67 @@
+---
+/** Home, seção 5. Job: mostrar amplitude sem sobrecarregar. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import type { Categoria } from '@/data/categorias';
+import type { Procedimento } from '@/lib/conteudo';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  intro: string;
+  grupos: { categoria: Categoria; procedimentos: Procedimento[] }[];
+}
+
+const { eyebrow, titulo, intro, grupos } = Astro.props;
+---
+
+<Section labelledby="tratamentos-titulo">
+  <SectionHeader id="tratamentos-titulo" eyebrow={eyebrow} titulo={titulo} intro={intro} />
+  <div class="categorias">
+    {grupos.map(({ categoria, procedimentos }) => (
+      <div class="categoria">
+        <h3 class="t-h3">
+          <a href={`/tratamentos#${categoria.slug}`}>{categoria.rotulo}</a>
+        </h3>
+        <p class="text-secondary">{categoria.descricao}</p>
+        <ul class="list-reset categoria__lista" role="list">
+          {procedimentos.map((p) => (
+            <li>
+              <a href={`/tratamentos/${p.id}`}>{p.data.nome}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .categorias {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .categoria {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding-block-start: var(--space-4);
+    border-block-start: var(--border-width) solid var(--color-border-default);
+  }
+
+  .categoria h3 a {
+    text-decoration: none;
+  }
+
+  .categoria h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .categoria__lista a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+</style>

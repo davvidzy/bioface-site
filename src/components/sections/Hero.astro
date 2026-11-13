@@ -1,0 +1,48 @@
+---
+/** Home, seção 2. Job: em 3 segundos, quem, o quê, onde. */
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  apoio: string;
+}
+
+const { eyebrow, titulo, apoio } = Astro.props;
+---
+
+<section class="hero section" aria-labelledby="hero-titulo">
+  <div class="container hero__grid">
+    <div class="hero__texto">
+      <p class="eyebrow t-eyebrow">{eyebrow}</p>
+      <h1 id="hero-titulo" class="t-display-xl">
+        {titulo}
+      </h1>
+      <p class="t-body-l text-secondary">{apoio}</p>
+      <WhatsAppLink origem="hero" />
+    </div>
+    <div class="placeholder-media hero__media" style="--ratio: 4 / 5">
+      <span>Foto profissional da Maria (pendente)</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero__grid {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .hero__texto {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+  }
+
+  @media (min-width: 56rem) {
+    .hero__grid {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+</style>

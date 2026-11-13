@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import { naoEncontrada as t } from '@/data/textos';
+---
+
+<BaseLayout title={t.seo.title} description={t.seo.description} path="/404" noindex>
+  <div class="container section nao-encontrada">
+    <h1 class="t-display-l">{t.titulo}</h1>
+    <p class="t-body-l">{t.texto}</p>
+    <ul role="list" class="list-reset caminhos">
+      <li>
+        <a href="/">Página inicial</a>
+      </li>
+      <li>
+        <a href="/tratamentos">Tratamentos</a>
+      </li>
+      <li>
+        <a href="/resultados">Resultados</a>
+      </li>
+      <li>
+        <a href="/sobre">Sobre a Maria</a>
+      </li>
+    </ul>
+    <WhatsAppLink origem="404" variante="secundario" />
+  </div>
+</BaseLayout>
+
+<style>
+  .nao-encontrada {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+  }
+
+  .caminhos a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+</style>

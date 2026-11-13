@@ -1,0 +1,41 @@
+---
+/** Home, seção 6. Job: prova visual. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import ResultadosGrade from './ResultadosGrade.astro';
+import type { Resultado } from '@/lib/conteudo';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  link: string;
+  aviso: string;
+  itens: { resultado: Resultado; procedimento?: string | undefined }[];
+}
+
+const { eyebrow, titulo, link, aviso, itens } = Astro.props;
+---
+
+{itens.length > 0 && (
+  <Section labelledby="resultados-titulo" tema="escuro">
+    <SectionHeader id="resultados-titulo" eyebrow={eyebrow} titulo={titulo} />
+    <ResultadosGrade itens={itens} aviso={aviso} />
+    <p class="mais">
+      <a href="/resultados" class="t-label">
+        {link}
+      </a>
+    </p>
+  </Section>
+)}
+
+<style>
+  .mais {
+    margin-block-start: var(--space-7);
+  }
+
+  .mais a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+</style>

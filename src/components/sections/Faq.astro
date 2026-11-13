@@ -1,0 +1,31 @@
+---
+/** Home, seção 11 e páginas de tratamento. Job: responder objeções antes do direct. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Accordion from '@/components/ui/Accordion.astro';
+import Pendente from '@/components/ui/Pendente.astro';
+
+interface Props {
+  eyebrow?: string;
+  titulo: string;
+  itens: { pergunta: string; resposta: string }[];
+  id?: string;
+  /** Texto do placeholder quando ainda não há perguntas. */
+  pendente?: string;
+}
+
+const { eyebrow, titulo, itens, id = 'faq-titulo', pendente } = Astro.props;
+---
+
+<Section labelledby={id}>
+  <div class="faq">
+    <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+    {itens.length > 0 ? <Accordion itens={itens} /> : <Pendente texto={pendente ?? ''} />}
+  </div>
+</Section>
+
+<style>
+  .faq {
+    max-width: 48rem;
+  }
+</style>

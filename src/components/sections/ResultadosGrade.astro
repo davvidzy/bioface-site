@@ -1,0 +1,40 @@
+---
+/**
+ * Grade de comparadores antes/depois. Usada na prévia da Home, em /resultados
+ * e nas páginas de tratamento. Recebe só resultados com consentimento.
+ */
+import BeforeAfter from '@/components/ui/BeforeAfter.astro';
+import type { Resultado } from '@/lib/conteudo';
+
+interface Props {
+  itens: { resultado: Resultado; procedimento?: string | undefined }[];
+  aviso: string;
+}
+
+const { itens, aviso } = Astro.props;
+---
+
+<p class="t-caption aviso">{aviso}</p>
+<ul class="list-reset grade" role="list" data-resultados-grade>
+  {itens.map(({ resultado, procedimento }) => (
+    <li data-procedimento={resultado.data.procedimento?.id}>
+      <BeforeAfter resultado={resultado} procedimento={procedimento} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .aviso {
+    margin-block-end: var(--space-5);
+  }
+
+  .grade {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+
+  .grade > [hidden] {
+    display: none;
+  }
+</style>

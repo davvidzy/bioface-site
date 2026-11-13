@@ -1,0 +1,50 @@
+---
+/** Home, seção 7. Job: reduzir a ansiedade de quem nunca fez. */
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  passos: { titulo: string; texto: string }[];
+}
+
+const { eyebrow, titulo, passos } = Astro.props;
+---
+
+<Section labelledby="como-funciona-titulo">
+  <SectionHeader id="como-funciona-titulo" eyebrow={eyebrow} titulo={titulo} />
+  <ol class="list-reset passos" role="list">
+    {passos.map((passo, i) => (
+      <li class="passo">
+        <span class="t-eyebrow eyebrow" aria-hidden="true">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <h3 class="t-h3">{passo.titulo}</h3>
+        <p>{passo.texto}</p>
+      </li>
+    ))}
+  </ol>
+  <div class="cta">
+    <WhatsAppLink origem="como-funciona" variante="secundario" />
+  </div>
+</Section>
+
+<style>
+  .passos {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+
+  .passo {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .cta {
+    margin-block-start: var(--space-7);
+  }
+</style>
