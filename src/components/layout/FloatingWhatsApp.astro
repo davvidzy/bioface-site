@@ -14,14 +14,14 @@ interface Props {
 const { procedimento } = Astro.props;
 ---
 
-<div class="floating-whatsapp" data-floating-whatsapp>
+<aside class="floating-whatsapp" aria-label="Atalho de agendamento" data-floating-whatsapp>
   <WhatsAppLink
     origem="flutuante"
     procedimento={procedimento}
     rotulo="Agendar avaliação"
     complementoOculto="pelo WhatsApp"
   />
-</div>
+</aside>
 
 <style>
   .floating-whatsapp {

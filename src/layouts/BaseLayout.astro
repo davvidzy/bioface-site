@@ -46,6 +46,10 @@ const robots = noindex || !INDEXAR;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Marca "JS disponível" antes da pintura: enhancements entram sem salto de layout. -->
+    <script is:inline>
+      document.documentElement.dataset.js = '';
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -90,9 +94,27 @@ const robots = noindex || !INDEXAR;
 
     <script>
       import { initTracking } from '@/lib/analytics';
-      import { iniciarMovimento } from '@/lib/motion/lifecycle';
       initTracking();
-      iniciarMovimento();
+
+      // O ClientRouter troca os atributos do <html> na navegação; a marca precisa voltar.
+      document.addEventListener('astro:after-swap', () => {
+        document.documentElement.dataset['js'] = '';
+      });
+
+      // Movimento é enhancement: GSAP e Lenis (~60 KB) só baixam na primeira interação
+      // (scroll, toque, ponteiro ou tecla), fora do caminho crítico do LCP.
+      // Até lá todo conteúdo já está visível; quem não interage não precisa de animação.
+      const GATILHOS = ['scroll', 'wheel', 'touchstart', 'pointerdown', 'pointermove', 'keydown'];
+      let pedido = false;
+      const carregarMovimento = () => {
+        if (pedido) return;
+        pedido = true;
+        GATILHOS.forEach((e) => window.removeEventListener(e, carregarMovimento));
+        import('@/lib/motion/lifecycle').then((m) => m.iniciarMovimento());
+      };
+      GATILHOS.forEach((e) =>
+        window.addEventListener(e, carregarMovimento, { passive: true, once: true }),
+      );
     </script>
   </body>
 </html>

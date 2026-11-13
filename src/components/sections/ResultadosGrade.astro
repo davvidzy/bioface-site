@@ -9,16 +9,22 @@ import type { Resultado } from '@/lib/conteudo';
 interface Props {
   itens: { resultado: Resultado; procedimento?: string | undefined }[];
   aviso: string;
+  /** Quantos pares do início carregam com prioridade (acima da dobra). */
+  prioritarias?: number;
 }
 
-const { itens, aviso } = Astro.props;
+const { itens, aviso, prioritarias = 0 } = Astro.props;
 ---
 
 <p class="t-caption aviso">{aviso}</p>
 <ul class="list-reset grade" role="list" data-resultados-grade>
-  {itens.map(({ resultado, procedimento }) => (
+  {itens.map(({ resultado, procedimento }, i) => (
     <li data-procedimento={resultado.data.procedimento?.id}>
-      <BeforeAfter resultado={resultado} procedimento={procedimento} />
+      <BeforeAfter
+        resultado={resultado}
+        procedimento={procedimento}
+        prioritaria={i < prioritarias}
+      />
     </li>
   ))}
 </ul>

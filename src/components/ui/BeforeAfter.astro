@@ -3,7 +3,8 @@
  * Comparador antes/depois acessível (CLAUDE.md, seção 9).
  *
  * - Sem JS: as duas fotos lado a lado, cada uma com rótulo. Conteúdo completo.
- * - Com JS: as fotos se sobrepõem e um <input type="range"> nativo controla a divisão.
+ * - Com JS (html[data-js], definido no <head> antes da pintura, sem salto de layout):
+ *   as fotos se sobrepõem e um <input type="range"> nativo controla a divisão.
  *   Teclado (setas, Home, End, PageUp/PageDown) e leitor de tela vêm do input nativo;
  *   o valor é anunciado em porcentagem via aria-valuetext.
  * - Arrastar com mouse ou toque em qualquer ponto da foto é enhancement.
@@ -24,6 +25,10 @@ interface Props {
 const { resultado, procedimento, prioritaria = false } = Astro.props;
 const { antes, depois, alt, legenda, intervalo } = resultado.data;
 const loading = prioritaria ? 'eager' : 'lazy';
+// A foto de depois é a camada inteira de baixo: é ela que vira LCP quando o par está no topo.
+// Os demais pares ficam em prioridade baixa para não disputar banda com o LCP.
+const prioridade = prioritaria ? 'high' : 'low';
+const prioridadeAntes = prioritaria ? undefined : 'low';
 const sizes = '(min-width: 48rem) 30vw, 100vw';
 const textoLegenda = [procedimento, legenda, intervalo].filter(Boolean).join('. ');
 const regiao = alt.antes.replace(/\s+antes do tratamento$/i, '');
@@ -43,6 +48,7 @@ const inicial = 50;
         widths={[320, 640]}
         sizes={sizes}
         loading={loading}
+        fetchpriority={prioridade}
       />
       <span class="ba__rotulo ba__rotulo--depois t-caption" aria-hidden="true">
         Depois
@@ -57,6 +63,7 @@ const inicial = 50;
         widths={[320, 640]}
         sizes={sizes}
         loading={loading}
+        fetchpriority={prioridadeAntes}
       />
       <span class="ba__rotulo ba__rotulo--antes t-caption" aria-hidden="true">
         Antes
@@ -75,7 +82,6 @@ const inicial = 50;
       aria-label={`Comparar antes e depois: ${regiao}`}
       aria-valuetext={`${inicial}% antes, ${100 - inicial}% depois`}
       data-ba-controle
-      hidden
     />
   </div>
   {textoLegenda && <figcaption class="t-caption ba__legenda">{textoLegenda}</figcaption>}
@@ -130,7 +136,7 @@ const inicial = 50;
   }
 
   /* ---------- Com JS: comparador por sobreposição ---------- */
-  .ba[data-ba-ativo] .ba__palco {
+  :global(html[data-js]) .ba .ba__palco {
     display: block;
     position: relative;
     aspect-ratio: var(--ratio);
@@ -140,20 +146,20 @@ const inicial = 50;
     user-select: none;
   }
 
-  .ba[data-ba-ativo] .ba__camada {
+  :global(html[data-js]) .ba .ba__camada {
     position: absolute;
     inset: 0;
   }
 
-  .ba[data-ba-ativo] .ba__camada :global(img) {
+  :global(html[data-js]) .ba .ba__camada :global(img) {
     -webkit-user-drag: none;
   }
 
-  .ba[data-ba-ativo] .ba__camada--antes {
+  :global(html[data-js]) .ba .ba__camada--antes {
     clip-path: inset(0 calc(100% - var(--pos)) 0 0);
   }
 
-  .ba[data-ba-ativo] .ba__divisor {
+  :global(html[data-js]) .ba .ba__divisor {
     display: block;
     position: absolute;
     inset-block: 0;
@@ -176,8 +182,14 @@ const inicial = 50;
     background-color: var(--color-bg-default);
   }
 
-  /* O input fica sobre o palco, invisível, só para foco e teclado. */
+  /* Sem JS o input não serve para nada: fica fora. */
   .ba__controle {
+    display: none;
+  }
+
+  /* O input fica sobre o palco, invisível, só para foco e teclado. */
+  :global(html[data-js]) .ba__controle {
+    display: block;
     position: absolute;
     inset: 0;
     width: 100%;
@@ -188,7 +200,7 @@ const inicial = 50;
   }
 
   /* Foco do input aparece no palco inteiro. */
-  .ba[data-ba-ativo] .ba__palco:has(.ba__controle:focus-visible) {
+  :global(html[data-js]) .ba .ba__palco:has(.ba__controle:focus-visible) {
     outline: var(--focus-width) solid var(--color-focus-ring);
     outline-offset: var(--focus-offset);
   }
@@ -211,8 +223,6 @@ const inicial = 50;
       palco.style.setProperty('--pos', `${v}%`);
     };
 
-    controle.hidden = false;
-    ba.setAttribute('data-ba-ativo', '');
     controle.addEventListener('input', () => aplicar(Number(controle.value)));
 
     // Enhancement: arrastar em qualquer ponto da foto.

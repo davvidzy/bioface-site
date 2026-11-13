@@ -1,6 +1,7 @@
 /**
  * Ciclo de vida do movimento com o ClientRouter do Astro.
  *
+ * - Carregado sob demanda na primeira interação (BaseLayout); monta a página atual na hora.
  * - astro:page-load    cria as animações da página dentro de gsap.matchMedia (que é um gsap.context)
  * - astro:before-swap  reverte o contexto e mata os ScrollTriggers da página que sai
  * - fontes e imagens   ScrollTrigger.refresh() depois de carregarem (medidas mudam)
@@ -19,6 +20,8 @@ import { MOTION_CONDITIONS, MQ_REDUCE } from './reduced-motion';
 
 let mm: gsap.MatchMedia | null = null;
 let iniciado = false;
+/** Na primeira montagem o movimento chega depois da pintura: o que já está na tela fica como está. */
+let primeiraMontagem = true;
 
 function montarPagina(): void {
   mm?.revert();
@@ -27,7 +30,7 @@ function montarPagina(): void {
     const { full } = ctx.conditions as { full: boolean; reduce: boolean };
     if (full) {
       iniciarLenis();
-      criarReveals(document);
+      criarReveals(document, { ignorarVisiveis: primeiraMontagem });
     } else {
       // Reduced motion: sem Lenis, sem reveals. Conteúdo já está visível.
       destruirLenis();
@@ -41,6 +44,7 @@ function montarPagina(): void {
     lenis.scrollTo(window.scrollY, { immediate: true, force: true });
   }
 
+  primeiraMontagem = false;
   agendarRefresh();
 }
 
@@ -107,6 +111,9 @@ export function iniciarMovimento(): void {
   // Captura: roda antes do ClientRouter, que também trata links de hash.
   document.addEventListener('click', tratarAncoras, { capture: true });
   document.addEventListener('focusin', garantirFocoVisivel);
+
+  // Carregado sob demanda: o astro:page-load da primeira página já passou.
+  montarPagina();
 
   // Se a preferência mudar com a página aberta, o matchMedia refaz tudo; o Lenis segue junto.
   window.matchMedia(MQ_REDUCE).addEventListener('change', (e) => {

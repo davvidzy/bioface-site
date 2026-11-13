@@ -9,7 +9,7 @@
  * Princípio: o CSS nunca esconde nada. O estado inicial oculto é aplicado aqui,
  * no momento da animação. Sem JS (ou com reduced motion), tudo fica visível.
  */
-import { gsap, SplitText } from './index';
+import { gsap, ScrollTrigger, SplitText } from './index';
 import { DURATION, EASE, REVEAL_DISTANCE, REVEAL_START } from './tokens';
 
 function revealFade(el: HTMLElement): void {
@@ -57,9 +57,15 @@ const REVEALS: Record<string, (el: HTMLElement) => void> = {
   lines: revealLines,
 };
 
+interface OpcoesReveal {
+  /** Não anima o que já está na tela (evita piscar quando o movimento chega depois da pintura). */
+  ignorarVisiveis?: boolean;
+}
+
 /** Cria todas as animações declaradas dentro de `raiz`. Chamar dentro de um gsap.context. */
-export function criarReveals(raiz: ParentNode = document): void {
+export function criarReveals(raiz: ParentNode = document, opcoes: OpcoesReveal = {}): void {
   raiz.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+    if (opcoes.ignorarVisiveis && ScrollTrigger.isInViewport(el)) return;
     const tipo = el.dataset['reveal'] ?? '';
     REVEALS[tipo]?.(el);
   });
