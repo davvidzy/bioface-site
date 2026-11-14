@@ -8,13 +8,12 @@ interface Props {
   eyebrow: string;
   titulo: string;
   texto: string;
-  link: string;
 }
 
-const { eyebrow, titulo, texto, link } = Astro.props;
+const { eyebrow, titulo, texto } = Astro.props;
 ---
 
-<Section labelledby="sobre-titulo" sutil>
+<Section labelledby="sobre-titulo" id="sobre" sutil>
   <div class="sobre">
     {/* TODO(conteudo): fotos profissionais da Maria (as do Instagram não têm qualidade para hero). */}
     <div class="placeholder-media" style="--ratio: 3 / 4">
@@ -23,11 +22,6 @@ const { eyebrow, titulo, texto, link } = Astro.props;
     <div class="sobre__texto">
       <SectionHeader id="sobre-titulo" eyebrow={eyebrow} titulo={titulo} />
       <Texto texto={texto} class="t-body-l" />
-      <p>
-        <a href="/sobre" class="t-label sobre__link">
-          {link}
-        </a>
-      </p>
     </div>
   </div>
 </Section>
@@ -42,12 +36,6 @@ const { eyebrow, titulo, texto, link } = Astro.props;
   .sobre__texto {
     display: grid;
     gap: var(--space-4);
-  }
-
-  .sobre__link {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap-min);
   }
 
   @media (min-width: 56rem) {

@@ -60,18 +60,6 @@ export async function resultadosPublicaveis(
   return (filtro ? todos.filter(filtro) : todos).sort((a, b) => a.id.localeCompare(b.id));
 }
 
-export async function resultadosDoProcedimento(slug: string): Promise<Resultado[]> {
-  return resultadosPublicaveis((r) => r.data.procedimento?.id === slug);
-}
-
-/** Procedimentos que têm pelo menos um resultado publicável (para o filtro de /resultados). */
-export async function procedimentosComResultado(): Promise<Procedimento[]> {
-  const resultados = await resultadosPublicaveis();
-  const ids = new Set(resultados.map((r) => r.data.procedimento?.id).filter(Boolean));
-  const procedimentos = await getProcedimentos();
-  return procedimentos.filter((p) => ids.has(p.id));
-}
-
 export async function nomeDoProcedimento(r: Resultado): Promise<string | undefined> {
   if (!r.data.procedimento) return undefined;
   const p = await getEntry(r.data.procedimento);

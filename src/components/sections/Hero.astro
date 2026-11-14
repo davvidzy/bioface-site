@@ -1,49 +1,177 @@
 ---
-/** Home, seção 2. Job: em 3 segundos, quem, o quê, onde. */
+/**
+ * Home, seção 2. Job: em 3 segundos, quem, o quê, onde. Ocupa a tela inteira (100svh).
+ *
+ * Imagem com direção de arte por orientação (lib/hero.ts):
+ * - paisagem: foto horizontal, Maria à direita, texto à esquerda sobre o fundo claro
+ * - retrato: foto vertical, texto embaixo
+ * Contraste: texto vinho (wine/900) sobre o fundo bege da foto (~9:1), reforçado por um
+ * degradê creme onde o texto fica, para manter ≥ 7:1 em qualquer recorte.
+ *
+ * É o LCP da Home: eager, fetchpriority=high e preload no <head> (index.astro).
+ */
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import { imagensHero, MEDIA_RETRATO } from '@/lib/hero';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
-  apoio: string;
+  destaque: string;
+  descricao: string;
+  alt: string;
 }
 
-const { eyebrow, titulo, apoio } = Astro.props;
+const { titulo, destaque, descricao, alt } = Astro.props;
+const { paisagem, retrato } = await imagensHero();
 ---
 
-<section class="hero section" aria-labelledby="hero-titulo">
-  <div class="container hero__grid">
-    <div class="hero__texto">
-      <p class="eyebrow t-eyebrow">{eyebrow}</p>
-      <h1 id="hero-titulo" class="t-display-xl">
-        {titulo}
-      </h1>
-      <p class="t-body-l text-secondary">{apoio}</p>
-      <WhatsAppLink origem="hero" />
-    </div>
-    {/* TODO(conteudo): fotos profissionais da Maria (as do Instagram não têm qualidade para hero). */}
-    <div class="placeholder-media hero__media" style="--ratio: 4 / 5">
-      <span>Foto profissional da Maria (pendente)</span>
-    </div>
+<section class="hero" aria-labelledby="hero-titulo" data-cta-principal>
+  <picture class="hero__media">
+    <source
+      media={MEDIA_RETRATO}
+      type="image/avif"
+      srcset={retrato.avif.srcSet.attribute}
+      sizes="100vw"
+    />
+    <source
+      media={MEDIA_RETRATO}
+      type="image/webp"
+      srcset={retrato.webp.srcSet.attribute}
+      sizes="100vw"
+    />
+    <source media={MEDIA_RETRATO} srcset={retrato.jpg.srcSet.attribute} sizes="100vw" />
+    <source type="image/avif" srcset={paisagem.avif.srcSet.attribute} sizes="100vw" />
+    <source type="image/webp" srcset={paisagem.webp.srcSet.attribute} sizes="100vw" />
+    <img
+      src={paisagem.jpg.src}
+      srcset={paisagem.jpg.srcSet.attribute}
+      sizes="100vw"
+      width={paisagem.meta.width}
+      height={paisagem.meta.height}
+      alt={alt}
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+  </picture>
+
+  <div class="container hero__conteudo">
+    <h1 id="hero-titulo" class="hero__titulo t-display-xl">
+      <span>{titulo}</span>
+      <em class="hero__destaque">{destaque}</em>
+    </h1>
+    <p class="hero__descricao t-body-l">{descricao}</p>
+    <WhatsAppLink origem="hero" />
   </div>
 </section>
 
 <style>
-  .hero__grid {
+  .hero {
+    position: relative;
+    isolation: isolate;
     display: grid;
-    gap: var(--space-7);
-    align-items: center;
+    align-items: end;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    background-color: var(--color-bg-subtle);
   }
 
-  .hero__texto {
+  /* ---------- Imagem ---------- */
+  .hero__media,
+  .hero__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__media {
+    z-index: -2;
+  }
+
+  .hero__media img {
+    object-fit: cover;
+    /* Paisagem: Maria à direita; ao recortar as laterais, preserva o lado dela. */
+    object-position: 70% 30%;
+  }
+
+  /* ---------- Degradê de contraste ----------
+   * Creme (bg-default) onde o texto fica + faixa no topo para o header sobreposto.
+   */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
+        transparent 9rem
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-bg-default) 88%, transparent) 0%,
+        color-mix(in srgb, var(--color-bg-default) 60%, transparent) 34%,
+        transparent 60%
+      );
+  }
+
+  /* ---------- Texto ---------- */
+  .hero__conteudo {
     display: grid;
-    gap: var(--space-5);
     justify-items: start;
+    gap: var(--space-5);
+    padding-block: calc(var(--space-10) + var(--space-6))
+      clamp(var(--space-8), 12vh, var(--space-10));
+    color: var(--color-text-primary);
   }
 
-  @media (min-width: 56rem) {
-    .hero__grid {
-      grid-template-columns: 3fr 2fr;
+  .hero__titulo {
+    display: grid;
+  }
+
+  .hero__destaque {
+    font-style: italic;
+  }
+
+  .hero__descricao {
+    /* No máximo 2 linhas no desktop. */
+    max-width: 34rem;
+    color: var(--color-text-primary);
+  }
+
+  .hero__conteudo :global(.btn) {
+    margin-block-start: var(--space-2);
+  }
+
+  /* ---------- Retrato (celular e tablet em pé) ---------- */
+  @media (orientation: portrait) {
+    .hero__media img {
+      object-position: 60% 20%;
+    }
+
+    /* Só a faixa do topo (header); o degradê do texto vai no próprio bloco abaixo. */
+    .hero::before {
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
+        transparent 8rem
+      );
+    }
+
+    /* Degradê atrás do bloco de texto: acompanha a altura do conteúdo em qualquer tela,
+       com uma faixa de transição (--fade) acima do título. */
+    .hero__conteudo {
+      --fade: var(--space-9);
+      padding-block: var(--fade) var(--space-8);
+      background: linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--color-bg-default) 94%, transparent) 0%,
+        color-mix(in srgb, var(--color-bg-default) 86%, transparent) calc(100% - var(--fade)),
+        transparent 100%
+      );
     }
   }
 </style>

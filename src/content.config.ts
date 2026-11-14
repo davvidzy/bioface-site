@@ -44,7 +44,7 @@ const resultados = defineCollection({
        * Diferença em relação ao brief: opcional.
        * O Figma não informa qual tratamento aparece em cada par, e atribuir um
        * resultado a um tratamento é informação clínica que não pode ser inventada.
-       * Quando a cliente informar, preencher; o filtro de /resultados passa a usar.
+       * Quando a cliente informar, preencher; a legenda do comparador passa a mostrar.
        */
       procedimento: reference('procedimentos').optional(),
       antes: image(),

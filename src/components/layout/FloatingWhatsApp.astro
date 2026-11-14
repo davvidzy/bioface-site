@@ -1,26 +1,15 @@
 ---
 /**
  * Botão flutuante de WhatsApp, só no mobile.
- * Some quando o CTA final da página ([data-cta-final]) está visível,
+ * Some quando um CTA principal ([data-cta-principal]: hero e CTA final) está visível,
  * para não haver dois CTAs iguais na mesma tela.
  * Sem JS: fica sempre visível (o site continua completo).
  */
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
-
-interface Props {
-  procedimento?: string | undefined;
-}
-
-const { procedimento } = Astro.props;
 ---
 
 <aside class="floating-whatsapp" aria-label="Atalho de agendamento" data-floating-whatsapp>
-  <WhatsAppLink
-    origem="flutuante"
-    procedimento={procedimento}
-    rotulo="Agendar avaliação"
-    complementoOculto="pelo WhatsApp"
-  />
+  <WhatsAppLink origem="flutuante" rotulo="Agendar avaliação" complementoOculto="pelo WhatsApp" />
 </aside>
 
 <style>
@@ -68,7 +57,7 @@ const { procedimento } = Astro.props;
   function montar() {
     observer?.disconnect();
     const botao = document.querySelector<HTMLElement>('[data-floating-whatsapp]');
-    const alvos = document.querySelectorAll('[data-cta-final]');
+    const alvos = document.querySelectorAll('[data-cta-principal]');
     if (!botao || alvos.length === 0) return;
     const visiveis = new Set<Element>();
     observer = new IntersectionObserver((entries) => {

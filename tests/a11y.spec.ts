@@ -53,7 +53,7 @@ test.describe('axe: estados interativos', () => {
       );
       await route.fulfill({ response: resposta, body: html });
     });
-    for (const rota of ['/', '/resultados', '/tratamentos/tratamento-melasma']) {
+    for (const rota of ['/', '/privacidade']) {
       await page.goto(rota);
       expect(await page.evaluate(() => document.documentElement.classList.contains('lenis'))).toBe(
         false,

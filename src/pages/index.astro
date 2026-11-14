@@ -1,8 +1,8 @@
 ---
 /**
- * Home. A ordem das seções segue a decisão da paciente:
+ * Home: landing page única. A ordem das seções segue a decisão da paciente:
  * quem é, o que faz, funciona, como é o processo, posso confiar, como agendo.
- * A Home precisa funcionar sozinha.
+ * O header usa âncoras destas seções (data/textos.ts → navegacao).
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
@@ -27,9 +27,10 @@ import {
   getFaqGeral,
 } from '@/lib/conteudo';
 import { jsonLdLocalBusiness, jsonLdFaq } from '@/lib/seo';
+import { preloadsHero } from '@/lib/hero';
 
 const grupos = await getProcedimentosPorCategoria();
-const resultados = (await resultadosPublicaveis()).slice(0, 3);
+const resultados = await resultadosPublicaveis();
 const resultadosItens = await Promise.all(
   resultados.map(async (resultado) => ({
     resultado,
@@ -38,6 +39,7 @@ const resultadosItens = await Promise.all(
 );
 const depoimentos = await getDepoimentos();
 const faq = (await getFaqGeral()).map((f) => f.data);
+const preloads = await preloadsHero();
 
 // Só fatos com fonte. Nota do Google e número de procedimentos entram quando a cliente informar.
 const credenciais: Credencial[] = [
@@ -53,7 +55,27 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
 );
 ---
 
-<BaseLayout title={home.seo.title} description={home.seo.description} path="/" jsonLd={jsonLd}>
+<BaseLayout
+  title={home.seo.title}
+  description={home.seo.description}
+  path="/"
+  jsonLd={jsonLd}
+  headerSobreposto
+>
+  <Fragment slot="head">
+    {preloads.map((p) => (
+      <link
+        rel="preload"
+        as="image"
+        type="image/avif"
+        media={p.media}
+        imagesrcset={p.srcset}
+        imagesizes="100vw"
+        fetchpriority="high"
+      />
+    ))}
+  </Fragment>
+
   <Hero {...home.hero} />
   <Credenciais titulo={home.credenciais.titulo} itens={credenciais} />
   <Filosofia {...home.filosofia} />
@@ -63,6 +85,6 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   <SobrePrevia {...home.sobre} />
   <Depoimentos {...home.depoimentos} depoimentos={depoimentos} />
   <Espaco {...home.espaco} />
-  <Faq {...home.faq} itens={faq} />
+  <Faq {...home.faq} ancora="duvidas" itens={faq} />
   <CtaFinal {...home.ctaFinal} origem="cta-final" comLocalizacao />
 </BaseLayout>

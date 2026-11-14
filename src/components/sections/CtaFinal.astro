@@ -1,7 +1,7 @@
 ---
 /**
  * CTA final de cada página. Job: última chance de conversão, sem atrito.
- * Marcado com data-cta-final: o botão flutuante some quando ele está na tela.
+ * Marcado com data-cta-principal: o botão flutuante some quando ele está na tela.
  */
 import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
@@ -19,7 +19,7 @@ interface Props {
 const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.props;
 ---
 
-<Section labelledby="cta-final-titulo" tema="escuro" data-cta-final>
+<Section labelledby="cta-final-titulo" id="contato" tema="escuro" data-cta-principal>
   <div class="cta">
     <h2 id="cta-final-titulo" class="t-h2" data-reveal="fade">
       {titulo}

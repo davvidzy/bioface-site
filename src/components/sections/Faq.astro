@@ -1,5 +1,5 @@
 ---
-/** Home, seção 11 e páginas de tratamento. Job: responder objeções antes do direct. */
+/** Home, seção 11. Job: responder objeções antes do direct. */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Accordion from '@/components/ui/Accordion.astro';
@@ -10,14 +10,16 @@ interface Props {
   titulo: string;
   itens: { pergunta: string; resposta: string }[];
   id?: string;
+  /** Âncora da seção na landing page. */
+  ancora?: string;
   /** Texto do placeholder quando ainda não há perguntas. */
   pendente?: string;
 }
 
-const { eyebrow, titulo, itens, id = 'faq-titulo', pendente } = Astro.props;
+const { eyebrow, titulo, itens, id = 'faq-titulo', ancora, pendente } = Astro.props;
 ---
 
-<Section labelledby={id}>
+<Section labelledby={id} id={ancora}>
   <div class="faq">
     <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
     {itens.length > 0 ? <Accordion itens={itens} /> : <Pendente texto={pendente ?? ''} />}

@@ -24,11 +24,19 @@ import {
 } from '@/lib/seo';
 
 type Props = SeoProps & {
-  /** Nome do tratamento para o botão flutuante pré-preencher a mensagem. */
-  procedimento?: string | undefined;
+  /** Header por cima do primeiro bloco da página (hero em tela cheia). */
+  headerSobreposto?: boolean;
 };
 
-const { title, description, path, image, noindex = false, jsonLd = [], procedimento } = Astro.props;
+const {
+  title,
+  description,
+  path,
+  image,
+  noindex = false,
+  jsonLd = [],
+  headerSobreposto = false,
+} = Astro.props;
 
 const canonical = absoluteUrl(path, Astro.site);
 // Transição de página da Fase 0: fade simples só no conteúdo. Duração = --duration-page.
@@ -81,16 +89,18 @@ const robots = noindex || !INDEXAR;
       <script type="application/ld+json" set:html={JSON.stringify(ld)} />
     ))}
 
+    <slot name="head" />
+
     <ClientRouter />
   </head>
   <body>
     <SkipLink />
-    <Header />
+    <Header sobreposto={headerSobreposto} />
     <main id="conteudo" tabindex="-1" transition:animate={transicaoPagina}>
       <slot />
     </main>
     <Footer />
-    <FloatingWhatsApp procedimento={procedimento} />
+    <FloatingWhatsApp />
 
     <script>
       import { initTracking } from '@/lib/analytics';

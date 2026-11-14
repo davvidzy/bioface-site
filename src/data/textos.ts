@@ -1,13 +1,22 @@
 /**
- * Copy das páginas. Componentes de seção recebem estes textos por props.
+ * Copy do site. Componentes de seção recebem estes textos por props.
  * Tom: português do Brasil, sóbrio e acolhedor, frases curtas, sem travessão longo.
  * Sem promessa de resultado garantido, sem "o melhor", sem "sem dor" absoluto.
  *
+ * Landing page única: tudo acontece na Home; a navegação usa âncoras das seções.
  * Texto que só a Maria pode fornecer leva o marcador de conteúdo pendente e vira placeholder visível.
  */
 import { site } from './site';
 
 export const AVISO_RESULTADOS = 'Resultados variam de pessoa para pessoa.';
+
+/** Âncoras da Home, na ordem da página. Usadas no header. */
+export const navegacao = [
+  { ancora: 'tratamentos', rotulo: 'Tratamentos' },
+  { ancora: 'resultados', rotulo: 'Resultados' },
+  { ancora: 'sobre', rotulo: 'Sobre' },
+  { ancora: 'duvidas', rotulo: 'Dúvidas' },
+] as const;
 
 export const home = {
   seo: {
@@ -15,10 +24,13 @@ export const home = {
     description: `Estética facial com resultados naturais. ${site.responsavel.nome}, biomédica esteta há ${site.anosAtuacao} anos no Lago Sul, Brasília. Agende sua avaliação pelo WhatsApp.`,
   },
   hero: {
-    eyebrow: `${site.endereco.bairro}, ${site.endereco.cidade}`,
     // TODO(validar-cliente): promessa central do h1.
-    titulo: 'Estética facial com resultados naturais',
-    apoio: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()} há ${site.anosAtuacao} anos.`,
+    titulo: 'Você,',
+    destaque: 'ainda mais você.',
+    descricao: `Estética facial com ${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()} há ${site.anosAtuacao} anos no ${site.endereco.bairro}.`,
+    // TODO(validar-cliente): confirmar que as fotos do hero são da Maria e ajustar o jaleco
+    // ("Dra." e "Medicina Estética" não cabem para biomédica).
+    alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
   },
   credenciais: {
     titulo: 'Credenciais',
@@ -37,7 +49,6 @@ export const home = {
   resultados: {
     eyebrow: 'Resultados',
     titulo: 'Antes e depois',
-    link: 'Ver todos os resultados',
   },
   comoFunciona: {
     eyebrow: 'Como funciona',
@@ -62,7 +73,6 @@ export const home = {
     eyebrow: 'Quem cuida de você',
     titulo: site.responsavel.nome,
     texto: 'TODO(conteudo): trajetória resumida da Maria em 2 ou 3 frases.',
-    link: 'Conhecer a Maria',
   },
   depoimentos: {
     eyebrow: 'Depoimentos',
@@ -80,81 +90,6 @@ export const home = {
   ctaFinal: {
     titulo: 'Agende sua avaliação',
     texto: 'A avaliação é o primeiro passo para um plano feito para você.',
-  },
-};
-
-export const tratamentosIndice = {
-  seo: {
-    title: 'Tratamentos faciais no Lago Sul, Brasília | BioFace',
-    description:
-      'Tratamentos faciais para pele, firmeza e contorno, agrupados pelo seu objetivo. Agende uma avaliação individual com Maria Guedes.',
-  },
-  titulo: 'Tratamentos faciais',
-  intro: 'Cada plano é definido na avaliação individual, a partir do que você deseja resolver.',
-  navegacao: 'Categorias de tratamento',
-  cta: {
-    titulo: 'Não sabe qual é o seu caso?',
-    texto: 'A avaliação define.',
-  },
-};
-
-export const tratamento = {
-  breadcrumbRaiz: 'Tratamentos',
-  paraQuem: 'Para quem é',
-  comoFunciona: 'Como funciona',
-  expectativa: 'O que esperar',
-  expectativaRotulos: {
-    sessoes: 'Sessões',
-    duracaoSessao: 'Duração da sessão',
-    recuperacao: 'Recuperação',
-    inicioResultado: 'Início do resultado',
-    duracaoResultado: 'Duração do resultado',
-  },
-  resultados: 'Resultados deste tratamento',
-  faq: 'Perguntas frequentes',
-  relacionados: 'Tratamentos relacionados',
-  cta: {
-    titulo: 'Quer saber se este tratamento é para você?',
-    texto: 'A indicação é feita na avaliação individual.',
-  },
-};
-
-export const resultados = {
-  seo: {
-    title: 'Resultados: antes e depois | BioFace',
-    description: `Antes e depois de tratamentos faciais com ${site.responsavel.nome}, no Lago Sul, Brasília. ${AVISO_RESULTADOS}`,
-  },
-  titulo: 'Resultados',
-  intro: 'Fotos de pacientes que autorizaram a publicação.',
-  filtro: 'Filtrar por tratamento',
-  filtroTodos: 'Todos',
-  cta: {
-    titulo: 'Quer entender o que é possível no seu caso?',
-    texto: 'Cada rosto é único. A avaliação mostra o caminho.',
-  },
-};
-
-export const sobre = {
-  seo: {
-    title: `${site.responsavel.nome}, biomédica esteta no Lago Sul | BioFace`,
-    description: `Conheça ${site.responsavel.nome}, biomédica esteta há ${site.anosAtuacao} anos, e o espaço da BioFace no Lago Sul, Brasília.`,
-  },
-  titulo: site.responsavel.nome,
-  subtitulo: `${site.responsavel.titulo}, ${site.anosAtuacao} anos de atuação`,
-  formacao: {
-    titulo: 'Formação e trajetória',
-    texto: 'TODO(conteudo): formação, especializações e trajetória da Maria.',
-  },
-  filosofia: {
-    titulo: 'Filosofia de trabalho',
-    texto: 'TODO(conteudo): versão longa da filosofia, o que natural significa no método da Maria.',
-  },
-  espaco: {
-    titulo: 'O espaço',
-    fotos: 4,
-  },
-  localizacao: {
-    titulo: 'Como chegar',
   },
 };
 

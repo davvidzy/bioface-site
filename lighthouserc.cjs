@@ -10,7 +10,7 @@ module.exports = {
   ci: {
     collect: {
       staticDistDir: './dist',
-      url: ['/index.html', '/tratamentos/tratamento-melasma.html', '/resultados.html'],
+      url: ['/index.html', '/privacidade.html'],
       numberOfRuns: 3,
     },
     assert: {

@@ -3,7 +3,7 @@ import { site, faltando, linkGoogleMaps } from '@/data/site';
 export interface SeoProps {
   title: string;
   description: string;
-  /** Caminho da página, ex.: "/tratamentos". Gera canonical e og:url. */
+  /** Caminho da página, ex.: "/privacidade". Gera canonical e og:url. */
   path: string;
   /** Imagem Open Graph (URL absoluta ou caminho relativo ao site). */
   image?: string | undefined;
@@ -25,7 +25,7 @@ export const INDEXAR = import.meta.env['INDEXAR'] === 'true' || process.env['IND
 
 /**
  * Nome do arquivo Open Graph de uma rota, gerado por scripts/og.mjs em public/og/.
- * "/" → "padrao", "/tratamentos/fios-de-pdo" → "tratamentos-fios-de-pdo".
+ * "/" → "padrao", "/privacidade" → "privacidade".
  */
 export function nomeOg(path: string): string {
   const limpo = path.replace(/^\/+|\/+$/g, '');
@@ -103,29 +103,6 @@ export function jsonLdFaq(
       '@type': 'Question',
       name: i.pergunta,
       acceptedAnswer: { '@type': 'Answer', text: i.resposta },
-    })),
-  };
-}
-
-export interface Migalha {
-  nome: string;
-  /** Sem href = página atual. */
-  href?: string;
-}
-
-export function jsonLdBreadcrumb(
-  migalhas: Migalha[],
-  base: URL | string | undefined,
-  pathAtual: string,
-): Record<string, unknown> {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: migalhas.map((m, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: m.nome,
-      item: absoluteUrl(m.href ?? pathAtual, base),
     })),
   };
 }

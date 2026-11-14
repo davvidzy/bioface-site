@@ -6,16 +6,19 @@
 interface Props {
   /** id do heading que rotula a seção. */
   labelledby: string;
+  /** Âncora da seção na landing page (ex.: "tratamentos" → /#tratamentos). */
+  id?: string | undefined;
   tema?: 'claro' | 'escuro';
   sutil?: boolean;
   class?: string | undefined;
   [key: `data-${string}`]: string | boolean | undefined;
 }
 
-const { labelledby, tema = 'claro', sutil = false, class: className, ...rest } = Astro.props;
+const { labelledby, id, tema = 'claro', sutil = false, class: className, ...rest } = Astro.props;
 ---
 
 <section
+  id={id}
   class:list={['section', { 'section--subtle': sutil }, className]}
   aria-labelledby={labelledby}
   data-theme={tema === 'escuro' ? 'escuro' : undefined}

@@ -15,20 +15,16 @@ interface Props {
 const { eyebrow, titulo, intro, grupos } = Astro.props;
 ---
 
-<Section labelledby="tratamentos-titulo">
+<Section labelledby="tratamentos-titulo" id="tratamentos">
   <SectionHeader id="tratamentos-titulo" eyebrow={eyebrow} titulo={titulo} intro={intro} />
   <div class="categorias">
     {grupos.map(({ categoria, procedimentos }) => (
       <div class="categoria">
-        <h3 class="t-h3">
-          <a href={`/tratamentos#${categoria.slug}`}>{categoria.rotulo}</a>
-        </h3>
+        <h3 class="t-h3">{categoria.rotulo}</h3>
         <p class="text-secondary">{categoria.descricao}</p>
         <ul class="list-reset categoria__lista" role="list">
           {procedimentos.map((p) => (
-            <li>
-              <a href={`/tratamentos/${p.id}`}>{p.data.nome}</a>
-            </li>
+            <li>{p.data.nome}</li>
           ))}
         </ul>
       </div>
@@ -51,17 +47,8 @@ const { eyebrow, titulo, intro, grupos } = Astro.props;
     border-block-start: var(--border-width) solid var(--color-border-default);
   }
 
-  .categoria h3 a {
-    text-decoration: none;
-  }
-
-  .categoria h3 a:hover {
-    text-decoration: underline;
-  }
-
-  .categoria__lista a {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--tap-min);
+  .categoria__lista {
+    display: grid;
+    gap: var(--space-2);
   }
 </style>

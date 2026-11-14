@@ -3,15 +3,12 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 124 marcadores.
+Total: 121 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
 - [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:19](src/components/sections/Espaco.astro#L19)
-- [ ] fotos profissionais da Maria (as do Instagram não têm qualidade para hero). Em 3 arquivos:
-  - [src/components/sections/Hero.astro:24](src/components/sections/Hero.astro#L24)
-  - [src/components/sections/SobrePrevia.astro:19](src/components/sections/SobrePrevia.astro#L19)
-  - [src/pages/sobre.astro:20](src/pages/sobre.astro#L20)
+- [ ] fotos profissionais da Maria (as do Instagram não têm qualidade para hero). [src/components/sections/SobrePrevia.astro:18](src/components/sections/SobrePrevia.astro#L18)
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
@@ -109,11 +106,9 @@ Total: 124 marcadores.
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
-- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:30](src/data/textos.ts#L30)
-- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:64](src/data/textos.ts#L64)
-- [ ] formação, especializações e trajetória da Maria. [src/data/textos.ts:146](src/data/textos.ts#L146)
-- [ ] versão longa da filosofia, o que natural significa no método da Maria. [src/data/textos.ts:150](src/data/textos.ts#L150)
-- [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:6](astro.config.mjs#L6)
+- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:42](src/data/textos.ts#L42)
+- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:75](src/data/textos.ts#L75)
+- [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)
 
@@ -139,8 +134,9 @@ Total: 124 marcadores.
   - [src/content/resultados/par-4.json:2](src/content/resultados/par-4.json#L2)
   - [src/content/resultados/par-5.json:2](src/content/resultados/par-5.json#L2)
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
-- [ ] promessa central do h1. [src/data/textos.ts:19](src/data/textos.ts#L19)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:45](src/data/textos.ts#L45)
+- [ ] promessa central do h1. [src/data/textos.ts:27](src/data/textos.ts#L27)
+- [ ] confirmar que as fotos do hero são da Maria e ajustar o jaleco. [src/data/textos.ts:31](src/data/textos.ts#L31)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:56](src/data/textos.ts#L56)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

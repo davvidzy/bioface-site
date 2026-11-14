@@ -13,38 +13,71 @@ test.describe('WhatsApp', () => {
       expect(await link.textContent()).toContain('nova aba');
     }
   });
+});
 
-  test('CTA da página de tratamento leva o nome do tratamento', async ({ page }) => {
-    await page.goto('/tratamentos/tratamento-melasma');
-    const href = await page
-      .locator('[data-cta-final] a[data-track="whatsapp_click"]')
-      .getAttribute('href');
-    expect(decodeURIComponent(href ?? '')).toContain('avaliação sobre Tratamento para melasma');
+test.describe('Hero', () => {
+  test('ocupa a tela inteira e tem título, descrição e CTA', async ({ page }) => {
+    await page.goto('/');
+    const hero = page.locator('.hero');
+    const altura = await hero.evaluate((h) => h.getBoundingClientRect().height);
+    expect(Math.round(altura)).toBe(page.viewportSize()?.height);
+    await expect(hero.locator('h1')).toHaveCount(1);
+    await expect(hero.locator('.hero__descricao')).toBeVisible();
+    await expect(hero.locator('a[data-origem="hero"]')).toBeVisible();
+  });
+
+  test('foto certa por orientação', async ({ page, isMobile }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const src = await page.locator('.hero img').evaluate((i) => (i as HTMLImageElement).currentSrc);
+    expect(src).toContain(isMobile ? 'hero-mobile' : 'hero-desktop');
+  });
+
+  test('descrição em no máximo 2 linhas', async ({ page }) => {
+    await page.goto('/');
+    const linhas = await page.locator('.hero__descricao').evaluate((p) => {
+      const lh = parseFloat(getComputedStyle(p).lineHeight);
+      return Math.round(p.getBoundingClientRect().height / lh);
+    });
+    expect(linhas).toBeLessThanOrEqual(2);
+  });
+
+  test('mobile: botão flutuante oculto com o hero na tela', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'botão flutuante só existe no mobile');
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await expect(page.locator('[data-floating-whatsapp]')).toHaveAttribute('data-oculto', '');
+    await page.locator('#tratamentos').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-floating-whatsapp]')).not.toHaveAttribute('data-oculto', '');
   });
 });
 
 test.describe('Conteúdo e SEO', () => {
   test('um h1 por página', async ({ page }) => {
-    for (const rota of ['/', '/tratamentos', '/resultados', '/sobre', '/privacidade']) {
+    for (const rota of ['/', '/privacidade', '/404']) {
       await page.goto(rota);
       await expect(page.locator('h1')).toHaveCount(1);
     }
   });
 
-  test('tratamento pendente recebe noindex', async ({ page }) => {
-    await page.goto('/tratamentos/fios-de-pdo');
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  test('cada âncora do header tem uma seção na Home', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'navegação do header só aparece no desktop');
+    await page.goto('/');
+    for (const link of await page.locator('header nav a').all()) {
+      const ancora = ((await link.getAttribute('href')) ?? '').split('#')[1] ?? '';
+      await expect(page.locator(`section#${ancora}`)).toHaveCount(1);
+    }
   });
 
   test('aviso de variação aparece junto de resultados', async ({ page }) => {
-    await page.goto('/resultados');
-    await expect(page.getByText('Resultados variam de pessoa para pessoa.')).toBeVisible();
+    await page.goto('/');
+    await expect(
+      page.locator('#resultados').getByText('Resultados variam de pessoa para pessoa.'),
+    ).toBeVisible();
   });
 });
 
 test.describe('Comparador antes/depois', () => {
   test('teclado move o controle e anuncia porcentagem', async ({ page }) => {
-    await page.goto('/resultados');
+    await page.goto('/');
     const controle = page.locator('[data-ba] input[type="range"]').first();
     await controle.focus();
     await page.keyboard.press('ArrowRight');
@@ -82,24 +115,28 @@ test.describe('Movimento', () => {
     await page.locator('#faq-titulo').scrollIntoViewIfNeeded();
     await expect(page.locator('#faq-titulo')).toHaveCSS('opacity', '1', { timeout: 3000 });
 
-    await page.locator('header a[href="/tratamentos"]').click();
-    await page.waitForURL('**/tratamentos');
+    // Ida e volta pela política de privacidade (ClientRouter) e âncora na volta.
+    await page.locator('footer a[href="/privacidade"]').click();
+    await page.waitForURL('**/privacidade');
+    await page.locator('header a[href="/"]').click();
+    await page.waitForURL((url) => url.pathname === '/');
     await expect(page.locator('html')).toHaveAttribute('data-js', '');
     // Durante a View Transition a camada ::view-transition cobre a página e recebe os cliques.
     await page.waitForFunction(() =>
       document.getAnimations().every((a) => a.playState !== 'running'),
     );
-    await page.locator('.categorias-nav a[href="#contorno"]').click();
-    await expect(page.locator('#contorno')).toBeFocused();
+    await page.locator('header nav a[href="/#tratamentos"]').click();
+    await expect(page.locator('#tratamentos')).toBeFocused();
     expect(erros).toEqual([]);
   });
 
-  test('âncora como primeira interação: rola e foca o destino', async ({ page }) => {
-    await page.goto('/tratamentos', { waitUntil: 'networkidle' });
-    await page.locator('.categorias-nav a[href="#contorno"]').focus();
+  test('âncora como primeira interação: rola e foca o destino', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'navegação do header só aparece no desktop');
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('header nav a[href="/#duvidas"]').focus();
     await page.keyboard.press('Enter');
-    await expect(page.locator('#contorno')).toBeFocused();
-    await expect(page.locator('#contorno')).toBeInViewport();
+    await expect(page.locator('#duvidas')).toBeFocused();
+    await expect(page.locator('#duvidas')).toBeInViewport();
   });
 
   test('reduced motion: sem Lenis e conteúdo visível', async ({ browser }) => {

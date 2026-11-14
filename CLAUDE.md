@@ -52,24 +52,19 @@ Fixe versões exatas no `package.json`. Rode `npm view <pacote> version` antes d
 
 ## 3. Mapa do site
 
+> **Decisão de 2026-11-13: landing page única.** Tudo acontece na Home. As páginas `/tratamentos`, `/tratamentos/[slug]`, `/resultados` e `/sobre` foram removidas a pedido. **Não recrie rotas novas** sem pedido explícito. As seções 6.2 a 6.5 abaixo ficam só como referência de conteúdo para as seções da Home.
+
 ```
-/                                   Home
-/tratamentos                        Índice de tratamentos, agrupados por objetivo
-/tratamentos/[slug]                 Página de cada tratamento (12 páginas, geradas da collection)
-/resultados                         Galeria de antes e depois, filtrável por tratamento
-/sobre                              Maria Guedes e o espaço
-/privacidade                        Política de privacidade (LGPD)
+/                                   Home (landing page única; header navega por âncoras)
+/privacidade                        Política de privacidade (LGPD, obrigatória)
 /404                                Página não encontrada, com caminho de volta
 ```
 
-Não existe `/contato`: o contato é o WhatsApp, presente em todas as páginas (header, CTA final, botão flutuante no mobile) e o bloco de localização fica no rodapé expandido da Home e de `/sobre`.
+Âncoras da Home (header): `#tratamentos`, `#resultados`, `#sobre`, `#duvidas`; o CTA final é `#contato`.
 
-### Por que várias páginas e não uma
-1. **SEO local:** cada tratamento vira uma página indexável ("tratamento para melasma Lago Sul"). Uma one-page não ranqueia para 12 termos.
-2. **Experiência:** transições entre páginas são parte da linguagem Awwwards.
-3. **Conversão contextual:** o CTA de cada tratamento abre o WhatsApp com mensagem já preenchida com o nome do tratamento.
+Não existe `/contato`: o contato é o WhatsApp (header, hero, CTA final, botão flutuante no mobile) e o bloco de localização fica no CTA final da Home.
 
-A Home precisa funcionar sozinha: quem não navegar além dela tem tudo para decidir e agendar.
+Consequência aceita: sem uma página por tratamento, o SEO local depende da Home (title, description, JSON-LD de `HealthAndBeautyBusiness` e `FAQPage`). A collection `procedimentos` continua com o modelo completo (seção 5), pronta se as páginas voltarem.
 
 ---
 
@@ -191,13 +186,13 @@ Mais: botão flutuante de WhatsApp no mobile, que some quando o CTA final está 
 
 **Fica fora de propósito:** tabela de preços, blog, newsletter, "missão, visão e valores", contador animado de números sem fonte, carrossel automático.
 
-### 6.2 Índice `/tratamentos`
+### 6.2 Índice `/tratamentos` (removida: landing única, ver seção 3)
 1. Cabeçalho da página (`h1` + 1 frase sobre avaliação individual)
 2. Navegação por categoria (âncoras ou filtro, operável por teclado)
 3. 3 blocos de categoria, cada um com seus cards
 4. CTA: "Não sabe qual é o seu caso? A avaliação define." → WhatsApp
 
-### 6.3 Template `/tratamentos/[slug]`
+### 6.3 Template `/tratamentos/[slug]` (removida: landing única, ver seção 3)
 1. Breadcrumb (Tratamentos › Categoria › Nome)
 2. Hero: `h1` com o nome + `problema` em linguagem da paciente
 3. Para quem é (`paraQuem`)
@@ -210,13 +205,13 @@ Mais: botão flutuante de WhatsApp no mobile, que some quando o CTA final está 
 
 Se `pendente: true`, a página é gerada mas recebe `noindex` e não entra no sitemap.
 
-### 6.4 `/resultados`
+### 6.4 `/resultados` (removida: os comparadores ficam na seção Resultados da Home)
 1. Cabeçalho + aviso: resultados variam de pessoa para pessoa
 2. Filtro por tratamento (só os que têm resultado)
 3. Grade de comparadores antes/depois
 4. CTA → WhatsApp
 
-### 6.5 `/sobre`
+### 6.5 `/sobre` (removida: conteúdo vai para as seções Sobre, Espaço e CTA final da Home)
 1. Maria Guedes: foto, formação, 18 anos de trajetória
 2. Filosofia de trabalho (versão longa da seção 4 da Home)
 3. O espaço (galeria)
