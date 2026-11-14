@@ -50,6 +50,31 @@ test.describe('Hero', () => {
   });
 });
 
+test.describe('Menu do celular', () => {
+  test('abre, mostra os links e fecha ao tocar num link', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'menu hambúrguer só no celular');
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const menu = page.locator('[data-menu-movel]');
+    await expect(page.locator('header nav[aria-label="Principal"]')).toBeHidden();
+    await menu.locator('summary').click();
+    await expect(menu.locator('[data-menu-link]')).toHaveCount(4);
+    await expect(menu.locator('a[data-origem="menu"]')).toBeVisible();
+    await menu.locator('[data-menu-link]', { hasText: 'Dúvidas' }).click();
+    await expect(menu).not.toHaveAttribute('open', '');
+    await expect(page.locator('#duvidas')).toBeInViewport();
+  });
+
+  test('Esc fecha e devolve o foco ao botão', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'menu hambúrguer só no celular');
+    await page.goto('/');
+    const botao = page.locator('[data-menu-movel] summary');
+    await botao.click();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[data-menu-movel]')).not.toHaveAttribute('open', '');
+    await expect(botao).toBeFocused();
+  });
+});
+
 test.describe('Conteúdo e SEO', () => {
   test('um h1 por página', async ({ page }) => {
     for (const rota of ['/', '/privacidade', '/404']) {
@@ -61,7 +86,7 @@ test.describe('Conteúdo e SEO', () => {
   test('cada âncora do header tem uma seção na Home', async ({ page, isMobile }) => {
     test.skip(isMobile, 'navegação do header só aparece no desktop');
     await page.goto('/');
-    for (const link of await page.locator('header nav a').all()) {
+    for (const link of await page.locator('header nav[aria-label="Principal"] a').all()) {
       const ancora = ((await link.getAttribute('href')) ?? '').split('#')[1] ?? '';
       await expect(page.locator(`section#${ancora}`)).toHaveCount(1);
     }
@@ -184,9 +209,13 @@ test.describe('Movimento', () => {
     await expect(page.locator('html')).toHaveAttribute('data-js', '');
     // Durante a View Transition a camada ::view-transition cobre a página e recebe os cliques.
     await page.waitForFunction(() =>
-      document.getAnimations().every((a) => a.playState !== 'running'),
+      document
+        .getAnimations()
+        // Ignora animações infinitas de propósito (halo do CTA do hero).
+        .filter((a) => a.effect?.getTiming().iterations !== Infinity)
+        .every((a) => a.playState !== 'running'),
     );
-    await page.locator('header nav a[href="/#tratamentos"]').click();
+    await page.locator('header nav[aria-label="Principal"] a[href="/#tratamentos"]').click();
     await expect(page.locator('#tratamentos')).toBeFocused();
     expect(erros).toEqual([]);
   });
@@ -194,7 +223,7 @@ test.describe('Movimento', () => {
   test('âncora como primeira interação: rola e foca o destino', async ({ page, isMobile }) => {
     test.skip(isMobile, 'navegação do header só aparece no desktop');
     await page.goto('/', { waitUntil: 'networkidle' });
-    await page.locator('header nav a[href="/#duvidas"]').focus();
+    await page.locator('header nav[aria-label="Principal"] a[href="/#duvidas"]').focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#duvidas')).toBeFocused();
     await expect(page.locator('#duvidas')).toBeInViewport();

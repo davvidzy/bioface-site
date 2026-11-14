@@ -32,7 +32,8 @@ test.describe('axe: estados interativos', () => {
 
   test('FAQ aberto e mapa carregado na Home', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    for (const summary of await page.locator('details summary').all()) await summary.click();
+    for (const summary of await page.locator('.accordion details summary').all())
+      await summary.click();
     const { violations } = await new AxeBuilder({ page })
       .withTags(TAGS)
       .exclude('iframe') // conteúdo do Google Maps não é nosso

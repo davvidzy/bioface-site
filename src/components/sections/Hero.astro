@@ -62,7 +62,12 @@ const { paisagem, retrato } = await imagensHero();
       <span class="hero__aura" aria-hidden="true"></span>
       <h1 id="hero-titulo" class="hero__titulo t-display-xl" set:html={enfase(titulo)} />
       <p class="hero__descricao">{descricao}</p>
-      <WhatsAppLink origem="hero" class="hero__cta" />
+      <WhatsAppLink
+        origem="hero"
+        rotulo="Agendar avaliação"
+        complementoVisivel=" pelo WhatsApp"
+        class="hero__cta"
+      />
     </div>
   </div>
 </section>
@@ -181,35 +186,42 @@ const { paisagem, retrato } = await imagensHero();
       0 0.25rem 0.75rem color-mix(in srgb, var(--color-aura-2) 18%, transparent);
   }
 
-  /* ---------- Retrato (celular e tablet em pé) ---------- */
+  /* Halo que pulsa devagar: CTA chamativo sem ser grande. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__texto :global(.hero__cta) {
+      animation: hero-halo 3.2s var(--ease-out-soft) 1.2s infinite;
+    }
+  }
+
+  @keyframes hero-halo {
+    0% {
+      box-shadow:
+        0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
+        0 0 0 0 color-mix(in srgb, var(--color-aura-1) 85%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow:
+        0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
+        0 0 0 0.9rem color-mix(in srgb, var(--color-aura-1) 0%, transparent);
+    }
+  }
+
+  /* ---------- Retrato (celular e tablet em pé) ----------
+   * Texto no alto, centralizado com a aura; a foto ocupa o resto da tela embaixo
+   * e se dissolve no creme pelo topo.
+   */
   @media (orientation: portrait) {
     .hero {
-      align-items: end;
-    }
-
-    .hero__media img {
-      object-position: 60% 20%;
+      align-items: start;
     }
 
     .hero::before {
-      background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
-        transparent 8rem
-      );
+      display: none;
     }
 
-    /* Degradê atrás do bloco de texto: acompanha a altura do conteúdo em qualquer tela,
-       com uma faixa de transição (--fade) acima do título. */
     .hero__conteudo {
-      --fade: var(--space-9);
-      padding-block: var(--fade) var(--space-8);
-      background: linear-gradient(
-        0deg,
-        var(--color-bg-default) 0%,
-        color-mix(in srgb, var(--color-bg-default) 90%, transparent) calc(100% - var(--fade)),
-        transparent 100%
-      );
+      padding-block: calc(5.5rem + var(--space-5)) var(--space-5);
     }
 
     .hero__texto {
@@ -220,6 +232,20 @@ const { paisagem, retrato } = await imagensHero();
     /* 24px: mínimo da Cormorant (em Medium) e cabe em 2 linhas no celular. */
     .hero__descricao {
       font-size: 1.5rem;
+    }
+
+    /* Foto ancorada na base com altura própria: se o texto mudar de altura quando a
+       fonte chega, a foto não se move (sem CLS). */
+    .hero__media {
+      inset: auto 0 0;
+      height: 54svh;
+      z-index: -3;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
+    }
+
+    .hero__media img {
+      object-position: 55% 12%;
     }
   }
 </style>

@@ -6,7 +6,8 @@
  * Começa no fluxo (na Home, `sobreposto` ao hero, sem fundo). Ao rolar, a barra vira
  * uma pílula suspensa e arredondada (data-flutuante, aplicado em BaseLayout).
  * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
- * No mobile a navegação sai: a landing é rolagem contínua e o CTA fica visível.
+ * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
+ * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
  */
 import Wordmark from '@/assets/brand/wordmark-mono.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
@@ -42,8 +43,57 @@ const { sobreposto = false } = Astro.props;
       complementoOculto="pelo WhatsApp"
       class="site-header__cta"
     />
+
+    <details class="menu-movel" data-menu-movel>
+      <summary class="menu-movel__botao" aria-label="Menu">
+        <span class="menu-movel__icone" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </summary>
+      <div class="menu-movel__painel">
+        <nav aria-label="Menu">
+          <ul class="list-reset menu-movel__links" role="list">
+            {navegacao.map((link) => (
+              <li>
+                <a href={`/#${link.ancora}`} data-menu-link>
+                  {link.rotulo}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <WhatsAppLink
+          origem="menu"
+          rotulo="Agendar avaliação"
+          complementoOculto="pelo WhatsApp"
+          class="menu-movel__cta"
+        />
+      </div>
+    </details>
   </div>
 </header>
+
+<script>
+  // Fecha o menu do celular: ao tocar num link, com Esc (devolve o foco ao botão) ou fora.
+  const menu = () => document.querySelector<HTMLDetailsElement>('[data-menu-movel]');
+  document.addEventListener('click', (e) => {
+    const m = menu();
+    if (!m?.open) return;
+    const alvo = e.target as Element;
+    if (alvo.closest('[data-menu-link]') || !m.contains(alvo)) m.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    const m = menu();
+    if (e.key !== 'Escape' || !m?.open) return;
+    m.open = false;
+    m.querySelector<HTMLElement>('summary')?.focus();
+  });
+  document.addEventListener('astro:before-swap', () => {
+    const m = menu();
+    if (m) m.open = false;
+  });
+</script>
 
 <style>
   /*
@@ -156,8 +206,123 @@ const { sobreposto = false } = Astro.props;
     background-color: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
   }
 
+  /* ---------- Menu do celular ---------- */
+  .menu-movel {
+    display: none;
+  }
+
+  .menu-movel__botao {
+    display: grid;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: 50%;
+    cursor: pointer;
+    list-style: none;
+    background-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .menu-movel__botao::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu-movel__icone {
+    display: grid;
+    gap: 5px;
+    width: 18px;
+  }
+
+  .menu-movel__icone span {
+    display: block;
+    height: 1.5px;
+    border-radius: 1px;
+    background-color: currentColor;
+    transition: transform var(--duration-base) var(--ease-out-soft);
+  }
+
+  .menu-movel__icone span:last-child {
+    width: 65%;
+    justify-self: end;
+    transition:
+      transform var(--duration-base) var(--ease-out-soft),
+      width var(--duration-base) var(--ease-out-soft);
+  }
+
+  .menu-movel[open] .menu-movel__icone span:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+
+  .menu-movel[open] .menu-movel__icone span:last-child {
+    width: 100%;
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+
+  .menu-movel__painel {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-2));
+    inset-inline: var(--space-3);
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    border-radius: var(--radius-l);
+    background-color: var(--color-bg-default);
+    box-shadow: var(--shadow-flutuante);
+  }
+
+  .site-header[data-flutuante] .menu-movel__painel {
+    inset-inline: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-movel[open] .menu-movel__painel {
+      animation: menu-entra var(--duration-base) var(--ease-out-soft);
+    }
+  }
+
+  @keyframes menu-entra {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+
+  .menu-movel__links {
+    display: grid;
+  }
+
+  .menu-movel__links a {
+    display: flex;
+    align-items: center;
+    min-height: 3.25rem;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-h3);
+    text-decoration: none;
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 35%, transparent);
+  }
+
+  .menu-movel__painel :global(.menu-movel__cta) {
+    justify-self: stretch;
+  }
+
   @media (max-width: 48rem) {
     nav {
+      display: none;
+    }
+
+    .menu-movel {
+      display: block;
+    }
+
+    .menu-movel nav {
+      display: block;
+    }
+
+    .site-header__barra :global(.site-header__cta) {
       display: none;
     }
 
@@ -171,15 +336,6 @@ const { sobreposto = false } = Astro.props;
 
     .site-header[data-flutuante] .site-header__barra {
       padding-inline-start: var(--space-4);
-    }
-
-    /* No celular o CTA do header fica só com o texto (sem a seta) para caber. */
-    .site-header__barra :global(.site-header__cta .btn__seta) {
-      display: none;
-    }
-
-    .site-header__barra :global(.site-header__cta) {
-      padding-inline: var(--space-5);
     }
   }
 </style>

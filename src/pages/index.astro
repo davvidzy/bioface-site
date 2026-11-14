@@ -53,6 +53,15 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   headerSobreposto
 >
   <Fragment slot="head">
+    {/* O itálico da Cormorant está no título do hero: pré-carregar evita que as linhas
+        mudem quando a fonte chega (CLS). */}
+    <link
+      rel="preload"
+      href="/fonts/cormorant-garamond-400-italic-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     {preloads.map((p) => (
       <link
         rel="preload"
