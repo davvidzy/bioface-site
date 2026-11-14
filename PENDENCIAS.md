@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 107 marcadores.
+Total: 109 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -88,11 +88,13 @@ Total: 107 marcadores.
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
 - [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:46](src/data/textos.ts#L46)
 - [ ] seção "O espaço" volta quando houver fotos da clínica. [src/pages/index.astro:97](src/pages/index.astro#L97)
+- [ ] fotos do hero (2) e de cada tratamento; por enquanto, placeholders. [src/pages/tratamentos/[categoria].astro:11](src/pages/tratamentos/[categoria].astro#L11)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)
 
 - [ ] o aviso "Resultados variam de pessoa para pessoa" saiu a pedido. [src/components/sections/ResultadosPrevia.astro:13](src/components/sections/ResultadosPrevia.astro#L13)
+- [ ] fotos de banco enviadas para a prévia; confirmar licença ou trocar por fotos da clínica. [src/components/sections/TratamentosCategorias.astro:26](src/components/sections/TratamentosCategorias.astro#L26)
 - [ ] quais tratamentos ganham destaque na Home. Em 12 arquivos:
   - [src/content/procedimentos/bioestimuladores-de-colageno.md:5](src/content/procedimentos/bioestimuladores-de-colageno.md#L5)
   - [src/content/procedimentos/fios-de-pdo.md:5](src/content/procedimentos/fios-de-pdo.md#L5)

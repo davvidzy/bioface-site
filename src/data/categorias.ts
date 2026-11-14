@@ -16,13 +16,13 @@ export const CATEGORIAS = [
   {
     slug: 'rejuvenescimento',
     rotulo: 'Firmeza e rejuvenescimento',
-    curto: 'Firmeza',
+    curto: 'Rejuvenescer',
     descricao: 'Para flacidez e sinais do tempo.',
   },
   {
     slug: 'contorno',
     rotulo: 'Expressão e contorno',
-    curto: 'Contorno',
+    curto: 'Expressões',
     descricao: 'Para rugas, volume e contorno.',
   },
 ] as const;

@@ -104,7 +104,6 @@ test.describe('Tratamentos', () => {
     const cards = page.locator('a.card-trat');
     await expect(cards).toHaveCount(5);
     await expect(cards.nth(1)).toContainText('Fios de PDO');
-    await expect(cards.first()).toContainText('06');
     const href = decodeURIComponent((await cards.nth(1).getAttribute('href')) ?? '');
     expect(href).toContain('Fios de PDO');
     await expect(page.locator('.outras__link')).toHaveCount(2);

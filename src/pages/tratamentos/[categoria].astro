@@ -1,12 +1,19 @@
 ---
 /**
- * Página de uma categoria de tratamentos (pedido de 2026-11-14: cada um dos 3 cards da Home
- * leva a uma página própria). Mostra os tratamentos da categoria em cards; cada card abre
- * o WhatsApp com o nome do tratamento na mensagem. No fim, os outros dois objetivos e o CTA.
+ * Página de uma categoria de tratamentos (aberta pelos cards da Home).
+ *
+ * 1. Hero: migalhas, nome do objetivo em display, frase de apoio, CTA e um link de texto
+ *    para quem não sabe por onde começar; à direita, duas fotos em alturas diferentes.
+ * 2. Cards dos tratamentos: foto, nome em serifa e a dor numa frase. Cada card abre o
+ *    WhatsApp com o nome do tratamento na mensagem.
+ * 3. Outros objetivos e CTA final.
+ *
+ * TODO(conteudo): fotos do hero (2) e de cada tratamento; por enquanto, placeholders.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import Transicao from '@/components/ui/Transicao.astro';
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
 import { CATEGORIAS } from '@/data/categorias';
 import { getProcedimentosPorCategoria, isPendente } from '@/lib/conteudo';
@@ -19,38 +26,65 @@ export function getStaticPaths() {
 }
 
 const grupos = await getProcedimentosPorCategoria();
-const indice = grupos.findIndex((g) => g.categoria.slug === Astro.params.categoria);
-const grupo = grupos[indice];
+const grupo = grupos.find((g) => g.categoria.slug === Astro.params.categoria);
 if (!grupo) return Astro.redirect('/404');
 const { categoria, procedimentos } = grupo;
-// Numeração contínua com a Home (01 a 12): soma os tratamentos das categorias anteriores.
-const inicio = grupos.slice(0, indice).reduce((n, g) => n + g.procedimentos.length, 0);
 const outras = grupos.filter((g) => g.categoria.slug !== categoria.slug);
-const num = (n: number) => String(n).padStart(2, '0');
 
 const titulo = `${categoria.rotulo} | ${site.marca}`;
 const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome).join(', ')}. Avaliação individual com ${site.responsavel.nome} no ${site.endereco.bairro}, ${site.endereco.cidade}.`;
 ---
 
 <BaseLayout title={titulo} description={descricao} path={`/tratamentos/${categoria.slug}`}>
-  <section class="cat-pagina com-marca-dagua" aria-labelledby="categoria-titulo">
-    <MarcaDagua lado="direita" topo="6rem" corte={0.4} giro={8} />
-    <div class="container">
-      <nav aria-label="Você está em" class="migalhas">
-        <a href="/#tratamentos">Tratamentos</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{categoria.rotulo}</span>
-      </nav>
-
-      <header class="cat-pagina__cabeca">
-        <h1 id="categoria-titulo" class="t-display-l" data-reveal="fade">
+  <!-- ---------- Hero ---------- -->
+  <section class="cat-hero com-marca-dagua" aria-labelledby="categoria-titulo">
+    <MarcaDagua lado="esquerda" base="-8%" corte={0.45} opacidade={0.06} giro={-6} />
+    <div class="container cat-hero__grade">
+      <div class="cat-hero__texto">
+        <nav aria-label="Você está em" class="migalhas">
+          <a href="/#tratamentos">Tratamentos</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{categoria.curto}</span>
+        </nav>
+        <h1 id="categoria-titulo" class="cat-hero__titulo" data-reveal="fade">
           {categoria.rotulo}
         </h1>
-        <p class="cat-pagina__descricao">{categoria.descricao}</p>
-      </header>
+        <p class="cat-hero__descricao">{categoria.descricao}</p>
+        <div class="cat-hero__acoes">
+          <WhatsAppLink
+            origem="tratamentos"
+            rotulo="Agendar avaliação"
+            complementoOculto={`para ${categoria.rotulo.toLowerCase()} pelo WhatsApp`}
+            procedimento={categoria.rotulo.toLowerCase()}
+          />
+          <WhatsAppLink
+            origem="tratamentos"
+            rotulo="Dúvidas? Fale com a Maria →"
+            variante="texto"
+            class="cat-hero__ajuda"
+          />
+        </div>
+      </div>
 
+      <div class="cat-hero__fotos" aria-hidden="true">
+        <div class="placeholder-media cat-hero__foto cat-hero__foto--grande">
+          <span>Foto 1 · {categoria.curto}</span>
+        </div>
+        <div class="placeholder-media cat-hero__foto cat-hero__foto--pequena">
+          <span>Foto 2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- Tratamentos ---------- -->
+  <section class="cat-lista" aria-labelledby="lista-titulo">
+    <div class="container">
+      <h2 id="lista-titulo" class="t-display-l cat-lista__titulo">
+        Tratamentos
+      </h2>
       <ul class="list-reset cards" role="list">
-        {procedimentos.map((p, i) => {
+        {procedimentos.map((p) => {
           const problema = isPendente(p.data.problema) ? undefined : p.data.problema;
           return (
             <li>
@@ -63,20 +97,14 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
                 data-origem="tratamentos"
                 data-procedimento={p.data.nome}
               >
-                <span class="card-trat__numero" aria-hidden="true">
-                  {num(inicio + i + 1)}
+                <span class="placeholder-media card-trat__foto" aria-hidden="true">
+                  <span>Foto · {p.data.nome}</span>
                 </span>
                 <span class="card-trat__nome">{p.data.nome}</span>
                 {problema && <span class="card-trat__problema">{problema}</span>}
-                <span class="card-trat__rodape">
-                  <span>Agendar avaliação</span>
-                  <span class="card-trat__seta" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" />
-                    </svg>
-                  </span>
+                <span class="visually-hidden">
+                  : agendar avaliação pelo WhatsApp (abre o WhatsApp em nova aba)
                 </span>
-                <span class="visually-hidden">pelo WhatsApp (abre o WhatsApp em nova aba)</span>
               </a>
             </li>
           );
@@ -101,138 +129,175 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
     </div>
   </section>
 
-  <Transicao de="var(--cream-50)" para="var(--wine-950)" altura="clamp(8rem, 20vw, 16rem)" />
+  <Transicao de="var(--cream-100)" para="var(--wine-950)" altura="clamp(8rem, 20vw, 16rem)" />
   <CtaFinal {...home.ctaFinal} origem="cta-final" />
 </BaseLayout>
 
 <style>
-  .cat-pagina {
+  /* ---------- Hero ---------- */
+  .cat-hero {
     padding-block: var(--space-6) var(--space-section);
+  }
+
+  .cat-hero__grade {
+    display: grid;
+    gap: var(--space-9);
+    align-items: center;
+  }
+
+  .cat-hero__texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-5);
   }
 
   .migalhas {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    font-size: var(--text-body-s);
+    font-size: var(--text-caption);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--color-text-secondary);
   }
 
-  .migalhas a {
+  .migalhas a,
+  .migalhas > span {
     display: inline-flex;
     align-items: center;
     min-height: var(--tap-min);
   }
 
-  .migalhas > span {
-    display: inline-flex;
-    align-items: center;
+  .migalhas [aria-current] {
+    color: var(--color-text-primary);
   }
 
-  .cat-pagina__cabeca {
-    display: grid;
-    gap: var(--space-4);
-    margin-block: var(--space-5) var(--space-9);
-    max-width: 44rem;
+  .cat-hero__titulo {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: clamp(2.5rem, 1.6rem + 2.8vw, 4.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    /* Nunca quebrar palavra no meio ("rejuvenescimento"). */
+    overflow-wrap: normal;
+    hyphens: manual;
+    text-wrap: balance;
+    margin-block: var(--space-3) var(--space-5);
   }
 
-  .cat-pagina__descricao {
+  .cat-hero__descricao {
+    max-width: 30rem;
     font-size: var(--text-body-l);
     color: var(--color-text-secondary);
   }
 
-  /* ---------- Cards dos tratamentos ---------- */
+  .cat-hero__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    margin-block-start: var(--space-3);
+  }
+
+  .cat-hero__acoes :global(.cat-hero__ajuda) {
+    font-size: var(--text-body-s);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+
+  /* Duas fotos em alturas diferentes, com fio fino por dentro (como na referência). */
+  .cat-hero__fotos {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .cat-hero__foto {
+    position: relative;
+  }
+
+  .cat-hero__foto::after,
+  .card-trat__foto::after {
+    content: '';
+    position: absolute;
+    inset: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+    border-radius: calc(var(--radius-l) - var(--space-2));
+    pointer-events: none;
+  }
+
+  .cat-hero__foto--grande {
+    --ratio: 2 / 3;
+  }
+
+  .cat-hero__foto--pequena {
+    --ratio: 4 / 7;
+  }
+
+  @media (min-width: 56rem) {
+    .cat-hero__grade {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-10);
+    }
+  }
+
+  /* ---------- Lista de tratamentos ---------- */
+  .cat-lista {
+    padding-block: var(--space-section);
+    background-color: var(--color-bg-subtle);
+  }
+
+  .cat-lista__titulo {
+    margin-block-end: var(--space-8);
+  }
+
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-8) var(--space-5);
   }
 
   .card-trat {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
     display: grid;
-    grid-template-rows: auto 1fr auto auto;
-    gap: var(--space-3);
-    height: 100%;
-    min-height: 19rem;
-    padding: var(--space-6);
-    border-radius: var(--radius-l);
-    background-color: var(--color-bg-subtle);
+    gap: var(--space-2);
     color: var(--color-text-primary);
     text-decoration: none;
+  }
+
+  .card-trat__foto {
+    --ratio: 16 / 9;
+    position: relative;
+    margin-block-end: var(--space-3);
+    background:
+      radial-gradient(120% 90% at 30% 20%, var(--cream-50), transparent 60%),
+      color-mix(in srgb, var(--gold-200) 35%, var(--cream-100));
     transition:
       translate var(--motion-fluido),
       box-shadow var(--motion-fluido);
   }
 
-  .card-trat::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    top: 100%;
-    z-index: -1;
-    height: 110%;
-    border-radius: 50% 50% 0 0;
-    background-color: color-mix(in srgb, var(--gold-200) 45%, var(--color-bg-subtle));
-    transition:
-      top var(--motion-fluido),
-      border-radius var(--motion-fluido);
-  }
-
-  .card-trat__numero {
-    font-size: var(--text-caption);
-    font-variant-numeric: tabular-nums;
-    color: var(--color-text-secondary);
-  }
-
   .card-trat__nome {
-    align-self: end;
     font-family: var(--font-display);
     font-size: var(--text-h3);
     line-height: var(--leading-h3);
+    transition: translate var(--motion-fluido);
   }
 
   .card-trat__problema {
-    font-size: var(--text-body-m);
+    font-size: var(--text-body-s);
     color: var(--color-text-secondary);
   }
 
-  .card-trat__rodape {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-block-start: var(--space-3);
-    padding-block-start: var(--space-4);
-    border-block-start: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 30%, transparent);
-    font-weight: var(--weight-medium);
-  }
-
-  .card-trat__seta {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background-color: var(--color-action-primary-bg);
-    color: var(--color-action-primary-text);
-    transition: rotate var(--motion-fluido);
-  }
-
-  .card-trat:hover {
+  .card-trat:hover .card-trat__foto {
     translate: 0 -4px;
-    box-shadow: 0 18px 40px -24px rgb(43 20 32 / 0.35);
+    box-shadow: 0 22px 40px -28px rgb(43 20 32 / 0.45);
   }
 
-  .card-trat:hover::before {
-    top: 0;
-    border-radius: 0;
-  }
-
-  .card-trat:hover .card-trat__seta {
-    rotate: -45deg;
+  .card-trat:hover .card-trat__nome {
+    translate: var(--space-2) 0;
   }
 
   /* ---------- Outros objetivos ---------- */
@@ -285,15 +350,27 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
     translate: var(--space-3) 0;
   }
 
+  /* Celular: hero centralizado, como na Home. */
+  @media (max-width: 55.99rem) {
+    .cat-hero__texto {
+      justify-items: center;
+      text-align: center;
+    }
+
+    .cat-hero__acoes {
+      justify-content: center;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .card-trat,
-    .card-trat::before,
-    .card-trat__seta,
+    .card-trat__foto,
+    .card-trat__nome,
     .outras__nome {
       transition: none;
     }
 
-    .card-trat:hover {
+    .card-trat:hover .card-trat__foto,
+    .card-trat:hover .card-trat__nome {
       translate: none;
     }
   }

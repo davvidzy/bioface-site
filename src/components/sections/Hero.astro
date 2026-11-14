@@ -211,9 +211,12 @@ const { paisagem, retrato } = await imagensHero();
       padding-block: calc(6.75rem + var(--space-9)) var(--space-4);
     }
 
+    /* Celular: tudo centralizado. */
     .hero__texto {
       width: 100%;
       gap: var(--space-5);
+      justify-items: center;
+      text-align: center;
     }
 
     /* Celular: título em 3 linhas, descrição em Body/M e 2 linhas. */
