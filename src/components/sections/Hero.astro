@@ -65,7 +65,8 @@ const { paisagem, retrato } = await imagensHero();
       <WhatsAppLink
         origem="hero"
         rotulo="Agendar avaliação"
-        complementoVisivel=" pelo WhatsApp"
+        complementoOculto="pelo WhatsApp"
+        variante="destaque"
         class="hero__cta"
       />
     </div>
@@ -178,42 +179,19 @@ const { paisagem, retrato } = await imagensHero();
     text-wrap: balance;
   }
 
-  /* CTA com brilho dourado suave. */
-  .hero__texto :global(.hero__cta) {
-    margin-block-start: var(--space-2);
-    box-shadow:
-      0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
-      0 0.25rem 0.75rem color-mix(in srgb, var(--color-aura-2) 18%, transparent);
-  }
-
-  /* Halo que pulsa devagar: CTA chamativo sem ser grande. */
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__texto :global(.hero__cta) {
-      animation: hero-halo 3.2s var(--ease-out-soft) 1.2s infinite;
-    }
-  }
-
-  @keyframes hero-halo {
-    0% {
-      box-shadow:
-        0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
-        0 0 0 0 color-mix(in srgb, var(--color-aura-1) 85%, transparent);
-    }
-    70%,
-    100% {
-      box-shadow:
-        0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
-        0 0 0 0.9rem color-mix(in srgb, var(--color-aura-1) 0%, transparent);
-    }
-  }
-
   /* ---------- Retrato (celular e tablet em pé) ----------
-   * Texto no alto, centralizado com a aura; a foto ocupa o resto da tela embaixo
-   * e se dissolve no creme pelo topo.
+   * Quebra os 100svh de propósito: o texto desce com bastante respiro e a Maria aparece
+   * inteira logo abaixo, dissolvida no fundo em cima e embaixo (página contínua).
    */
   @media (orientation: portrait) {
     .hero {
-      align-items: start;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero__conteudo {
+      order: 1;
     }
 
     .hero::before {
@@ -221,7 +199,7 @@ const { paisagem, retrato } = await imagensHero();
     }
 
     .hero__conteudo {
-      padding-block: calc(5.5rem + var(--space-5)) var(--space-5);
+      padding-block: calc(5.5rem + var(--space-10)) var(--space-4);
     }
 
     .hero__texto {
@@ -234,18 +212,29 @@ const { paisagem, retrato } = await imagensHero();
       font-size: 1.5rem;
     }
 
-    /* Foto ancorada na base com altura própria: se o texto mudar de altura quando a
-       fonte chega, a foto não se move (sem CLS). */
     .hero__media {
-      inset: auto 0 0;
-      height: 54svh;
-      z-index: -3;
-      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
-      mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
+      order: 2;
+      position: relative;
+      inset: auto;
+      display: block;
+      height: auto;
+      z-index: auto;
+      margin-block-start: calc(-1 * var(--space-8));
+      -webkit-mask-image: linear-gradient(
+        180deg,
+        transparent 0%,
+        #000 28%,
+        #000 82%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(180deg, transparent 0%, #000 28%, #000 82%, transparent 100%);
     }
 
     .hero__media img {
-      object-position: 55% 12%;
+      position: static;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
     }
   }
 </style>

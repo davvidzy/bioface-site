@@ -7,7 +7,7 @@
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
-  variante?: 'primario' | 'secundario';
+  variante?: 'primario' | 'secundario' | 'destaque';
   href?: string | undefined;
   /** Mostra a seta no círculo. Padrão: só no primário. */
   seta?: boolean;
@@ -96,6 +96,23 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
   .btn--primario:hover {
     color: var(--color-action-hover-text);
     border-color: var(--color-action-hover-bg);
+  }
+
+  /* Destaque: simples. Dourado sólido, sem seta; no hover preenche em vinho. */
+  .btn--destaque {
+    background-color: var(--color-action-destaque-bg);
+    color: var(--color-action-destaque-text);
+    border-color: var(--color-action-destaque-bg);
+    padding-inline: var(--space-7);
+  }
+
+  .btn--destaque::before {
+    background-color: var(--color-action-primary-bg);
+  }
+
+  .btn--destaque:hover {
+    color: var(--color-action-primary-text);
+    border-color: var(--color-action-primary-bg);
   }
 
   .btn--secundario {

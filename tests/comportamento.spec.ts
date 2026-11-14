@@ -16,11 +16,14 @@ test.describe('WhatsApp', () => {
 });
 
 test.describe('Hero', () => {
-  test('ocupa a tela inteira e tem título, descrição e CTA', async ({ page }) => {
+  test('altura, título, descrição e CTA', async ({ page, isMobile }) => {
     await page.goto('/');
     const hero = page.locator('.hero');
     const altura = await hero.evaluate((h) => h.getBoundingClientRect().height);
-    expect(Math.round(altura)).toBe(page.viewportSize()?.height);
+    const tela = page.viewportSize()!.height;
+    // Desktop: exatamente a tela. Celular: maior de propósito (foto inteira abaixo do texto).
+    if (isMobile) expect(altura).toBeGreaterThan(tela);
+    else expect(Math.round(altura)).toBe(tela);
     await expect(hero.locator('h1')).toHaveCount(1);
     await expect(hero.locator('.hero__descricao')).toBeVisible();
     await expect(hero.locator('a[data-origem="hero"]')).toBeVisible();
