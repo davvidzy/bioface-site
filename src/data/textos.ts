@@ -30,7 +30,7 @@ export const home = {
   },
   hero: {
     // TODO(validar-cliente): frase-manifesto do h1 (o medo central é ficar artificial).
-    titulo: 'Natural é quando o resultado *parece seu*.',
+    titulo: 'Natural é quando o resultado parece seu.',
     descricao: `Realçar, nunca transformar. Há ${site.anosAtuacao} anos cuidando de rostos no ${site.endereco.bairro}.`,
     // Imagem fictícia da Maria para a prévia (confirmado pela equipe em 2026-11-13).
     // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.

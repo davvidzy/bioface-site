@@ -170,8 +170,8 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 
 | # | Seção | Job | Conteúdo | Tema | CTA |
 |---|---|---|---|---|---|
-| 1 | Header | Navegar e converter de qualquer ponto | Wordmark nas cores originais (âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | sobre o hero, depois pílula suspensa | WhatsApp |
-| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto, descrição "Realçar, nunca transformar…" e CTA, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
+| 1 | Header | Navegar e converter de qualquer ponto | Logo do Figma (monograma + wordmark, âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | escuro (vinho): faixa no topo, pílula suspensa ao rolar | WhatsApp |
+| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto sem itálico (2 linhas no desktop, 3 no celular), descrição curta em Body (2 linhas) e CTA, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
 | 3 | Credenciais | Transformar promessa em fato | Faixa discreta e padronizada (valor curto + rótulo curto, separados por fios): anos, formação, nº de tratamentos, bairro. CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
 | 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos (nomes curtos aprovados em 2026-11-14, ex.: "Controle do melasma", "Laser e ultrassom"); número, nome em serifa, a dor numa frase, seta. Hierarquia: título da seção > objetivo > nome > dor. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
 | 5 | Resultados | Prova visual | Comparador em moldura 3:4 à esquerda; à direita título, caso atual (contador e região) e miniaturas meio antes/meio depois. Sem o aviso "resultados variam" (removido a pedido; validar com a cliente) | `bg/subtle` | nenhum |
@@ -188,7 +188,7 @@ Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
 ### 6.1.1 Direção visual (decidida em 2026-11-14)
 
 - **Narrativa de luz:** a página começa no creme e escurece aos poucos até o vinho (creme → `bg/subtle` → wine/900 → wine/950), como o dia indo para o entardecer. As passagens entre fundos são faixas de degradê decorativas (`components/ui/Transicao.astro`), fora das seções, para nenhum texto ficar sobre a transição.
-- **Itálico só em dois lugares:** no `h1` do hero e no título do CTA final. Os outros títulos são retos.
+- **Itálico só no título do CTA final.** O `h1` do hero e os outros títulos são retos.
 - **Um único botão de CTA em todo o site** (`components/ui/Button.astro`): pílula com hover "fluido" (preenchimento em elipse que sobe de baixo, rótulo que rola para a cópia invertida, leve crescimento). Cores pelo tema: vinho no claro, dourado no escuro. Sem variantes.
 - **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
 - **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.

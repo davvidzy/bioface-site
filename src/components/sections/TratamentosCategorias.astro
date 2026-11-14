@@ -54,7 +54,6 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
             <h3 id={`grupo-${categoria.slug}`} class="grupo__titulo">
               {categoria.rotulo}
             </h3>
-            <p class="grupo__descricao">{categoria.descricao}</p>
           </div>
           <ul class="list-reset grupo__lista" role="list">
             {itens.map((item) => (
@@ -136,11 +135,6 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
     line-height: 1.08;
     letter-spacing: -0.005em;
     overflow-wrap: normal;
-  }
-
-  .grupo__descricao {
-    font-size: var(--text-body-l);
-    color: var(--color-text-secondary);
   }
 
   .grupo__lista {

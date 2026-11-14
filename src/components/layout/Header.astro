@@ -3,8 +3,9 @@
  * Header: navegar e converter de qualquer ponto.
  * Landing page única: os links são âncoras das seções da Home.
  *
- * Começa no fluxo (na Home, `sobreposto` ao hero, sem fundo). Ao rolar, a barra vira
- * uma pílula suspensa e arredondada (data-flutuante, aplicado em BaseLayout).
+ * Barra em tema escuro (vinho): o logo nas cores originais e os links creme têm contraste.
+ * No topo, faixa de borda a borda; ao rolar, vira uma pílula suspensa e arredondada
+ * (data-flutuante, aplicado em BaseLayout), na mesma transição contínua.
  * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
  * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
  * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
@@ -23,7 +24,7 @@ const { sobreposto = false } = Astro.props;
 ---
 
 <header class:list={['site-header', { 'site-header--sobreposto': sobreposto }]} data-header>
-  <div class="site-header__barra">
+  <div class="site-header__barra" data-theme="escuro">
     <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
       <Monograma aria-hidden="true" focusable="false" class="site-header__icone" />
       <Wordmark aria-hidden="true" focusable="false" class="site-header__wordmark" />
@@ -161,11 +162,13 @@ const { sobreposto = false } = Astro.props;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3) var(--space-6);
-    width: min(var(--container-max), 100%);
+    width: 100%;
     min-height: var(--altura);
-    padding: 0 var(--gutter);
+    /* Conteúdo alinhado ao container do resto da página, com a barra de borda a borda. */
+    padding: 0 max(var(--gutter), (100% - var(--container-max)) / 2 + var(--gutter));
     border-radius: 0;
-    background-color: color-mix(in srgb, var(--color-bg-default) 0%, transparent);
+    /* Tema escuro: o logo âmbar e os links creme ganham contraste sobre o vinho. */
+    background-color: var(--color-bg-default);
     box-shadow:
       0 0 0 rgb(43 20 32 / 0),
       0 0 0 rgb(43 20 32 / 0);
@@ -188,7 +191,7 @@ const { sobreposto = false } = Astro.props;
     min-height: var(--altura-flutuante);
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
     border-radius: 2.5rem;
-    background-color: color-mix(in srgb, var(--color-bg-default) 92%, transparent);
+    background-color: color-mix(in srgb, var(--color-bg-default) 94%, transparent);
     box-shadow: var(--shadow-flutuante);
     backdrop-filter: blur(12px);
   }

@@ -146,7 +146,7 @@ const { paisagem, retrato } = await imagensHero();
     display: grid;
     justify-items: center;
     gap: var(--space-6);
-    width: min(42rem, 100%);
+    width: min(44rem, 100%);
     text-align: center;
     color: var(--color-text-primary);
   }
@@ -171,18 +171,19 @@ const { paisagem, retrato } = await imagensHero();
     filter: blur(24px);
   }
 
+  /* Desktop: duas linhas ("Natural é quando o / resultado parece seu."). */
   .hero__titulo {
+    font-size: clamp(3rem, 1.4rem + 3.6vw, 4.75rem);
+    line-height: 1.04;
     text-wrap: balance;
   }
 
-  /* Subtítulo serifado: o degrau do meio da hierarquia.
-     Cormorant entre 24px e 34px pede Medium (traços finos). */
+  /* Descrição em texto corrido (Body/L), discreta: o título é quem fala alto. */
   .hero__descricao {
-    max-width: 36rem;
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
-    line-height: var(--leading-h3);
-    font-weight: var(--weight-medium);
+    max-width: 30rem;
+    font-family: var(--font-body);
+    font-size: var(--text-body-l);
+    line-height: var(--leading-body);
     color: var(--color-text-secondary);
     text-wrap: balance;
   }
@@ -215,9 +216,14 @@ const { paisagem, retrato } = await imagensHero();
       gap: var(--space-5);
     }
 
-    /* 24px: mínimo da Cormorant (em Medium) e cabe em 2 linhas no celular. */
+    /* Celular: título em 3 linhas, descrição em Body/M e 2 linhas. */
+    .hero__titulo {
+      font-size: clamp(2.75rem, 1.5rem + 5.5vw, 3.5rem);
+    }
+
     .hero__descricao {
-      font-size: 1.5rem;
+      max-width: 21rem;
+      font-size: var(--text-body-m);
     }
 
     .hero__media {
