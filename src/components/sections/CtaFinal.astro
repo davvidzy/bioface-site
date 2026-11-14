@@ -26,8 +26,17 @@ const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.pr
   <div class="cta">
     <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
     <div class="cta__conteudo">
-      <h2 id="cta-final-titulo" class="t-display-xl" data-reveal="fade" set:html={enfase(titulo)} />
-      {texto && <p class="cta__texto">{texto}</p>}
+      <h2
+        id="cta-final-titulo"
+        class="t-display-xl"
+        data-reveal="lines"
+        set:html={enfase(titulo)}
+      />
+      {texto && (
+        <p class="cta__texto" data-reveal="fade">
+          {texto}
+        </p>
+      )}
       <WhatsAppLink origem={origem} procedimento={procedimento} />
     </div>
   </div>

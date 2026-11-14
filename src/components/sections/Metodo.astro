@@ -30,10 +30,12 @@ const { titulo, intro, passos } = Astro.props;
   />
   <div class="metodo__cabeca">
     <SectionHeader id="metodo-titulo" titulo={titulo} estilo="t-display-l" />
-    <p class="metodo__intro">{intro}</p>
+    <p class="metodo__intro" data-reveal="fade">
+      {intro}
+    </p>
     <p class="rascunho">Rascunho para aprovação</p>
   </div>
-  <ol class="list-reset passos" role="list">
+  <ol class="list-reset passos" role="list" data-reveal="stagger">
     {passos.map((passo, i) => (
       <li class="passo">
         <span class="passo__numero" aria-hidden="true">

@@ -37,7 +37,7 @@ const { paisagem, retrato } = await imagensHero();
     opacidade={0.08}
     giro={-6}
   />
-  <picture class="hero__media">
+  <picture class="hero__media entrada-foto">
     <source
       media={MEDIA_RETRATO}
       type="image/avif"
@@ -67,7 +67,7 @@ const { paisagem, retrato } = await imagensHero();
   </picture>
 
   <div class="container hero__conteudo">
-    <div class="hero__texto">
+    <div class="hero__texto entrada">
       <span class="hero__aura" aria-hidden="true"></span>
       <h1 id="hero-titulo" class="hero__titulo t-display-xl" set:html={enfase(titulo)} />
       <p class="hero__descricao">{descricao}</p>

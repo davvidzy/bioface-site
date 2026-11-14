@@ -23,7 +23,7 @@ const classeTitulo = estilo ?? (Tag === 'h1' ? 't-display-l' : 't-h2');
   <Tag
     id={id}
     class:list={[classeTitulo, 'titulo-enfase']}
-    data-reveal="fade"
+    data-reveal="lines"
     set:html={enfase(titulo)}
   />
   {intro && <p class="t-body-l text-secondary">{intro}</p>}

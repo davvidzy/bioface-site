@@ -40,13 +40,13 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
   <section class="cat-hero com-marca-dagua" aria-labelledby="categoria-titulo">
     <MarcaDagua lado="esquerda" base="-8%" corte={0.45} opacidade={0.06} giro={-6} />
     <div class="container cat-hero__grade">
-      <div class="cat-hero__texto">
+      <div class="cat-hero__texto entrada">
         <nav aria-label="Você está em" class="migalhas">
           <a href="/#tratamentos">Tratamentos</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{categoria.curto}</span>
         </nav>
-        <h1 id="categoria-titulo" class="cat-hero__titulo" data-reveal="fade">
+        <h1 id="categoria-titulo" class="cat-hero__titulo">
           {categoria.rotulo}
         </h1>
         <p class="cat-hero__descricao">{categoria.descricao}</p>
@@ -66,7 +66,7 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
         </div>
       </div>
 
-      <div class="cat-hero__fotos" aria-hidden="true">
+      <div class="cat-hero__fotos entrada-foto" aria-hidden="true">
         <div class="placeholder-media cat-hero__foto cat-hero__foto--grande">
           <span>Foto 1 · {categoria.curto}</span>
         </div>
@@ -80,10 +80,10 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
   <!-- ---------- Tratamentos ---------- -->
   <section class="cat-lista" aria-labelledby="lista-titulo">
     <div class="container">
-      <h2 id="lista-titulo" class="t-display-l cat-lista__titulo">
+      <h2 id="lista-titulo" class="t-display-l cat-lista__titulo" data-reveal="lines">
         Tratamentos
       </h2>
-      <ul class="list-reset cards" role="list">
+      <ul class="list-reset cards" role="list" data-reveal="stagger">
         {procedimentos.map((p) => {
           const problema = isPendente(p.data.problema) ? undefined : p.data.problema;
           return (
@@ -115,7 +115,7 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
         <h2 id="outras-titulo" class="outras__titulo">
           Outros objetivos
         </h2>
-        <ul class="list-reset outras__lista" role="list">
+        <ul class="list-reset outras__lista" role="list" data-reveal="stagger">
           {outras.map((g) => (
             <li>
               <a class="outras__link" href={`/tratamentos/${g.categoria.slug}`}>

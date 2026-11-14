@@ -39,11 +39,11 @@ const fotos: Record<Categoria['slug'], ImageMetadata> = {
 >
   <MarcaDagua lado="direita" topo="30%" corte={0.45} giro={8} />
   <div class="container">
-    <h2 id="tratamentos-titulo" class="t-display-l trat__titulo" data-reveal="fade">
+    <h2 id="tratamentos-titulo" class="t-display-l trat__titulo" data-reveal="lines">
       {titulo}
     </h2>
 
-    <ul class="list-reset trat__cards" role="list">
+    <ul class="list-reset trat__cards" role="list" data-reveal="stagger">
       {grupos.map(({ categoria, procedimentos }) => (
         <li data-trat-cat>
           <a class="card" href={`/tratamentos/${categoria.slug}`}>

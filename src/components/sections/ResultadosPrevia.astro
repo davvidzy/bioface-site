@@ -49,11 +49,11 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       <h2
         id="resultados-titulo"
         class="t-display-l res__titulo"
-        data-reveal="fade"
+        data-reveal="lines"
         set:html={enfase(titulo)}
       />
 
-      <div class="res__palco" data-res-palco>
+      <div class="res__palco" data-res-palco data-reveal="imagem">
         {itens.map(({ resultado, procedimento }, i) => (
           <div
             class="res__caso"
@@ -91,7 +91,12 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
         ))}
       </div>
 
-      <ul class="res__miniaturas list-reset" role="list" aria-label="Escolher caso">
+      <ul
+        class="res__miniaturas list-reset"
+        role="list"
+        aria-label="Escolher caso"
+        data-reveal="stagger"
+      >
         {itens.map(({ resultado }, i) => (
           <li>
             <button

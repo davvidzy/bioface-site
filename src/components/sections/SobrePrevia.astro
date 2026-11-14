@@ -33,7 +33,7 @@ const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
     giro={-8}
   />
   <div class="sobre">
-    <figure class="sobre__foto" data-reveal="fade">
+    <figure class="sobre__foto" data-reveal="imagem">
       <Picture
         src={foto}
         alt={alt}
@@ -46,7 +46,7 @@ const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
 
     <div class="sobre__texto">
       <div class="sobre__nome">
-        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="fade">
+        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="lines">
           {titulo}
         </h2>
         <p class="sobre__subtitulo">{subtitulo}</p>
@@ -55,7 +55,7 @@ const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
       {isPendente(citacao) ? (
         <Texto texto={citacao} />
       ) : (
-        <blockquote class="sobre__citacao">
+        <blockquote class="sobre__citacao" data-reveal="fade">
           <p>{citacao}</p>
         </blockquote>
       )}

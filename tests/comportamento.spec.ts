@@ -178,9 +178,10 @@ test.describe('Movimento', () => {
     await page.mouse.move(200, 200);
     await expect(page.locator('html')).toHaveClass(/lenis/);
     // Abaixo da dobra: escondido pelo JS até o scroll chegar.
-    await expect(page.locator('#faq-titulo')).toHaveCSS('opacity', '0');
-    await page.locator('#faq-titulo').scrollIntoViewIfNeeded();
-    await expect(page.locator('#faq-titulo')).toHaveCSS('opacity', '1', { timeout: 3000 });
+    const abaixo = page.locator('.cta__texto');
+    await expect(abaixo).toHaveCSS('opacity', '0');
+    await abaixo.scrollIntoViewIfNeeded();
+    await expect(abaixo).toHaveCSS('opacity', '1', { timeout: 3000 });
 
     // Ida e volta pela política de privacidade (ClientRouter) e âncora na volta.
     await page.locator('footer a[href="/privacidade"]').click();

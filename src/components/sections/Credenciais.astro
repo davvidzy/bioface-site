@@ -12,7 +12,7 @@ const { itens } = Astro.props;
 ---
 
 <section class="credenciais" aria-label="Em resumo">
-  <ul class="container list-reset credenciais__lista" role="list">
+  <ul class="container list-reset credenciais__lista" role="list" data-reveal="stagger">
     {itens.map((item) => (
       <li class="credenciais__item">{item}</li>
     ))}
