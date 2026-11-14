@@ -9,9 +9,11 @@
  * Celular, sem JS ou reduced motion: tudo em coluna, legível, sem nada escondido.
  * Recriado a partir da referência Timeline (Hyperiux Vault), adaptado ao projeto (Astro, CSS e GSAP).
  *
- * TODO(conteudo): foto do atendimento (à esquerda do trilho); por enquanto, placeholder.
+ * Foto do atendimento à esquerda do trilho (src/assets/metodo/atendimento.jpg).
  */
+import { Picture } from 'astro:assets';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
+import fotoAtendimento from '@/assets/metodo/atendimento.jpg';
 
 interface Props {
   titulo: string;
@@ -45,8 +47,15 @@ const posicoes = ['24%', '50%', '76%'];
       data-ldt-marca
     />
     <div class="metodo__trilho" data-ldt-trilho>
-      <div class="placeholder-media metodo__foto" aria-hidden="true">
-        <span>Foto · atendimento</span>
+      <div class="metodo__foto">
+        <Picture
+          src={fotoAtendimento}
+          alt="Atendimento na clínica BioFace"
+          widths={[600, 900, 1500]}
+          sizes="(min-width: 64rem) 50vw, 100vw"
+          formats={['avif', 'webp']}
+          loading="lazy"
+        />
       </div>
 
       <div class="metodo__tempo">
@@ -112,7 +121,19 @@ const posicoes = ['24%', '50%', '76%'];
   }
 
   .metodo__foto {
-    --ratio: 3 / 2;
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: var(--radius-l);
+  }
+
+  .metodo__foto :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .metodo__tempo {
@@ -234,8 +255,9 @@ const posicoes = ['24%', '50%', '76%'];
     }
 
     :global(html[data-js]) .metodo__foto {
+      flex: none;
       height: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 3 / 2;
     }
 
     :global(html[data-js]) .metodo__tempo {

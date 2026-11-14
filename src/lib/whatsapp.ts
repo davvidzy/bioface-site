@@ -10,11 +10,12 @@ export interface WhatsAppLinkOptions {
   origem: OrigemWhatsApp;
 }
 
-const MENSAGEM_PADRAO = 'Olá! Vim pelo site e gostaria de agendar uma avaliação.';
+// Mensagem definida pela clínica (link oficial de agendamento).
+const MENSAGEM_PADRAO = 'Olá, gostaria de agendar uma avaliação na Bioface';
 
 export function mensagemWhatsApp(procedimento?: string): string {
   if (!procedimento) return MENSAGEM_PADRAO;
-  return `Olá! Vim pelo site e gostaria de agendar uma avaliação sobre ${procedimento}.`;
+  return `${MENSAGEM_PADRAO} sobre ${procedimento}`;
 }
 
 /**
@@ -25,6 +26,7 @@ export function mensagemWhatsApp(procedimento?: string): string {
  */
 export function buildWhatsAppLink({ procedimento }: WhatsAppLinkOptions): string {
   const numero = faltando(site.whatsapp) ? '' : site.whatsapp.replace(/\D/g, '');
-  const texto = encodeURIComponent(mensagemWhatsApp(procedimento));
-  return `https://wa.me/${numero}?text=${texto}`;
+  // URLSearchParams codifica como o link da clínica (espaço vira "+").
+  const query = new URLSearchParams({ text: mensagemWhatsApp(procedimento) });
+  return `https://wa.me/${numero}?${query.toString()}`;
 }

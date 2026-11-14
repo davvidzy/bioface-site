@@ -3,12 +3,11 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 110 marcadores.
+Total: 107 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
 - [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:18](src/components/sections/Espaco.astro#L18)
-- [ ] foto do atendimento (à esquerda do trilho); por enquanto, placeholder. [src/components/sections/Metodo.astro:12](src/components/sections/Metodo.astro#L12)
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
@@ -69,11 +68,9 @@ Total: 110 marcadores.
 - [ ] endereço completo. [src/data/site.ts:42](src/data/site.ts#L42)
 - [ ] CEP. [src/data/site.ts:46](src/data/site.ts#L46)
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
-- [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
 - [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:47](src/data/textos.ts#L47)
 - [ ] seção "O espaço" volta quando houver fotos da clínica. [src/pages/index.astro:97](src/pages/index.astro#L97)
-- [ ] fotos do hero (2) e de cada tratamento; por enquanto, placeholders. [src/pages/tratamentos/[categoria].astro:11](src/pages/tratamentos/[categoria].astro#L11)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)

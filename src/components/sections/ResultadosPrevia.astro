@@ -14,7 +14,7 @@
  * (2026-11-14). O brief (seção 11) e as regras de publicidade pedem esse aviso perto de
  * resultados: confirmar com a cliente antes de publicar.
  */
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BeforeAfter from '@/components/ui/BeforeAfter.astro';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { enfase } from '@/lib/texto';
@@ -107,8 +107,22 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
               aria-label={`Caso ${i + 1}: ${resultado.data.legenda ?? ''}`}
               data-res-mini
             >
-              <Image src={resultado.data.antes} alt="" width={120} />
-              <Image src={resultado.data.depois} alt="" width={120} />
+              <Picture
+                src={resultado.data.antes}
+                alt=""
+                widths={[120, 240]}
+                sizes="120px"
+                formats={['avif', 'webp']}
+                pictureAttributes={{ style: 'display: contents' }}
+              />
+              <Picture
+                src={resultado.data.depois}
+                alt=""
+                widths={[120, 240]}
+                sizes="120px"
+                formats={['avif', 'webp']}
+                pictureAttributes={{ style: 'display: contents' }}
+              />
             </button>
           </li>
         ))}

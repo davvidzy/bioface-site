@@ -417,7 +417,7 @@ Mínimos no mobile: Display/XL 48px, Display/L 40px, H2 34px, H3 26px (aqui a Co
 
 ### WhatsApp (`lib/whatsapp.ts`)
 - `buildWhatsAppLink({ procedimento?, origem })` gera `https://wa.me/<numero>?text=<mensagem codificada>`.
-- Mensagem padrão: "Olá! Vim pelo site e gostaria de agendar uma avaliação." Com procedimento: "...uma avaliação sobre {nome}."
+- Mensagem padrão (link oficial da clínica): "Olá, gostaria de agendar uma avaliação na Bioface". Com procedimento: "... na Bioface sobre {nome}".
 - Todo clique dispara `analytics.track('whatsapp_click', { origem, procedimento })`. A ferramenta de analytics ainda não foi escolhida: implemente como no-op.
 
 ### Conformidade
@@ -434,7 +434,7 @@ Marque cada lacuna no código como `TODO(conteudo)` ou `TODO(validar-cliente)` p
 
 - [ ] Número do CRBM da Maria Guedes
 - [ ] Endereço completo, CEP, coordenadas, horários
-- [ ] Número de WhatsApp de agendamento
+- [x] ~~Número de WhatsApp de agendamento~~: 55 61 8252-1783 (link oficial da clínica)
 - [ ] Fotos profissionais da Maria e do espaço (as do Instagram não têm qualidade para hero)
 - [ ] Formação e trajetória para `/sobre`
 - [ ] Conteúdo clínico de cada tratamento (indicações, sessões, recuperação, duração)

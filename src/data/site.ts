@@ -46,7 +46,7 @@ export const site: Site = {
     cep: 'TODO', // TODO(conteudo): CEP
     geo: { lat: null, lng: null }, // TODO(conteudo): coordenadas
   },
-  whatsapp: 'TODO', // TODO(conteudo): número de agendamento, só dígitos, com DDI 55
+  whatsapp: '556182521783', // agendamento da clínica, só dígitos, com DDI 55
   horarios: [], // TODO(conteudo): horários de atendimento
   instagram: 'https://www.instagram.com/bioface_/',
   linktree: 'https://linktr.ee/bioface_',

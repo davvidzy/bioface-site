@@ -7,8 +7,8 @@ test.describe('WhatsApp', () => {
     expect(await links.count()).toBeGreaterThan(0);
     for (const link of await links.all()) {
       const href = (await link.getAttribute('href')) ?? '';
-      expect(href).toMatch(/^https:\/\/wa\.me\/\d*\?text=/);
-      expect(decodeURIComponent(href)).toContain('Vim pelo site');
+      expect(href).toMatch(/^https:\/\/wa\.me\/556182521783\?text=/);
+      expect(href).toContain('Ol%C3%A1%2C+gostaria+de+agendar+uma+avalia%C3%A7%C3%A3o+na+Bioface');
       await expect(link).toHaveAttribute('target', '_blank');
       expect(await link.textContent()).toContain('nova aba');
     }
@@ -116,8 +116,8 @@ test.describe('Tratamentos', () => {
     const cards = page.locator('a.card-trat');
     await expect(cards).toHaveCount(5);
     await expect(cards.nth(1)).toContainText('Fios de PDO');
-    const href = decodeURIComponent((await cards.nth(1).getAttribute('href')) ?? '');
-    expect(href).toContain('Fios de PDO');
+    const href = (await cards.nth(1).getAttribute('href')) ?? '';
+    expect(new URL(href).searchParams.get('text')).toContain('Fios de PDO');
     await expect(page.locator('.outras__link')).toHaveCount(2);
   });
 });
