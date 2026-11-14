@@ -17,7 +17,7 @@ import Faq from '@/components/sections/Faq.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
 import Conector from '@/components/ui/Conector.astro';
 
-import { home, AVISO_RESULTADOS } from '@/data/textos';
+import { home } from '@/data/textos';
 import {
   getProcedimentosPorCategoria,
   resultadosPublicaveis,
@@ -79,16 +79,12 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   <Filosofia {...home.filosofia} />
   <Conector />
   <TratamentosCategorias {...home.tratamentos} grupos={grupos} />
-  <Conector />
-  <ResultadosPrevia {...home.resultados} aviso={AVISO_RESULTADOS} itens={resultadosItens} />
-  <Conector />
+  <ResultadosPrevia {...home.resultados} itens={resultadosItens} />
   <ComoFunciona {...home.comoFunciona} />
   <Conector />
   <SobrePrevia {...home.sobre} alt={home.hero.alt} />
   <Depoimentos {...home.depoimentos} depoimentos={depoimentos} />
-  <Conector />
   <Espaco {...home.espaco} />
-  <Conector />
   <Faq {...home.faq} ancora="duvidas" itens={faq} />
   <CtaFinal {...home.ctaFinal} origem="cta-final" comLocalizacao />
 </BaseLayout>

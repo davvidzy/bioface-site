@@ -43,14 +43,6 @@ test.describe('Hero', () => {
     });
     expect(linhas).toBeLessThanOrEqual(2);
   });
-
-  test('mobile: botão flutuante oculto com o hero na tela', async ({ page, isMobile }) => {
-    test.skip(!isMobile, 'botão flutuante só existe no mobile');
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await expect(page.locator('[data-floating-whatsapp]')).toHaveAttribute('data-oculto', '');
-    await page.locator('#tratamentos').scrollIntoViewIfNeeded();
-    await expect(page.locator('[data-floating-whatsapp]')).not.toHaveAttribute('data-oculto', '');
-  });
 });
 
 test.describe('Menu do celular', () => {
@@ -93,13 +85,6 @@ test.describe('Conteúdo e SEO', () => {
       const ancora = ((await link.getAttribute('href')) ?? '').split('#')[1] ?? '';
       await expect(page.locator(`section#${ancora}`)).toHaveCount(1);
     }
-  });
-
-  test('aviso de variação aparece junto de resultados', async ({ page }) => {
-    await page.goto('/');
-    await expect(
-      page.locator('#resultados').getByText('Resultados variam de pessoa para pessoa.'),
-    ).toBeVisible();
   });
 });
 
@@ -145,6 +130,20 @@ test.describe('Comparador antes/depois', () => {
     await expect(controle).toHaveAttribute('aria-valuetext', '51% antes, 49% depois');
     await page.keyboard.press('End');
     await expect(controle).toHaveAttribute('aria-valuetext', '100% antes, 0% depois');
+  });
+});
+
+test.describe('Header', () => {
+  test('marca a seção atual no menu ao rolar', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'navegação do header só aparece no desktop');
+    await page.goto('/');
+    const link = (id: string) => page.locator(`nav[aria-label="Principal"] a[href="/#${id}"]`);
+    await page.locator('#resultados').evaluate((s) => s.scrollIntoView({ block: 'center' }));
+    await expect(link('resultados')).toHaveAttribute('aria-current', 'location');
+    await expect(link('tratamentos')).not.toHaveAttribute('aria-current', /.*/);
+    await page.locator('#duvidas').evaluate((s) => s.scrollIntoView({ block: 'center' }));
+    await expect(link('duvidas')).toHaveAttribute('aria-current', 'location');
+    await expect(link('resultados')).not.toHaveAttribute('aria-current', /.*/);
   });
 });
 

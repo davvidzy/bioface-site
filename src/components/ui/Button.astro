@@ -2,19 +2,20 @@
 /**
  * Botão ou link com aparência de botão, em pílula.
  * Com href vira <a>; sem href vira <button>. Alvo de toque mínimo de 44px.
- * O primário leva uma seta num círculo (decorativa).
+ * Padrão do site (sem seta): dourado (destaque) nos CTAs das seções, vinho (primário) no
+ * header, e no menu. A seta num círculo é opcional (prop seta).
  */
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
   variante?: 'primario' | 'secundario' | 'destaque';
   href?: string | undefined;
-  /** Mostra a seta no círculo. Padrão: só no primário. */
+  /** Mostra a seta no círculo. Padrão: não. */
   seta?: boolean;
 };
 
 const { variante = 'primario', href, seta, class: className, ...rest } = Astro.props;
-const comSeta = seta ?? variante === 'primario';
+const comSeta = seta ?? false;
 const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label', className];
 ---
 
@@ -46,7 +47,7 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
    * Contraste no hover: vinho sobre dourado 9,4:1; no tema escuro, vinho sobre creme 13,5:1.
    */
   .btn {
-    --morph: var(--duration-base) var(--ease-out-soft);
+    --morph: var(--motion-fluido);
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -107,12 +108,12 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
   }
 
   .btn--destaque::before {
-    background-color: var(--color-action-primary-bg);
+    background-color: var(--color-action-destaque-hover-bg);
   }
 
   .btn--destaque:hover {
-    color: var(--color-action-primary-text);
-    border-color: var(--color-action-primary-bg);
+    color: var(--color-action-destaque-hover-text);
+    border-color: var(--color-action-destaque-hover-bg);
   }
 
   .btn--secundario {

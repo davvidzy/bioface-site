@@ -1,41 +1,55 @@
 ---
 /**
  * Home. Job: autoridade e vínculo humano.
- * Foto da Maria em destaque, com uma moldura fina deslocada (detalhe de marca).
+ * Foto grande da Maria, nome em display, uma frase dela em destaque e a trajetória.
+ * Desktop: foto à esquerda ocupando a altura; texto à direita, alinhado à base da foto.
  */
 import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Texto from '@/components/ui/Texto.astro';
 import foto from '@/assets/pessoas/hero-mobile.jpg';
+import { enfase } from '@/lib/texto';
+import { isPendente } from '@/lib/conteudo';
 
 interface Props {
   titulo: string;
   subtitulo: string;
   texto: string;
+  citacao: string;
   alt: string;
 }
 
-const { titulo, subtitulo, texto, alt } = Astro.props;
+const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
 ---
 
 <Section labelledby="sobre-titulo" id="sobre">
   <div class="sobre">
-    <figure class="sobre__foto">
+    <figure class="sobre__foto" data-reveal="fade">
       <Picture
         src={foto}
         alt={alt}
-        widths={[400, 640, 900]}
-        sizes="(min-width: 56rem) 34vw, 90vw"
+        widths={[480, 800, 1100]}
+        sizes="(min-width: 56rem) 40vw, 100vw"
         formats={['avif', 'webp']}
         loading="lazy"
-        data-reveal="fade"
       />
     </figure>
+
     <div class="sobre__texto">
-      <SectionHeader id="sobre-titulo" titulo={titulo} estilo="t-display-l" />
-      <p class="t-body-l text-secondary">{subtitulo}</p>
-      <Texto texto={texto} class="t-body-l" />
+      <div class="sobre__nome">
+        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="fade" set:html={enfase(titulo)} />
+        <p class="sobre__subtitulo">{subtitulo}</p>
+      </div>
+
+      {isPendente(citacao) ? (
+        <Texto texto={citacao} />
+      ) : (
+        <blockquote class="sobre__citacao">
+          <p>{citacao}</p>
+        </blockquote>
+      )}
+
+      <Texto texto={texto} class="t-body-l sobre__trajetoria" />
     </div>
   </div>
 </Section>
@@ -44,43 +58,53 @@ const { titulo, subtitulo, texto, alt } = Astro.props;
   .sobre {
     display: grid;
     gap: var(--space-8);
-    align-items: center;
-  }
-
-  .sobre__foto {
-    position: relative;
-    isolation: isolate;
-    max-width: 26rem;
-    width: 85%;
-  }
-
-  /* Moldura fina deslocada atrás da foto. */
-  .sobre__foto::before {
-    content: '';
-    position: absolute;
-    inset: var(--space-5) calc(-1 * var(--space-5)) calc(-1 * var(--space-5)) var(--space-5);
-    border: 1px solid var(--color-accent-decorative);
-    border-radius: var(--radius-l);
-    z-index: -1;
   }
 
   .sobre__foto :global(img) {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
-    object-position: 60% 20%;
+    object-position: 60% 15%;
     border-radius: var(--radius-l);
   }
 
   .sobre__texto {
     display: grid;
-    gap: var(--space-4);
-    max-width: 34rem;
+    gap: var(--space-7);
+    align-content: end;
+    max-width: 36rem;
+  }
+
+  .sobre__nome {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .sobre__subtitulo {
+    color: var(--color-text-secondary);
+    font-size: var(--text-body-l);
+  }
+
+  /* Frase da Maria: serifa itálica grande com um fio dourado à esquerda. */
+  .sobre__citacao {
+    margin: 0;
+    padding-inline-start: var(--space-6);
+    border-inline-start: 1px solid var(--gold-600);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-style: italic;
+    line-height: var(--leading-h2);
+  }
+
+  .sobre__trajetoria {
+    color: var(--color-text-secondary);
   }
 
   @media (min-width: 56rem) {
     .sobre {
-      grid-template-columns: 5fr 6fr;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      column-gap: clamp(var(--space-8), 7vw, 8rem);
+      align-items: end;
     }
   }
 </style>

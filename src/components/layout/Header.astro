@@ -9,7 +9,7 @@
  * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
  * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
  */
-import Wordmark from '@/assets/brand/wordmark-mono.svg';
+import Wordmark from '@/assets/brand/wordmark.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import { site } from '@/data/site';
 import { navegacao } from '@/data/textos';
@@ -93,6 +93,41 @@ const { sobreposto = false } = Astro.props;
     const m = menu();
     if (m) m.open = false;
   });
+
+  /*
+   * Onde a pessoa está: marca com aria-current o link da seção que ocupa a faixa central
+   * da tela. Fora das seções do menu (hero, CTA final), nenhum fica marcado.
+   */
+  let observador: IntersectionObserver | null = null;
+  function marcarSecaoAtual() {
+    observador?.disconnect();
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-header] a[href^="/#"]')];
+    const secoes = [...new Set(links.map((l) => l.hash.slice(1)))]
+      .map((id) => document.getElementById(id))
+      .filter((s): s is HTMLElement => s !== null);
+    if (secoes.length === 0) return;
+    const visiveis = new Set<string>();
+    const atualizar = () => {
+      const atual = secoes.find((s) => visiveis.has(s.id))?.id;
+      links.forEach((l) => {
+        if (l.hash.slice(1) === atual) l.setAttribute('aria-current', 'location');
+        else l.removeAttribute('aria-current');
+      });
+    };
+    observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((e) => {
+          if (e.isIntersecting) visiveis.add(e.target.id);
+          else visiveis.delete(e.target.id);
+        });
+        atualizar();
+      },
+      // Faixa fina no meio da tela: só uma seção por vez cruza a linha.
+      { rootMargin: '-45% 0px -55% 0px' },
+    );
+    secoes.forEach((s) => observador?.observe(s));
+  }
+  document.addEventListener('astro:page-load', marcarSecaoAtual);
 </script>
 
 <style>
@@ -104,7 +139,7 @@ const { sobreposto = false } = Astro.props;
   .site-header {
     --altura: 5.5rem;
     --altura-flutuante: 3.75rem;
-    --morph: 0.6s var(--ease-out-soft);
+    --morph: var(--motion-fluido);
     min-height: var(--altura);
   }
 
@@ -180,30 +215,47 @@ const { sobreposto = false } = Astro.props;
     width: 7.5rem;
   }
 
-  /* ---------- Navegação: pílula de fundo no hover ---------- */
+  /* ---------- Navegação: barra que cresce sob o texto ----------
+   * Hover: a barra cresce da esquerda para a direita; ao sair, recolhe para a direita.
+   * Seção atual (aria-current, marcado pelo script ao rolar): barra inteira e fixa.
+   */
   .site-header__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 var(--space-1);
+    gap: 0 var(--space-6);
   }
 
   .site-header__links a {
+    position: relative;
     display: inline-flex;
     align-items: center;
     min-height: var(--tap-min);
-    padding-inline: var(--space-4);
-    border-radius: var(--radius-pill);
     text-decoration: none;
-    background-color: color-mix(in srgb, var(--color-text-primary) 0%, transparent);
-    transition: background-color var(--duration-fast) var(--ease-standard);
   }
 
-  .site-header__links a:hover {
-    background-color: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  .site-header__links a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0.6rem;
+    height: 1.5px;
+    border-radius: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform var(--motion-fluido);
   }
 
-  .site-header__links a:active {
-    background-color: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+  .site-header__links a:hover::after,
+  .site-header__links a[aria-current]::after {
+    transform: scaleX(1);
+    transform-origin: 0% 50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__links a::after {
+      transition: none;
+    }
   }
 
   /* ---------- Menu do celular ---------- */
@@ -239,15 +291,15 @@ const { sobreposto = false } = Astro.props;
     height: 1.5px;
     border-radius: 1px;
     background-color: currentColor;
-    transition: transform var(--duration-base) var(--ease-out-soft);
+    transition: transform var(--motion-fluido);
   }
 
   .menu-movel__icone span:last-child {
     width: 65%;
     justify-self: end;
     transition:
-      transform var(--duration-base) var(--ease-out-soft),
-      width var(--duration-base) var(--ease-out-soft);
+      transform var(--motion-fluido),
+      width var(--motion-fluido);
   }
 
   .menu-movel[open] .menu-movel__icone span:first-child {
@@ -277,7 +329,7 @@ const { sobreposto = false } = Astro.props;
 
   @media (prefers-reduced-motion: no-preference) {
     .menu-movel[open] .menu-movel__painel {
-      animation: menu-entra var(--duration-base) var(--ease-out-soft);
+      animation: menu-entra var(--motion-fluido);
     }
   }
 

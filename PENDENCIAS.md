@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 116 marcadores.
+Total: 118 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -100,13 +100,15 @@ Total: 116 marcadores.
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
-- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:37](src/data/textos.ts#L37)
-- [ ] 3 fotos verticais (3:4) para a filosofia: detalhe de procedimento, mãos, espaço. [src/data/textos.ts:38](src/data/textos.ts#L38)
-- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:68](src/data/textos.ts#L68)
+- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:35](src/data/textos.ts#L35)
+- [ ] 3 fotos verticais (3:4) para a filosofia: detalhe de procedimento, mãos, espaço. [src/data/textos.ts:36](src/data/textos.ts#L36)
+- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:66](src/data/textos.ts#L66)
+- [ ] uma frase da Maria, na voz dela, sobre o que é um resultado natural. [src/data/textos.ts:67](src/data/textos.ts#L67)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)
 
+- [ ] o aviso "Resultados variam de pessoa para pessoa" saiu a pedido. [src/components/sections/ResultadosPrevia.astro:13](src/components/sections/ResultadosPrevia.astro#L13)
 - [ ] quais tratamentos ganham destaque na Home. Em 12 arquivos:
   - [src/content/procedimentos/bioestimuladores-de-colageno.md:5](src/content/procedimentos/bioestimuladores-de-colageno.md#L5)
   - [src/content/procedimentos/fios-de-pdo.md:5](src/content/procedimentos/fios-de-pdo.md#L5)
@@ -128,9 +130,9 @@ Total: 116 marcadores.
   - [src/content/resultados/par-3.json:2](src/content/resultados/par-3.json#L2)
   - [src/content/resultados/par-4.json:2](src/content/resultados/par-4.json#L2)
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
-- [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:27](src/data/textos.ts#L27)
-- [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:31](src/data/textos.ts#L31)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:49](src/data/textos.ts#L49)
+- [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:25](src/data/textos.ts#L25)
+- [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:29](src/data/textos.ts#L29)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:47](src/data/textos.ts#L47)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

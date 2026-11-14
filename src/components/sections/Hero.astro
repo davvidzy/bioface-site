@@ -27,7 +27,7 @@ const { titulo, descricao, alt } = Astro.props;
 const { paisagem, retrato } = await imagensHero();
 ---
 
-<section class="hero" aria-labelledby="hero-titulo" data-cta-principal>
+<section class="hero" aria-labelledby="hero-titulo">
   <picture class="hero__media">
     <source
       media={MEDIA_RETRATO}

@@ -3,7 +3,6 @@
  * CTA final. Job: última chance de conversão, sem atrito.
  * Um cartão arredondado em vinho dentro da página clara (não é faixa de seção),
  * com o monograma da marca como detalhe. Localização logo abaixo, no fundo claro.
- * Marcado com data-cta-principal: o botão flutuante some quando ele está na tela.
  */
 import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
@@ -23,13 +22,13 @@ interface Props {
 const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.props;
 ---
 
-<Section labelledby="cta-final-titulo" id="contato" data-cta-principal>
+<Section labelledby="cta-final-titulo" id="contato">
   <div class="cta" data-theme="escuro">
     <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
     <div class="cta__conteudo">
       <h2 id="cta-final-titulo" class="t-display-l" data-reveal="fade" set:html={enfase(titulo)} />
       {texto && <p class="t-body-l text-secondary">{texto}</p>}
-      <WhatsAppLink origem={origem} procedimento={procedimento} />
+      <WhatsAppLink origem={origem} procedimento={procedimento} variante="destaque" />
     </div>
   </div>
   {comLocalizacao && (

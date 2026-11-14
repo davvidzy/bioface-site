@@ -8,8 +8,6 @@
  */
 import { site } from './site';
 
-export const AVISO_RESULTADOS = 'Resultados variam de pessoa para pessoa.';
-
 /** Âncoras da Home, na ordem da página. Usadas no header. */
 export const navegacao = [
   { ancora: 'tratamentos', rotulo: 'Tratamentos' },
@@ -39,7 +37,7 @@ export const home = {
     imagens: 3,
   },
   tratamentos: {
-    titulo: 'Tratamentos que *fazemos*',
+    titulo: 'Nossos *tratamentos*',
   },
   resultados: {
     titulo: 'Antes e *depois*',
@@ -66,6 +64,7 @@ export const home = {
     titulo: `${site.responsavel.nome.split(' ')[0]} *${site.responsavel.nome.split(' ').slice(1).join(' ')}*`,
     subtitulo: `${site.responsavel.titulo}, ${site.anosAtuacao} anos de atuação`,
     texto: 'TODO(conteudo): trajetória resumida da Maria em 2 ou 3 frases.',
+    citacao: 'TODO(conteudo): uma frase da Maria, na voz dela, sobre o que é um resultado natural.',
   },
   depoimentos: {
     titulo: 'O que dizem as *pacientes*',

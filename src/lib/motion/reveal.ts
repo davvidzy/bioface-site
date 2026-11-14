@@ -17,7 +17,7 @@ function revealFade(el: HTMLElement): void {
   gsap.from(el, {
     autoAlpha: 0,
     y: REVEAL_DISTANCE,
-    duration: DURATION.slow,
+    duration: DURATION.fluida,
     ease: EASE.outSoft,
     scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
   });
@@ -34,7 +34,7 @@ function revealLines(el: HTMLElement): void {
     onSplit(self) {
       return gsap.from(self.lines, {
         yPercent: 100,
-        duration: DURATION.slow,
+        duration: DURATION.fluida,
         stagger: 0.08,
         ease: EASE.outSoft,
         scrollTrigger: { trigger: el, start: REVEAL_START, once: true },

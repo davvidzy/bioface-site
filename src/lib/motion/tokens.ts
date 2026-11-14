@@ -9,6 +9,7 @@ export const DURATION = {
   base: 0.4, // --duration-base: 400ms
   slow: 0.8, // --duration-slow: 800ms
   page: 0.45, // --duration-page: 450ms
+  fluida: 0.75, // --duration-fluida: 750ms (ritmo padrão)
 } as const;
 
 /** Curvas bezier dos easings nomeados (mesmos valores do CSS). */

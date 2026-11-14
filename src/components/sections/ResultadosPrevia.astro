@@ -9,6 +9,10 @@
  *
  * Sem JS: todos os comparadores empilhados, cada um com sua legenda. Sem miniaturas.
  * Reduced motion: troca de caso sem varredura nem fade.
+ *
+ * TODO(validar-cliente): o aviso "Resultados variam de pessoa para pessoa" saiu a pedido
+ * (2026-11-14). O brief (seção 11) e as regras de publicidade pedem esse aviso perto de
+ * resultados: confirmar com a cliente antes de publicar.
  */
 import { Image } from 'astro:assets';
 import BeforeAfter from '@/components/ui/BeforeAfter.astro';
@@ -17,11 +21,10 @@ import type { Resultado } from '@/lib/conteudo';
 
 interface Props {
   titulo: string;
-  aviso: string;
   itens: { resultado: Resultado; procedimento?: string | undefined }[];
 }
 
-const { titulo, aviso, itens } = Astro.props;
+const { titulo, itens } = Astro.props;
 const total = String(itens.length).padStart(2, '0');
 const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
@@ -91,15 +94,13 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
           </li>
         ))}
       </ul>
-
-      <p class="t-caption res__aviso">{aviso}</p>
     </div>
   </section>
 )}
 
 <style>
   .res {
-    --troca: 0.6s var(--ease-out-soft);
+    --troca: var(--motion-fluido);
     padding-block: var(--space-section);
   }
 
@@ -133,7 +134,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     visibility: hidden;
     transition:
       opacity var(--troca),
-      visibility 0s linear 0.6s;
+      visibility 0s linear var(--duration-fluida);
   }
 
   :global(html[data-js]) .res__caso[data-ativo] {
@@ -234,9 +235,9 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     outline-offset: var(--focus-offset);
     box-shadow: 0 0 0 0 var(--color-text-primary);
     transition:
-      opacity var(--duration-base) var(--ease-standard),
-      transform var(--duration-base) var(--ease-out-soft),
-      box-shadow var(--duration-base) var(--ease-out-soft);
+      opacity var(--motion-fluido),
+      transform var(--motion-fluido),
+      box-shadow var(--motion-fluido);
   }
 
   .res__mini :global(img) {
@@ -257,10 +258,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
       0 0 0 3.5px var(--color-text-primary);
   }
 
-  .res__aviso {
-    color: var(--color-text-secondary);
-  }
-
   /* ---------- Desktop: comparador à esquerda, caso e miniaturas à direita ---------- */
   @media (min-width: 64rem) {
     :global(html[data-js]) .res__grade {
@@ -271,9 +268,8 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
         'palco titulo'
         'palco info'
         'palco minis'
-        'palco aviso'
         'palco .';
-      grid-template-rows: 1fr auto auto auto auto 1fr;
+      grid-template-rows: 1fr auto auto auto 1fr;
       column-gap: clamp(var(--space-8), 8vw, 9rem);
       row-gap: var(--space-6);
       align-items: start;
@@ -300,11 +296,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     :global(html[data-js]) .res__mini {
       width: 5.5rem;
     }
-
-    :global(html[data-js]) .res__aviso {
-      grid-area: aviso;
-      padding-block-start: var(--space-4);
-    }
   }
 
   /* Celular: título, palco, caso e miniaturas em coluna; palco centralizado. */
@@ -323,10 +314,6 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     }
 
     :global(html[data-js]) .res__infos,
-    :global(html[data-js]) .res__aviso {
-      text-align: center;
-    }
-
     :global(html[data-js]) .res__info {
       justify-items: center;
     }

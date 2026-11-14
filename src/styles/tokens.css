@@ -42,6 +42,9 @@
   /* CTA de destaque (hero): dourado sólido com texto vinho (9,4:1). */
   --color-action-destaque-bg: var(--gold-200);
   --color-action-destaque-text: var(--wine-900);
+  /* Hover do destaque: preenche em vinho com texto creme (13,5:1). */
+  --color-action-destaque-hover-bg: var(--wine-900);
+  --color-action-destaque-hover-text: var(--cream-50);
   --color-border-default: var(--wine-500);
   --color-focus-ring: var(--wine-900);
   --color-accent-decorative: var(--gold-400);
@@ -127,6 +130,10 @@
   --duration-base: 400ms;
   --duration-slow: 800ms;
   --duration-page: 450ms;
+  /* Ritmo padrão do site: toda mudança de estado (hover, abrir, trocar, header) usa este par. */
+  --duration-fluida: 750ms;
+  --ease-fluida: var(--ease-out-soft);
+  --motion-fluido: var(--duration-fluida) var(--ease-fluida);
   --reveal-distance: 24px;
 
   /* ---------- Camadas ---------- */
@@ -151,4 +158,7 @@
   --color-action-hover-text: var(--wine-900);
   --color-border-default: var(--gold-400);
   --color-focus-ring: var(--gold-200);
+  /* Destaque sobre vinho: o hover preenche em creme. */
+  --color-action-destaque-hover-bg: var(--cream-50);
+  --color-action-destaque-hover-text: var(--wine-900);
 }
