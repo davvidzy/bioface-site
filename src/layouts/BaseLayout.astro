@@ -142,7 +142,7 @@ const robots = noindex || !INDEXAR;
         const diferenca = y - ultimoY;
         if (Math.abs(diferenca) < DELTA) return;
         ultimoY = y;
-        const menuAberto = Boolean(document.querySelector('[data-menu-movel][open]'));
+        const menuAberto = Boolean(document.querySelector('[data-menu-movel]:popover-open'));
         const focoNoHeader = header.contains(document.activeElement);
         const ocultar = diferenca > 0 && y > LIMITE_HEADER && !menuAberto && !focoNoHeader;
         header.toggleAttribute('data-oculto', ocultar);

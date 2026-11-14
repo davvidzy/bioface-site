@@ -11,14 +11,17 @@
  *   logo e links em vinho, para manter o contraste com o fundo vinho que passa atrás.
  * O BaseLayout troca o data-theme da barra junto com esses estados.
  * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
- * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
- * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
+ * No celular: logo + botão de menu. O menu é um popover nativo (funciona sem JS e fica na
+ * camada superior, fora dos transforms da barra): tela cheia em vinho, abre da esquerda para
+ * a direita com fade; logo de um lado, X discreto do outro, links em serifa grande e o CTA
+ * embaixo. Fecha no X, com Esc (o foco volta ao botão) ou ao tocar num link.
  */
 import Wordmark from '@/assets/brand/wordmark.svg';
 import Monograma from '@/assets/brand/monograma.svg';
 import WordmarkMono from '@/assets/brand/wordmark-mono.svg';
 import MonogramaMono from '@/assets/brand/monograma-mono.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { site } from '@/data/site';
 import { navegacao } from '@/data/textos';
 
@@ -59,25 +62,73 @@ const { sobreposto = false } = Astro.props;
       class="site-header__cta"
     />
 
-    <details class="menu-movel" data-menu-movel>
-      <summary class="menu-movel__botao" aria-label="Menu">
-        <span class="menu-movel__icone" aria-hidden="true">
-          <span></span>
-          <span></span>
-        </span>
-      </summary>
-      <div class="menu-movel__painel">
-        <nav aria-label="Menu">
-          <ul class="list-reset menu-movel__links" role="list">
-            {navegacao.map((link) => (
-              <li>
-                <a href={`/#${link.ancora}`} data-menu-link>
-                  {link.rotulo}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <button
+      type="button"
+      class="menu-movel__botao"
+      popovertarget="menu-movel"
+      aria-label="Abrir menu"
+      data-menu-botao
+    >
+      <span class="menu-movel__icone" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <div
+      id="menu-movel"
+      class="menu-movel"
+      popover
+      role="dialog"
+      aria-label="Menu"
+      data-theme="escuro"
+      data-menu-movel
+      data-lenis-prevent
+    >
+      <MarcaDagua
+        lado="direita"
+        base="-8%"
+        tamanho="22rem"
+        corte={0.38}
+        opacidade={0.06}
+        giro={8}
+        parallax={false}
+      />
+      <div class="menu-movel__topo">
+        <a
+          href="/"
+          class="menu-movel__marca"
+          aria-label={`${site.marca}, página inicial`}
+          data-menu-link
+        >
+          <Monograma focusable="false" class="menu-movel__icone-marca" aria-hidden="true" />
+          <Wordmark focusable="false" class="menu-movel__wordmark" aria-hidden="true" />
+        </a>
+        <button
+          type="button"
+          class="menu-movel__fechar"
+          popovertarget="menu-movel"
+          popovertargetaction="hide"
+          aria-label="Fechar menu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <nav aria-label="Menu" class="menu-movel__nav">
+        <ul class="list-reset menu-movel__links" role="list">
+          {navegacao.map((link, i) => (
+            <li class="menu-movel__item" style={`--i: ${i}`}>
+              <a href={`/#${link.ancora}`} data-menu-link>
+                {link.rotulo}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="menu-movel__item menu-movel__rodape" style={`--i: ${navegacao.length}`}>
         <WhatsAppLink
           origem="menu"
           rotulo="Agendar avaliação"
@@ -85,28 +136,76 @@ const { sobreposto = false } = Astro.props;
           class="menu-movel__cta"
         />
       </div>
-    </details>
+    </div>
   </div>
 </header>
 
 <script>
-  // Fecha o menu do celular: ao tocar num link, com Esc (devolve o foco ao botão) ou fora.
-  const menu = () => document.querySelector<HTMLDetailsElement>('[data-menu-movel]');
-  document.addEventListener('click', (e) => {
+  /*
+   * Menu do celular (popover nativo). Abrir, fechar no X e Esc já vêm do navegador.
+   * Aqui: fechar ao tocar num link e deixar o resto da página inerte enquanto ele está
+   * aberto (o foco fica dentro do menu e o leitor de tela não lê o que está por trás).
+   */
+  const menu = () => document.querySelector<HTMLElement>('[data-menu-movel]');
+  const inertes: Element[] = [];
+  function alternarInerte(aberto: boolean) {
+    inertes.splice(0).forEach((el) => el.removeAttribute('inert'));
     const m = menu();
-    if (!m?.open) return;
-    const alvo = e.target as Element;
-    if (alvo.closest('[data-menu-link]') || !m.contains(alvo)) m.open = false;
-  });
-  document.addEventListener('keydown', (e) => {
+    if (!aberto || !m) return;
+    for (let no: Element | null = m; no && no !== document.body; no = no.parentElement) {
+      for (const irmao of no.parentElement?.children ?? []) {
+        if (irmao === no || irmao.hasAttribute('inert')) continue;
+        irmao.setAttribute('inert', '');
+        inertes.push(irmao);
+      }
+    }
+  }
+  function alinharTopo(m: HTMLElement) {
+    const botao = document.querySelector('[data-menu-botao]')?.getBoundingClientRect();
+    const marca = document.querySelector('.site-header__marca')?.getBoundingClientRect();
+    if (botao) {
+      m.style.setProperty('--fechar-topo', `${botao.top}px`);
+      m.style.setProperty('--fechar-direita', `${window.innerWidth - botao.right}px`);
+    }
+    if (marca) {
+      m.style.setProperty('--marca-topo', `${marca.top}px`);
+      m.style.setProperty('--marca-esquerda', `${marca.left}px`);
+      m.style.setProperty('--marca-altura', `${marca.height}px`);
+    }
+  }
+  function prepararMenu() {
     const m = menu();
-    if (e.key !== 'Escape' || !m?.open) return;
-    m.open = false;
-    m.querySelector<HTMLElement>('summary')?.focus();
-  });
+    if (!m || m.dataset['pronto'] !== undefined) return;
+    m.dataset['pronto'] = '';
+    // beforetoggle: antes de abrir, alinha logo e X ao lugar exato do logo e do botão da
+    // barra (que mudam entre o topo e a pílula); antes de fechar, tira o inert para o
+    // navegador conseguir devolver o foco ao botão.
+    m.addEventListener('beforetoggle', (e) => {
+      const abrindo = (e as ToggleEvent).newState === 'open';
+      if (abrindo) alinharTopo(m);
+      alternarInerte(abrindo);
+    });
+    // Ao abrir, o foco entra no menu (no X); ao fechar pelo X ou Esc, volta ao botão.
+    let porLink = false;
+    m.addEventListener('toggle', (e) => {
+      if ((e as ToggleEvent).newState === 'open') {
+        m.querySelector<HTMLElement>('.menu-movel__fechar')?.focus({ preventScroll: true });
+      } else if (!porLink) {
+        document.querySelector<HTMLElement>('[data-menu-botao]')?.focus({ preventScroll: true });
+      }
+      porLink = false;
+    });
+    m.addEventListener('click', (e) => {
+      if (!(e.target as Element).closest('[data-menu-link]')) return;
+      porLink = true;
+      m.hidePopover();
+    });
+  }
+  document.addEventListener('astro:page-load', prepararMenu);
   document.addEventListener('astro:before-swap', () => {
     const m = menu();
-    if (m) m.open = false;
+    if (m?.matches(':popover-open')) m.hidePopover();
+    alternarInerte(false);
   });
 
   /*
@@ -320,25 +419,18 @@ const { sobreposto = false } = Astro.props;
   }
 
   /* ---------- Menu do celular ---------- */
-  .menu-movel {
-    display: none;
-  }
-
   .menu-movel__botao {
-    display: grid;
+    display: none;
     place-items: center;
     width: var(--tap-min);
     height: var(--tap-min);
+    padding: 0;
+    border: 0;
     border-radius: 50%;
     cursor: pointer;
-    list-style: none;
     background-color: var(--color-action-primary-bg);
     color: var(--color-action-primary-text);
-    transition: background-color var(--duration-fast) var(--ease-standard);
-  }
-
-  .menu-movel__botao::-webkit-details-marker {
-    display: none;
+    transition: background-color var(--motion-fluido);
   }
 
   .menu-movel__icone {
@@ -352,74 +444,193 @@ const { sobreposto = false } = Astro.props;
     height: 1.5px;
     border-radius: 1px;
     background-color: currentColor;
-    transition: transform var(--motion-fluido);
   }
 
   .menu-movel__icone span:last-child {
     width: 65%;
     justify-self: end;
-    transition:
-      transform var(--motion-fluido),
-      width var(--motion-fluido);
   }
 
-  .menu-movel[open] .menu-movel__icone span:first-child {
-    transform: translateY(3.25px) rotate(45deg);
-  }
-
-  .menu-movel[open] .menu-movel__icone span:last-child {
+  /*
+   * Painel em tela cheia. O popover fica na camada superior do navegador, então o
+   * position: fixed vale para a tela inteira, mesmo com a barra transformada.
+   * Abre revelando da esquerda para a direita (clip-path) junto com um fade; fecha
+   * recolhendo no sentido contrário. Links e CTA entram em sequência logo depois.
+   */
+  .menu-movel {
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
     width: 100%;
-    transform: translateY(-3.25px) rotate(-45deg);
-  }
-
-  .menu-movel__painel {
-    position: absolute;
-    inset-block-start: calc(100% + var(--space-2));
-    inset-inline: var(--space-3);
-    display: grid;
-    gap: var(--space-6);
-    padding: var(--space-6);
-    border-radius: var(--radius-l);
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0 var(--gutter) max(var(--space-8), env(safe-area-inset-bottom));
+    border: 0;
+    /* Cabe inteiro na tela: sem rolagem dentro do menu. */
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+    isolation: isolate;
     background-color: var(--color-bg-default);
-    box-shadow: var(--shadow-flutuante);
+    color: var(--color-text-primary);
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transition:
+      clip-path var(--motion-fluido),
+      opacity var(--motion-fluido),
+      display var(--duration-fluida) allow-discrete,
+      overlay var(--duration-fluida) allow-discrete;
   }
 
-  .site-header[data-flutuante] .menu-movel__painel {
-    inset-inline: 0;
+  .menu-movel:popover-open {
+    display: flex;
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .menu-movel[open] .menu-movel__painel {
-      animation: menu-entra var(--motion-fluido);
-    }
-  }
-
-  @keyframes menu-entra {
-    from {
+  @starting-style {
+    .menu-movel:popover-open {
+      clip-path: inset(0 100% 0 0);
       opacity: 0;
-      transform: translateY(-0.5rem);
     }
+  }
+
+  .menu-movel::backdrop {
+    background: transparent;
+  }
+
+  /* Sem rolagem da página por trás enquanto o menu está aberto. */
+  :global(html:has(.menu-movel:popover-open)) {
+    overflow: hidden;
+  }
+
+  /*
+   * Logo e X ficam exatamente onde estavam o logo e o botão da barra (posições medidas
+   * pelo script ao abrir). Sem JS, valem os valores padrão do topo da página.
+   */
+  .menu-movel__topo {
+    flex: none;
+    min-height: 6.75rem;
+  }
+
+  .menu-movel__marca {
+    --logo: 6.25rem;
+    position: absolute;
+    inset-block-start: var(--marca-topo, 1.84rem);
+    inset-inline-start: var(--marca-esquerda, var(--gutter));
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--logo) * 0.084);
+    height: var(--marca-altura, 3.08rem);
+    min-height: var(--tap-min);
+  }
+
+  .menu-movel__marca :global(.menu-movel__icone-marca) {
+    width: calc(var(--logo) * 0.317);
+    height: auto;
+  }
+
+  .menu-movel__marca :global(.menu-movel__wordmark) {
+    width: var(--logo);
+    height: auto;
+  }
+
+  /* X discreto: dois fios finos, sem fundo; só um aro sutil e um giro no hover. */
+  .menu-movel__fechar {
+    position: absolute;
+    inset-block-start: var(--fechar-topo, 2.0rem);
+    inset-inline-end: var(--fechar-direita, var(--gutter));
+    display: grid;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition:
+      border-color var(--motion-fluido),
+      rotate var(--motion-fluido);
+  }
+
+  .menu-movel__fechar span {
+    grid-area: 1 / 1;
+    width: 1.125rem;
+    height: 1px;
+    background-color: currentColor;
+    rotate: 45deg;
+  }
+
+  .menu-movel__fechar span:last-child {
+    rotate: -45deg;
+  }
+
+  .menu-movel__fechar:hover {
+    border-color: color-mix(in srgb, var(--color-border-default) 45%, transparent);
+    rotate: 90deg;
+  }
+
+  .menu-movel__nav {
+    margin-block: auto;
+    padding-block: var(--space-6);
   }
 
   .menu-movel__links {
     display: grid;
+    gap: var(--space-2);
   }
 
   .menu-movel__links a {
     display: flex;
     align-items: center;
-    min-height: 3.25rem;
+    min-height: min(4rem, 8dvh);
     font-family: var(--font-display);
-    font-size: var(--text-h3);
-    font-weight: var(--weight-medium);
-    line-height: var(--leading-h3);
+    font-size: min(clamp(2.5rem, 1.5rem + 5vw, 3.5rem), 6.5dvh);
+    font-weight: var(--weight-regular);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
     text-decoration: none;
-    border-block-end: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 35%, transparent);
+    color: var(--color-text-primary);
+    transition:
+      translate var(--motion-fluido),
+      color var(--motion-fluido);
   }
 
-  .menu-movel__painel :global(.menu-movel__cta) {
-    justify-self: stretch;
+  .menu-movel__links a:hover {
+    translate: var(--space-2) 0;
+    color: var(--color-text-accent);
+  }
+
+  .menu-movel__rodape :global(.menu-movel__cta) {
+    width: 100%;
+  }
+
+  /* Entrada em sequência: cada item desliza da esquerda, um pouco depois do painel. */
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-movel:popover-open .menu-movel__item {
+      animation: menu-item var(--motion-fluido) both;
+      animation-delay: calc(180ms + var(--i) * 70ms);
+    }
+  }
+
+  @keyframes menu-item {
+    from {
+      opacity: 0;
+      translate: -1.5rem 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-movel,
+    .menu-movel__fechar,
+    .menu-movel__links a {
+      transition: none;
+    }
   }
 
   @media (max-width: 48rem) {
@@ -427,8 +638,8 @@ const { sobreposto = false } = Astro.props;
       display: none;
     }
 
-    .menu-movel {
-      display: block;
+    .menu-movel__botao {
+      display: grid;
     }
 
     .menu-movel nav {

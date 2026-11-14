@@ -51,22 +51,34 @@ test.describe('Menu do celular', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const menu = page.locator('[data-menu-movel]');
     await expect(page.locator('header nav[aria-label="Principal"]')).toBeHidden();
-    await menu.locator('summary').click();
-    await expect(menu.locator('[data-menu-link]')).toHaveCount(4);
+    await page.locator('[data-menu-botao]').click();
+    await expect(menu).toBeVisible();
+    await expect(menu.locator('nav [data-menu-link]')).toHaveCount(4);
     await expect(menu.locator('a[data-origem="menu"]')).toBeVisible();
     await menu.locator('[data-menu-link]', { hasText: 'Dúvidas' }).click();
-    await expect(menu).not.toHaveAttribute('open', '');
+    await expect(menu).toBeHidden();
     await expect(page.locator('#duvidas')).toBeInViewport();
   });
 
   test('Esc fecha e devolve o foco ao botão', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'menu hambúrguer só no celular');
     await page.goto('/');
-    const botao = page.locator('[data-menu-movel] summary');
+    const botao = page.locator('[data-menu-botao]');
     await botao.click();
+    await expect(page.locator('[data-menu-movel]')).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(page.locator('[data-menu-movel]')).not.toHaveAttribute('open', '');
+    await expect(page.locator('[data-menu-movel]')).toBeHidden();
     await expect(botao).toBeFocused();
+  });
+
+  test('o X fecha o menu', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'menu hambúrguer só no celular');
+    await page.goto('/');
+    await page.locator('[data-menu-botao]').click();
+    const menu = page.locator('[data-menu-movel]');
+    await expect(menu).toBeVisible();
+    await menu.getByRole('button', { name: 'Fechar menu' }).click();
+    await expect(menu).toBeHidden();
   });
 });
 
@@ -208,7 +220,7 @@ test.describe('Movimento', () => {
     // Ida e volta pela política de privacidade (ClientRouter) e âncora na volta.
     await page.locator('footer a[href="/privacidade"]').click();
     await page.waitForURL('**/privacidade');
-    await page.locator('header a[href="/"]').click();
+    await page.locator('header a.site-header__marca').click();
     await page.waitForURL((url) => url.pathname === '/');
     await expect(page.locator('html')).toHaveAttribute('data-js', '');
     // Durante a View Transition a camada ::view-transition cobre a página e recebe os cliques.

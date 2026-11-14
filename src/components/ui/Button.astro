@@ -139,6 +139,14 @@ const classes = ['btn', className];
     }
   }
 
+  /* Telas bem estreitas (320px): o rótulo longo cabe sem empurrar a página para o lado. */
+  @media (max-width: 22.5rem) {
+    .btn {
+      padding-inline: var(--space-4);
+      font-size: 0.9375rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .btn,
     .btn__preenchimento,
