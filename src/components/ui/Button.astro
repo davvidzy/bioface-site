@@ -60,6 +60,7 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
     border-radius: var(--radius-pill);
     text-decoration: none;
     text-align: center;
+    white-space: nowrap;
     transition:
       color var(--morph),
       border-color var(--morph);
@@ -151,6 +152,18 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
 
   .btn:active::before {
     transition-duration: var(--duration-fast);
+  }
+
+  /* Celular: pílula mais compacta para caber numa linha. */
+  @media (max-width: 30rem) {
+    .btn {
+      gap: var(--space-3);
+      padding-inline: var(--space-5);
+    }
+
+    .btn--seta {
+      padding-inline-end: var(--space-1);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

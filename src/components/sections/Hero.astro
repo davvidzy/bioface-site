@@ -5,22 +5,25 @@
  * Imagem com direção de arte por orientação (lib/hero.ts):
  * - paisagem: foto horizontal, Maria à direita, texto à esquerda sobre o fundo claro
  * - retrato: foto vertical, texto embaixo
- * Contraste: texto vinho (wine/900) sobre o fundo bege da foto (~9:1), reforçado por um
- * degradê creme onde o texto fica, para manter ≥ 7:1 em qualquer recorte.
+ * Hierarquia em três degraus, todos em serifa até o CTA: frase-manifesto enorme,
+ * subtítulo serifado médio, CTA em pílula com brilho. Texto centralizado na coluna,
+ * com uma aura de cor (dourado e rosé da marca) atrás dando presença.
+ * Contraste: texto vinho sobre creme + aura clara; medido nos pixels, ≥ 7:1.
  *
  * É o LCP da Home: eager, fetchpriority=high e preload no <head> (index.astro).
  */
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import { imagensHero, MEDIA_RETRATO } from '@/lib/hero';
+import { enfase } from '@/lib/texto';
 
 interface Props {
+  /** Frase-manifesto; um trecho entre *asteriscos* vira itálico. */
   titulo: string;
-  destaque: string;
   descricao: string;
   alt: string;
 }
 
-const { titulo, destaque, descricao, alt } = Astro.props;
+const { titulo, descricao, alt } = Astro.props;
 const { paisagem, retrato } = await imagensHero();
 ---
 
@@ -55,12 +58,12 @@ const { paisagem, retrato } = await imagensHero();
   </picture>
 
   <div class="container hero__conteudo">
-    <h1 id="hero-titulo" class="hero__titulo t-display-xl">
-      <span>{titulo}</span>
-      <em class="hero__destaque">{destaque}</em>
-    </h1>
-    <p class="hero__descricao t-body-l">{descricao}</p>
-    <WhatsAppLink origem="hero" />
+    <div class="hero__texto">
+      <span class="hero__aura" aria-hidden="true"></span>
+      <h1 id="hero-titulo" class="hero__titulo t-display-xl" set:html={enfase(titulo)} />
+      <p class="hero__descricao">{descricao}</p>
+      <WhatsAppLink origem="hero" class="hero__cta" />
+    </div>
   </div>
 </section>
 
@@ -69,7 +72,7 @@ const { paisagem, retrato } = await imagensHero();
     position: relative;
     isolation: isolate;
     display: grid;
-    align-items: end;
+    align-items: center;
     min-height: 100vh;
     min-height: 100svh;
     overflow: hidden;
@@ -86,7 +89,7 @@ const { paisagem, retrato } = await imagensHero();
   }
 
   .hero__media {
-    z-index: -2;
+    z-index: -3;
   }
 
   .hero__media img {
@@ -95,14 +98,14 @@ const { paisagem, retrato } = await imagensHero();
     object-position: 70% 30%;
   }
 
-  /* ---------- Degradê de contraste ----------
-   * Creme (bg-default) onde o texto fica + faixa no topo para o header sobreposto.
+  /* ---------- Degradês ----------
+   * Topo (header), base (a foto se dissolve na página) e lateral creme onde fica o texto.
    */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
     background:
       linear-gradient(
@@ -110,51 +113,84 @@ const { paisagem, retrato } = await imagensHero();
         color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
         transparent 9rem
       ),
-      /* Base: a foto se dissolve no fundo da página, sem corte de seção. */
       linear-gradient(0deg, var(--color-bg-default) 0%, transparent 32%),
       linear-gradient(
         90deg,
-        color-mix(in srgb, var(--color-bg-default) 88%, transparent) 0%,
-        color-mix(in srgb, var(--color-bg-default) 60%, transparent) 34%,
-        transparent 60%
+        color-mix(in srgb, var(--color-bg-default) 94%, transparent) 0%,
+        color-mix(in srgb, var(--color-bg-default) 80%, transparent) 40%,
+        transparent 62%
       );
   }
 
   /* ---------- Texto ---------- */
   .hero__conteudo {
+    padding-block: calc(var(--space-9) + var(--space-3)) var(--space-7);
+  }
+
+  .hero__texto {
+    position: relative;
     display: grid;
-    justify-items: start;
-    gap: var(--space-5);
-    padding-block: calc(var(--space-10) + var(--space-6))
-      clamp(var(--space-8), 12vh, var(--space-10));
+    justify-items: center;
+    gap: var(--space-6);
+    width: min(42rem, 100%);
+    text-align: center;
     color: var(--color-text-primary);
+  }
+
+  /* Aura: duas manchas desfocadas (dourado e rosé), atrás do texto. */
+  .hero__aura {
+    position: absolute;
+    inset: -20% -25%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        closest-side at 38% 45%,
+        color-mix(in srgb, var(--color-aura-1) 80%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        closest-side at 66% 60%,
+        color-mix(in srgb, var(--color-aura-2) 24%, transparent),
+        transparent
+      );
+    filter: blur(24px);
   }
 
   .hero__titulo {
-    display: grid;
+    text-wrap: balance;
   }
 
-  .hero__destaque {
-    font-style: italic;
-  }
-
+  /* Subtítulo serifado: o degrau do meio da hierarquia.
+     Cormorant entre 24px e 34px pede Medium (traços finos). */
   .hero__descricao {
-    /* No máximo 2 linhas no desktop. */
-    max-width: 34rem;
-    color: var(--color-text-primary);
+    max-width: 36rem;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-wrap: balance;
   }
 
-  .hero__conteudo :global(.btn) {
+  /* CTA com brilho dourado suave. */
+  .hero__texto :global(.hero__cta) {
     margin-block-start: var(--space-2);
+    box-shadow:
+      0 0.75rem 2.5rem color-mix(in srgb, var(--color-aura-1) 70%, transparent),
+      0 0.25rem 0.75rem color-mix(in srgb, var(--color-aura-2) 18%, transparent);
   }
 
   /* ---------- Retrato (celular e tablet em pé) ---------- */
   @media (orientation: portrait) {
+    .hero {
+      align-items: end;
+    }
+
     .hero__media img {
       object-position: 60% 20%;
     }
 
-    /* Só a faixa do topo (header); o degradê do texto vai no próprio bloco abaixo. */
     .hero::before {
       background: linear-gradient(
         180deg,
@@ -171,9 +207,19 @@ const { paisagem, retrato } = await imagensHero();
       background: linear-gradient(
         0deg,
         var(--color-bg-default) 0%,
-        color-mix(in srgb, var(--color-bg-default) 86%, transparent) calc(100% - var(--fade)),
+        color-mix(in srgb, var(--color-bg-default) 90%, transparent) calc(100% - var(--fade)),
         transparent 100%
       );
+    }
+
+    .hero__texto {
+      width: 100%;
+      gap: var(--space-5);
+    }
+
+    /* 24px: mínimo da Cormorant (em Medium) e cabe em 2 linhas no celular. */
+    .hero__descricao {
+      font-size: 1.5rem;
     }
   }
 </style>

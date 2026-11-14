@@ -172,5 +172,14 @@ const { sobreposto = false } = Astro.props;
     .site-header[data-flutuante] .site-header__barra {
       padding-inline-start: var(--space-4);
     }
+
+    /* No celular o CTA do header fica só com o texto (sem a seta) para caber. */
+    .site-header__barra :global(.site-header__cta .btn__seta) {
+      display: none;
+    }
+
+    .site-header__barra :global(.site-header__cta) {
+      padding-inline: var(--space-5);
+    }
   }
 </style>

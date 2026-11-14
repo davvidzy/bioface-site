@@ -24,10 +24,9 @@ export const home = {
     description: `Estética facial com resultados naturais. ${site.responsavel.nome}, biomédica esteta há ${site.anosAtuacao} anos no Lago Sul, Brasília. Agende sua avaliação pelo WhatsApp.`,
   },
   hero: {
-    // TODO(validar-cliente): promessa central do h1.
-    titulo: 'Você,',
-    destaque: 'ainda mais você.',
-    descricao: `Estética facial com ${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()} há ${site.anosAtuacao} anos no ${site.endereco.bairro}.`,
+    // TODO(validar-cliente): frase-manifesto do h1 (o medo central é ficar artificial).
+    titulo: 'Natural é quando o resultado *parece seu*.',
+    descricao: `Estética facial com ${site.responsavel.nome}, biomédica há ${site.anosAtuacao} anos no ${site.endereco.bairro}.`,
     // Imagem fictícia da Maria para a prévia (confirmado pela equipe em 2026-11-13).
     // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
