@@ -108,10 +108,15 @@ const robots = noindex || !INDEXAR;
 
       // Header suspenso: depois de rolar um pouco, a barra vira pílula flutuante.
       const LIMITE_HEADER = 80;
+      // Suspenso, a barra passa para o tema escuro (vinho); no topo, fica no tema claro.
       const atualizarHeader = () => {
-        document
-          .querySelector('[data-header]')
-          ?.toggleAttribute('data-flutuante', window.scrollY > LIMITE_HEADER);
+        const suspenso = window.scrollY > LIMITE_HEADER;
+        document.querySelector('[data-header]')?.toggleAttribute('data-flutuante', suspenso);
+        const barra = document.querySelector<HTMLElement>('[data-header-barra]');
+        if (barra) {
+          if (suspenso) barra.dataset['theme'] = 'escuro';
+          else delete barra.dataset['theme'];
+        }
       };
       window.addEventListener('scroll', atualizarHeader, { passive: true });
       document.addEventListener('astro:page-load', atualizarHeader);

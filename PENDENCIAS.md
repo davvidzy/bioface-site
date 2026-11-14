@@ -3,12 +3,11 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 108 marcadores.
+Total: 107 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
 - [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:18](src/components/sections/Espaco.astro#L18)
-- [ ] quando houver fotos por tratamento, o selo pode virar a imagem que segue o cursor. [src/components/sections/TratamentosCategorias.astro:11](src/components/sections/TratamentosCategorias.astro#L11)
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
@@ -87,7 +86,7 @@ Total: 108 marcadores.
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
-- [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:45](src/data/textos.ts#L45)
+- [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:46](src/data/textos.ts#L46)
 - [ ] seção "O espaço" volta quando houver fotos da clínica. [src/pages/index.astro:97](src/pages/index.astro#L97)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
@@ -117,10 +116,10 @@ Total: 108 marcadores.
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
 - [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:32](src/data/textos.ts#L32)
 - [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:36](src/data/textos.ts#L36)
-- [ ] rascunho para aprovação. [src/data/textos.ts:55](src/data/textos.ts#L55)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:58](src/data/textos.ts#L58)
-- [ ] rascunho para aprovação; trocar pela frase dela. [src/data/textos.ts:77](src/data/textos.ts#L77)
-- [ ] rascunho para aprovação; trocar pela trajetória real (formação, cursos). [src/data/textos.ts:79](src/data/textos.ts#L79)
+- [ ] rascunho para aprovação. [src/data/textos.ts:56](src/data/textos.ts#L56)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:59](src/data/textos.ts#L59)
+- [ ] rascunho para aprovação; trocar pela frase dela. [src/data/textos.ts:78](src/data/textos.ts#L78)
+- [ ] rascunho para aprovação; trocar pela trajetória real (formação, cursos). [src/data/textos.ts:80](src/data/textos.ts#L80)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

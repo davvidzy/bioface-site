@@ -52,10 +52,13 @@ Fixe versões exatas no `package.json`. Rode `npm view <pacote> version` antes d
 
 ## 3. Mapa do site
 
+> **Atualização de 2026-11-14:** a pedido, cada um dos 3 objetivos ganhou uma página própria (`/tratamentos/[categoria]`), aberta pelos cards da Home. As páginas por tratamento continuam fora.
+>
 > **Decisão de 2026-11-13: landing page única.** Tudo acontece na Home. As páginas `/tratamentos`, `/tratamentos/[slug]`, `/resultados` e `/sobre` foram removidas a pedido. **Não recrie rotas novas** sem pedido explícito. As seções 6.2 a 6.5 abaixo ficam só como referência de conteúdo para as seções da Home.
 
 ```
-/                                   Home (landing page única; header navega por âncoras)
+/                                   Home (header navega por âncoras)
+/tratamentos/[categoria]            Uma página por objetivo (pele, rejuvenescimento, contorno), com os tratamentos em cards
 /privacidade                        Política de privacidade (LGPD, obrigatória)
 /404                                Página não encontrada, com caminho de volta
 ```
@@ -170,10 +173,10 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 
 | # | Seção | Job | Conteúdo | Tema | CTA |
 |---|---|---|---|---|---|
-| 1 | Header | Navegar e converter de qualquer ponto | Logo do Figma (monograma + wordmark, âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | escuro (vinho): faixa no topo, pílula suspensa ao rolar | WhatsApp |
-| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto sem itálico (2 linhas no desktop, 3 no celular), descrição curta em Body (2 linhas) e CTA, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
-| 3 | Credenciais | Transformar promessa em fato | Faixa discreta e padronizada (valor curto + rótulo curto, separados por fios): anos, formação, nº de tratamentos, bairro. CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
-| 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos (nomes curtos aprovados em 2026-11-14, ex.: "Controle do melasma", "Laser e ultrassom"); número, nome em serifa, a dor numa frase, seta. Hierarquia: título da seção > objetivo > nome > dor. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
+| 1 | Header | Navegar e converter de qualquer ponto | Logo do Figma (monograma + wordmark), âncoras com a seção atual marcada, botão "Agendar avaliação" | topo: sem fundo, tema claro, logo vinho menor e mais respiro; ao rolar: pílula vinho (tema escuro) com o logo âmbar | WhatsApp |
+| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto sem itálico (2 linhas no desktop, 3 no celular), descrição curta em Body (2 linhas) e CTA, alinhados à esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
+| 3 | Credenciais | Transformar promessa em fato | Faixa muito discreta: uma linha curta por fato, de tamanhos parecidos, separadas por ponto dourado (anos, formação, nº de tratamentos, bairro). CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
+| 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | 3 cards, um por objetivo (número, quantidade, nome, nomes dos tratamentos), cada um levando a `/tratamentos/[categoria]`. Na página da categoria: cards dos tratamentos (número contínuo 01 a 12, nome, a dor numa frase), cada um abrindo o WhatsApp com o nome do tratamento | claro | página da categoria; WhatsApp por tratamento |
 | 5 | Resultados | Prova visual | Comparador em moldura 3:4 à esquerda; à direita título, caso atual (contador e região) e miniaturas meio antes/meio depois. Sem o aviso "resultados variam" (removido a pedido; validar com a cliente) | `bg/subtle` | nenhum |
 | 6 | Método | Diferenciar e reduzir ansiedade | "Como a Maria trabalha": frase de método + 3 passos | escuro (wine/900) | WhatsApp |
 | 7 | Maria | Autoridade e vínculo humano | Foto grande, nome em Display/XL, citação dela, trajetória | escuro | nenhum |

@@ -42,7 +42,7 @@ const faq = (await getFaqGeral()).filter((f) => !f.data.pendente).map((f) => f.d
 const totalTratamentos = grupos.reduce((n, g) => n + g.procedimentos.length, 0);
 const credenciais = [
   ...home.credenciais.slice(0, 2),
-  { valor: `${totalTratamentos} tratamentos`, rotulo: 'faciais, por objetivo' },
+  `${totalTratamentos} tratamentos`,
   ...home.credenciais.slice(2),
 ];
 const preloads = await preloadsHero();

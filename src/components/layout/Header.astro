@@ -3,15 +3,19 @@
  * Header: navegar e converter de qualquer ponto.
  * Landing page única: os links são âncoras das seções da Home.
  *
- * Barra em tema escuro (vinho): o logo nas cores originais e os links creme têm contraste.
- * No topo, faixa de borda a borda; ao rolar, vira uma pílula suspensa e arredondada
- * (data-flutuante, aplicado em BaseLayout), na mesma transição contínua.
+ * Dois estados, no mesmo elemento e na mesma transição contínua:
+ * - topo: sem fundo, tema claro, logo em vinho (versão mono), menor e com mais respiro;
+ * - ao rolar (data-flutuante, aplicado em BaseLayout): pílula suspensa em tema escuro
+ *   (vinho), com o logo nas cores originais (âmbar) e links creme.
+ * O BaseLayout troca também o data-theme da barra junto com o data-flutuante.
  * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
  * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
  * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
  */
 import Wordmark from '@/assets/brand/wordmark.svg';
 import Monograma from '@/assets/brand/monograma.svg';
+import WordmarkMono from '@/assets/brand/wordmark-mono.svg';
+import MonogramaMono from '@/assets/brand/monograma-mono.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import { site } from '@/data/site';
 import { navegacao } from '@/data/textos';
@@ -24,10 +28,16 @@ const { sobreposto = false } = Astro.props;
 ---
 
 <header class:list={['site-header', { 'site-header--sobreposto': sobreposto }]} data-header>
-  <div class="site-header__barra" data-theme="escuro">
+  <div class="site-header__barra" data-header-barra>
     <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
-      <Monograma aria-hidden="true" focusable="false" class="site-header__icone" />
-      <Wordmark aria-hidden="true" focusable="false" class="site-header__wordmark" />
+      <span class="site-header__logo site-header__logo--mono" aria-hidden="true">
+        <MonogramaMono focusable="false" class="site-header__icone" />
+        <WordmarkMono focusable="false" class="site-header__wordmark" />
+      </span>
+      <span class="site-header__logo site-header__logo--cor" aria-hidden="true">
+        <Monograma focusable="false" class="site-header__icone" />
+        <Wordmark focusable="false" class="site-header__wordmark" />
+      </span>
     </a>
     <nav aria-label="Principal">
       <ul class="site-header__links list-reset" role="list">
@@ -140,7 +150,7 @@ const { sobreposto = false } = Astro.props;
    * contínua (morph). O <header> guarda a altura no fluxo para a página não pular.
    */
   .site-header {
-    --altura: 5.5rem;
+    --altura: 6.75rem;
     --altura-flutuante: 3.75rem;
     --morph: var(--motion-fluido);
     min-height: var(--altura);
@@ -167,8 +177,7 @@ const { sobreposto = false } = Astro.props;
     /* Conteúdo alinhado ao container do resto da página, com a barra de borda a borda. */
     padding: 0 max(var(--gutter), (100% - var(--container-max)) / 2 + var(--gutter));
     border-radius: 0;
-    /* Tema escuro: o logo âmbar e os links creme ganham contraste sobre o vinho. */
-    background-color: var(--color-bg-default);
+    background-color: color-mix(in srgb, var(--wine-900) 0%, transparent);
     box-shadow:
       0 0 0 rgb(43 20 32 / 0),
       0 0 0 rgb(43 20 32 / 0);
@@ -191,15 +200,15 @@ const { sobreposto = false } = Astro.props;
     min-height: var(--altura-flutuante);
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
     border-radius: 2.5rem;
-    background-color: color-mix(in srgb, var(--color-bg-default) 94%, transparent);
+    background-color: color-mix(in srgb, var(--wine-900) 94%, transparent);
     box-shadow: var(--shadow-flutuante);
     backdrop-filter: blur(12px);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .site-header__barra,
-    .site-header__marca,
-    .site-header__marca > :global(svg) {
+    .site-header__logo,
+    .site-header__logo > :global(svg) {
       transition: none;
     }
   }
@@ -210,13 +219,34 @@ const { sobreposto = false } = Astro.props;
    * ícone = 0,317 × wordmark; espaço entre eles = 0,084 × wordmark.
    */
   .site-header__marca {
-    --logo: 9rem;
+    --logo: 7.25rem;
+    display: grid;
+    align-items: center;
+    min-height: var(--tap-min);
+    color: var(--color-text-primary);
+  }
+
+  /* As duas versões do logo ocupam o mesmo lugar; o estado decide qual aparece. */
+  .site-header__logo {
+    grid-area: 1 / 1;
     display: inline-flex;
     align-items: center;
     gap: calc(var(--logo) * 0.084);
-    min-height: var(--tap-min);
-    color: var(--color-text-primary);
-    transition: gap var(--morph);
+    transition:
+      opacity var(--morph),
+      gap var(--morph);
+  }
+
+  .site-header__logo--cor {
+    opacity: 0;
+  }
+
+  .site-header[data-flutuante] .site-header__logo--mono {
+    opacity: 0;
+  }
+
+  .site-header[data-flutuante] .site-header__logo--cor {
+    opacity: 1;
   }
 
   .site-header__icone {
@@ -229,10 +259,6 @@ const { sobreposto = false } = Astro.props;
     width: var(--logo);
     height: auto;
     transition: width var(--morph);
-  }
-
-  .site-header[data-flutuante] .site-header__marca {
-    --logo: 7.5rem;
   }
 
   /* ---------- Navegação: barra que cresce sob o texto ----------
@@ -403,11 +429,7 @@ const { sobreposto = false } = Astro.props;
     }
 
     .site-header__marca {
-      --logo: 7rem;
-    }
-
-    .site-header[data-flutuante] .site-header__marca {
-      --logo: 6.5rem;
+      --logo: 6.25rem;
     }
 
     .site-header[data-flutuante] .site-header__barra {

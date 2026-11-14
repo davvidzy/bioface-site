@@ -37,11 +37,12 @@ export const home = {
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
   },
   /** Faixa de fatos logo abaixo do hero. Só fatos já confirmados no brief. */
-  /** O total de tratamentos entra na Home, contado da collection. */
+  /** Uma linha por fato, com tamanhos parecidos (14 a 18 caracteres). */
   credenciais: [
-    { valor: `${site.anosAtuacao} anos`, rotulo: 'de atuação' },
-    { valor: 'Biomédica esteta', rotulo: 'responsável técnica' },
-    { valor: site.endereco.bairro, rotulo: `${site.endereco.cidade}, ${site.endereco.uf}` },
+    `${site.anosAtuacao} anos de atuação`,
+    'Biomédica esteta',
+    // O total de tratamentos entra na Home, contado da collection.
+    `${site.endereco.bairro}, ${site.endereco.cidade}`,
     // TODO(conteudo): quando houver, entrar com o número do CRBM e a nota do Google.
   ],
   tratamentos: {

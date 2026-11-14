@@ -5,8 +5,8 @@
  * Imagem com direção de arte por orientação (lib/hero.ts):
  * - paisagem: foto horizontal, Maria à direita, texto à esquerda sobre o fundo claro
  * - retrato: foto vertical, texto embaixo
- * Hierarquia em três degraus, todos em serifa até o CTA: frase-manifesto enorme,
- * subtítulo serifado médio, CTA em pílula com brilho. Texto centralizado na coluna,
+ * Hierarquia em três degraus: frase-manifesto em serifa grande, descrição curta em Body
+ * e o CTA. Tudo alinhado à esquerda na coluna,
  * com uma aura de cor (dourado e rosé da marca) atrás dando presença.
  * Contraste: texto vinho sobre creme + aura clara; medido nos pixels, ≥ 7:1.
  *
@@ -144,10 +144,10 @@ const { paisagem, retrato } = await imagensHero();
   .hero__texto {
     position: relative;
     display: grid;
-    justify-items: center;
+    justify-items: start;
     gap: var(--space-6);
     width: min(44rem, 100%);
-    text-align: center;
+    text-align: start;
     color: var(--color-text-primary);
   }
 
@@ -208,7 +208,7 @@ const { paisagem, retrato } = await imagensHero();
     }
 
     .hero__conteudo {
-      padding-block: calc(5.5rem + var(--space-10)) var(--space-4);
+      padding-block: calc(6.75rem + var(--space-9)) var(--space-4);
     }
 
     .hero__texto {

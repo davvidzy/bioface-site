@@ -1,0 +1,300 @@
+---
+/**
+ * Página de uma categoria de tratamentos (pedido de 2026-11-14: cada um dos 3 cards da Home
+ * leva a uma página própria). Mostra os tratamentos da categoria em cards; cada card abre
+ * o WhatsApp com o nome do tratamento na mensagem. No fim, os outros dois objetivos e o CTA.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
+import Transicao from '@/components/ui/Transicao.astro';
+import CtaFinal from '@/components/sections/CtaFinal.astro';
+import { CATEGORIAS } from '@/data/categorias';
+import { getProcedimentosPorCategoria, isPendente } from '@/lib/conteudo';
+import { buildWhatsAppLink } from '@/lib/whatsapp';
+import { site } from '@/data/site';
+import { home } from '@/data/textos';
+
+export function getStaticPaths() {
+  return CATEGORIAS.map((categoria) => ({ params: { categoria: categoria.slug } }));
+}
+
+const grupos = await getProcedimentosPorCategoria();
+const indice = grupos.findIndex((g) => g.categoria.slug === Astro.params.categoria);
+const grupo = grupos[indice];
+if (!grupo) return Astro.redirect('/404');
+const { categoria, procedimentos } = grupo;
+// Numeração contínua com a Home (01 a 12): soma os tratamentos das categorias anteriores.
+const inicio = grupos.slice(0, indice).reduce((n, g) => n + g.procedimentos.length, 0);
+const outras = grupos.filter((g) => g.categoria.slug !== categoria.slug);
+const num = (n: number) => String(n).padStart(2, '0');
+
+const titulo = `${categoria.rotulo} | ${site.marca}`;
+const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome).join(', ')}. Avaliação individual com ${site.responsavel.nome} no ${site.endereco.bairro}, ${site.endereco.cidade}.`;
+---
+
+<BaseLayout title={titulo} description={descricao} path={`/tratamentos/${categoria.slug}`}>
+  <section class="cat-pagina com-marca-dagua" aria-labelledby="categoria-titulo">
+    <MarcaDagua lado="direita" topo="6rem" corte={0.4} giro={8} />
+    <div class="container">
+      <nav aria-label="Você está em" class="migalhas">
+        <a href="/#tratamentos">Tratamentos</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{categoria.rotulo}</span>
+      </nav>
+
+      <header class="cat-pagina__cabeca">
+        <h1 id="categoria-titulo" class="t-display-l" data-reveal="fade">
+          {categoria.rotulo}
+        </h1>
+        <p class="cat-pagina__descricao">{categoria.descricao}</p>
+      </header>
+
+      <ul class="list-reset cards" role="list">
+        {procedimentos.map((p, i) => {
+          const problema = isPendente(p.data.problema) ? undefined : p.data.problema;
+          return (
+            <li>
+              <a
+                class="card-trat"
+                href={buildWhatsAppLink({ procedimento: p.data.nome, origem: 'tratamentos' })}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="whatsapp_click"
+                data-origem="tratamentos"
+                data-procedimento={p.data.nome}
+              >
+                <span class="card-trat__numero" aria-hidden="true">
+                  {num(inicio + i + 1)}
+                </span>
+                <span class="card-trat__nome">{p.data.nome}</span>
+                {problema && <span class="card-trat__problema">{problema}</span>}
+                <span class="card-trat__rodape">
+                  <span>Agendar avaliação</span>
+                  <span class="card-trat__seta" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="visually-hidden">pelo WhatsApp (abre o WhatsApp em nova aba)</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <section class="outras" aria-labelledby="outras-titulo">
+        <h2 id="outras-titulo" class="outras__titulo">
+          Outros objetivos
+        </h2>
+        <ul class="list-reset outras__lista" role="list">
+          {outras.map((g) => (
+            <li>
+              <a class="outras__link" href={`/tratamentos/${g.categoria.slug}`}>
+                <span class="outras__nome">{g.categoria.rotulo}</span>
+                <span class="outras__qtd">{g.procedimentos.length} tratamentos</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <Transicao de="var(--cream-50)" para="var(--wine-950)" altura="clamp(8rem, 20vw, 16rem)" />
+  <CtaFinal {...home.ctaFinal} origem="cta-final" />
+</BaseLayout>
+
+<style>
+  .cat-pagina {
+    padding-block: var(--space-6) var(--space-section);
+  }
+
+  .migalhas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    font-size: var(--text-body-s);
+    color: var(--color-text-secondary);
+  }
+
+  .migalhas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+
+  .migalhas > span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .cat-pagina__cabeca {
+    display: grid;
+    gap: var(--space-4);
+    margin-block: var(--space-5) var(--space-9);
+    max-width: 44rem;
+  }
+
+  .cat-pagina__descricao {
+    font-size: var(--text-body-l);
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- Cards dos tratamentos ---------- */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .card-trat {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    gap: var(--space-3);
+    height: 100%;
+    min-height: 19rem;
+    padding: var(--space-6);
+    border-radius: var(--radius-l);
+    background-color: var(--color-bg-subtle);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition:
+      translate var(--motion-fluido),
+      box-shadow var(--motion-fluido);
+  }
+
+  .card-trat::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: -1;
+    height: 110%;
+    border-radius: 50% 50% 0 0;
+    background-color: color-mix(in srgb, var(--gold-200) 45%, var(--color-bg-subtle));
+    transition:
+      top var(--motion-fluido),
+      border-radius var(--motion-fluido);
+  }
+
+  .card-trat__numero {
+    font-size: var(--text-caption);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-secondary);
+  }
+
+  .card-trat__nome {
+    align-self: end;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+  }
+
+  .card-trat__problema {
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+  }
+
+  .card-trat__rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: var(--space-3);
+    padding-block-start: var(--space-4);
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 30%, transparent);
+    font-weight: var(--weight-medium);
+  }
+
+  .card-trat__seta {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+    transition: rotate var(--motion-fluido);
+  }
+
+  .card-trat:hover {
+    translate: 0 -4px;
+    box-shadow: 0 18px 40px -24px rgb(43 20 32 / 0.35);
+  }
+
+  .card-trat:hover::before {
+    top: 0;
+    border-radius: 0;
+  }
+
+  .card-trat:hover .card-trat__seta {
+    rotate: -45deg;
+  }
+
+  /* ---------- Outros objetivos ---------- */
+  .outras {
+    margin-block-start: var(--space-10);
+  }
+
+  .outras__titulo {
+    margin-block-end: var(--space-5);
+    font-family: var(--font-body);
+    font-size: var(--text-body-m);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+  }
+
+  .outras__lista {
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 30%, transparent);
+  }
+
+  .outras__lista > li {
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 30%, transparent);
+  }
+
+  .outras__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
+
+  .outras__nome {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    line-height: 1.1;
+    transition: translate var(--motion-fluido);
+  }
+
+  .outras__qtd {
+    font-size: var(--text-body-s);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .outras__link:hover .outras__nome {
+    translate: var(--space-3) 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-trat,
+    .card-trat::before,
+    .card-trat__seta,
+    .outras__nome {
+      transition: none;
+    }
+
+    .card-trat:hover {
+      translate: none;
+    }
+  }
+</style>

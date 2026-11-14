@@ -89,28 +89,25 @@ test.describe('Conteúdo e SEO', () => {
 });
 
 test.describe('Tratamentos', () => {
-  test('índice com os 12 tratamentos em 3 objetivos, cada um levando ao WhatsApp', async ({
-    page,
-  }) => {
+  test('Home: 3 cards levam às páginas das categorias', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#tratamentos [data-trat-cat]')).toHaveCount(3);
-    const linhas = page.locator('#tratamentos a.linha');
-    await expect(linhas).toHaveCount(12);
-    const href = decodeURIComponent((await linhas.first().getAttribute('href')) ?? '');
-    expect(href).toContain('Limpeza de pele');
-    await linhas.nth(6).scrollIntoViewIfNeeded();
-    await expect(linhas.nth(6)).toContainText('Fios de PDO');
+    const cards = page.locator('#tratamentos a.card');
+    await expect(cards).toHaveCount(3);
+    await expect(cards.first()).toHaveAttribute('href', '/tratamentos/pele');
   });
 
-  test('desktop: selo acompanha o cursor sobre as linhas', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'cursor só no desktop');
-    await page.goto('/');
-    const linha = page.locator('#tratamentos a.linha').first();
-    await linha.scrollIntoViewIfNeeded();
-    await linha.hover();
-    const caixa = (await linha.boundingBox())!;
-    await page.mouse.move(caixa.x + caixa.width / 2 + 10, caixa.y + caixa.height / 2);
-    await expect(page.locator('[data-trat-indice]')).toHaveAttribute('data-selo-ativo', '');
+  test('página da categoria mostra seus tratamentos, cada um levando ao WhatsApp', async ({
+    page,
+  }) => {
+    await page.goto('/tratamentos/rejuvenescimento');
+    await expect(page.locator('h1')).toHaveText('Firmeza e rejuvenescimento');
+    const cards = page.locator('a.card-trat');
+    await expect(cards).toHaveCount(5);
+    await expect(cards.nth(1)).toContainText('Fios de PDO');
+    await expect(cards.first()).toContainText('06');
+    const href = decodeURIComponent((await cards.nth(1).getAttribute('href')) ?? '');
+    expect(href).toContain('Fios de PDO');
+    await expect(page.locator('.outras__link')).toHaveCount(2);
   });
 });
 
