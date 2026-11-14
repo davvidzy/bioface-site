@@ -1,7 +1,9 @@
 ---
 /**
- * Home. Job: reduzir a ansiedade de quem nunca fez.
- * Três passos ligados por um fio, com numerais grandes em serifa.
+ * Home. Job: diferenciar pelo método e reduzir a ansiedade de quem nunca fez.
+ * Junta a antiga "Filosofia" e o "Como funciona": uma frase sobre como a Maria trabalha
+ * e os três passos ligados por um fio, com numerais grandes em serifa.
+ * Tema escuro (vinho): começo do "entardecer" da página.
  */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
@@ -9,14 +11,19 @@ import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 
 interface Props {
   titulo: string;
+  intro: string;
   passos: { titulo: string; texto: string }[];
 }
 
-const { titulo, passos } = Astro.props;
+const { titulo, intro, passos } = Astro.props;
 ---
 
-<Section labelledby="como-funciona-titulo">
-  <SectionHeader id="como-funciona-titulo" titulo={titulo} estilo="t-display-l" />
+<Section labelledby="metodo-titulo" id="metodo" tema="escuro" class="metodo">
+  <div class="metodo__cabeca">
+    <SectionHeader id="metodo-titulo" titulo={titulo} estilo="t-display-l" />
+    <p class="metodo__intro">{intro}</p>
+    <p class="rascunho">Rascunho para aprovação</p>
+  </div>
   <ol class="list-reset passos" role="list">
     {passos.map((passo, i) => (
       <li class="passo">
@@ -24,16 +31,39 @@ const { titulo, passos } = Astro.props;
           {String(i + 1).padStart(2, '0')}
         </span>
         <h3 class="t-h3">{passo.titulo}</h3>
-        <p class="text-secondary">{passo.texto}</p>
+        <p class="passo__texto">{passo.texto}</p>
       </li>
     ))}
   </ol>
   <div class="cta">
-    <WhatsAppLink origem="como-funciona" variante="destaque" />
+    <WhatsAppLink origem="como-funciona" />
   </div>
 </Section>
 
 <style>
+  .metodo__cabeca {
+    display: grid;
+    gap: var(--space-4);
+    margin-block-end: var(--space-9);
+  }
+
+  .metodo__cabeca :global(.section-header) {
+    margin-block-end: 0;
+  }
+
+  .metodo__intro {
+    max-width: 38rem;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    color: var(--color-text-secondary);
+  }
+
+  .passo__texto {
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+  }
+
   .passos {
     position: relative;
     display: grid;

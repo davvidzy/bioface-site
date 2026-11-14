@@ -1,18 +1,18 @@
 ---
 /**
  * Rodapé: confiança institucional e conformidade (Home, seção 13).
- * Responsável técnica com registro, endereço, Instagram e /privacidade.
- * Claro como o resto da página, fechado pelo wordmark grande (decorativo).
+ * Responsável técnica com registro, Instagram e /privacidade.
+ * Escuro, no mesmo vinho do CTA final, fechado pelo wordmark grande (decorativo).
+ * O endereço fica só no bloco de localização do CTA final, para não repetir.
  */
-import { site, enderecoCompleto, faltando } from '@/data/site';
+import { site, faltando } from '@/data/site';
 import Pendente from '@/components/ui/Pendente.astro';
 import Wordmark from '@/assets/brand/wordmark-mono.svg';
 
-const endereco = enderecoCompleto();
 const ano = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" data-theme="escuro">
   <div class="container site-footer__grid">
     <section aria-labelledby="rodape-responsavel">
       <h2 id="rodape-responsavel" class="t-eyebrow site-footer__titulo">
@@ -25,22 +25,6 @@ const ano = new Date().getFullYear();
         <Pendente texto="número do CRBM" />
       ) : (
         <p>{site.responsavel.registro}</p>
-      )}
-    </section>
-
-    <section aria-labelledby="rodape-endereco">
-      <h2 id="rodape-endereco" class="t-eyebrow site-footer__titulo">
-        Endereço
-      </h2>
-      {endereco ? (
-        <address>{endereco}</address>
-      ) : (
-        <>
-          <p>
-            {site.endereco.bairro}, {site.endereco.cidade}/{site.endereco.uf}
-          </p>
-          <Pendente texto="endereço completo e CEP" />
-        </>
       )}
     </section>
 
@@ -73,6 +57,7 @@ const ano = new Date().getFullYear();
 <style>
   .site-footer {
     padding-block: var(--space-9) var(--space-6);
+    background-color: var(--color-bg-subtle);
   }
 
   .site-footer__marca {

@@ -16,12 +16,13 @@ interface Props {
   ancora?: string;
   /** Texto do placeholder quando ainda não há perguntas. */
   pendente?: string;
+  tema?: 'claro' | 'escuro';
 }
 
-const { titulo, itens, id = 'faq-titulo', ancora, pendente } = Astro.props;
+const { titulo, itens, id = 'faq-titulo', ancora, pendente, tema = 'claro' } = Astro.props;
 ---
 
-<Section labelledby={id} id={ancora}>
+<Section labelledby={id} id={ancora} tema={tema}>
   <div class="faq">
     <div class="faq__titulo">
       <SectionHeader id={id} titulo={titulo} estilo="t-display-l" />

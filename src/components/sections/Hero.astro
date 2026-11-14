@@ -1,240 +1,151 @@
 ---
 /**
- * Home, seção 2. Job: em 3 segundos, quem, o quê, onde. Ocupa a tela inteira (100svh).
+ * Home. Job: em 3 segundos, quem, o quê, onde.
  *
- * Imagem com direção de arte por orientação (lib/hero.ts):
- * - paisagem: foto horizontal, Maria à direita, texto à esquerda sobre o fundo claro
- * - retrato: foto vertical, texto embaixo
- * Hierarquia em três degraus, todos em serifa até o CTA: frase-manifesto enorme,
- * subtítulo serifado médio, CTA em pílula com brilho. Texto centralizado na coluna,
- * com uma aura de cor (dourado e rosé da marca) atrás dando presença.
- * Contraste: texto vinho sobre creme + aura clara; medido nos pixels, ≥ 7:1.
+ * Desktop: tela inteira (100svh), dividida ao meio. Texto à esquerda, alinhado à esquerda
+ * como o resto do site; foto da Maria à direita, até a borda da tela, sem esfumado.
+ * Celular: texto no alto e foto inteira, de borda a borda, logo abaixo (passa da tela).
+ *
+ * Hierarquia: frase-manifesto (Display/XL, a maior coisa da página), linha de identidade
+ * (Maria Guedes · Biomédica esteta · 18 anos · Lago Sul) e o CTA vinho do tema claro.
  *
  * É o LCP da Home: eager, fetchpriority=high e preload no <head> (index.astro).
  */
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
-import { imagensHero, MEDIA_RETRATO } from '@/lib/hero';
+import { imagemHero, SIZES_HERO } from '@/lib/hero';
 import { enfase } from '@/lib/texto';
 
 interface Props {
   /** Frase-manifesto; um trecho entre *asteriscos* vira itálico. */
   titulo: string;
-  descricao: string;
+  identidade: string[];
   alt: string;
 }
 
-const { titulo, descricao, alt } = Astro.props;
-const { paisagem, retrato } = await imagensHero();
+const { titulo, identidade, alt } = Astro.props;
+const img = await imagemHero();
 ---
 
 <section class="hero" aria-labelledby="hero-titulo">
+  <div class="hero__texto">
+    <h1 id="hero-titulo" class="hero__titulo" set:html={enfase(titulo)} />
+    <p class="hero__identidade">
+      {identidade.map((parte, i) => (
+        <>
+          {i > 0 && (
+            <span class="hero__sep" aria-hidden="true">
+              ·
+            </span>
+          )}
+          <span>{parte}</span>
+        </>
+      ))}
+    </p>
+    <WhatsAppLink
+      origem="hero"
+      rotulo="Agendar avaliação"
+      complementoOculto="pelo WhatsApp"
+      class="hero__cta"
+    />
+  </div>
+
   <picture class="hero__media">
-    <source
-      media={MEDIA_RETRATO}
-      type="image/avif"
-      srcset={retrato.avif.srcSet.attribute}
-      sizes="100vw"
-    />
-    <source
-      media={MEDIA_RETRATO}
-      type="image/webp"
-      srcset={retrato.webp.srcSet.attribute}
-      sizes="100vw"
-    />
-    <source media={MEDIA_RETRATO} srcset={retrato.jpg.srcSet.attribute} sizes="100vw" />
-    <source type="image/avif" srcset={paisagem.avif.srcSet.attribute} sizes="100vw" />
-    <source type="image/webp" srcset={paisagem.webp.srcSet.attribute} sizes="100vw" />
+    <source type="image/avif" srcset={img.avif.srcSet.attribute} sizes={SIZES_HERO} />
+    <source type="image/webp" srcset={img.webp.srcSet.attribute} sizes={SIZES_HERO} />
     <img
-      src={paisagem.jpg.src}
-      srcset={paisagem.jpg.srcSet.attribute}
-      sizes="100vw"
-      width={paisagem.meta.width}
-      height={paisagem.meta.height}
+      src={img.jpg.src}
+      srcset={img.jpg.srcSet.attribute}
+      sizes={SIZES_HERO}
+      width={img.meta.width}
+      height={img.meta.height}
       alt={alt}
       loading="eager"
       decoding="async"
       fetchpriority="high"
     />
   </picture>
-
-  <div class="container hero__conteudo">
-    <div class="hero__texto">
-      <span class="hero__aura" aria-hidden="true"></span>
-      <h1 id="hero-titulo" class="hero__titulo t-display-xl" set:html={enfase(titulo)} />
-      <p class="hero__descricao">{descricao}</p>
-      <WhatsAppLink
-        origem="hero"
-        rotulo="Agendar avaliação"
-        complementoOculto="pelo WhatsApp"
-        variante="destaque"
-        class="hero__cta"
-      />
-    </div>
-  </div>
 </section>
 
 <style>
   .hero {
-    position: relative;
-    isolation: isolate;
     display: grid;
-    align-items: center;
-    min-height: 100vh;
-    min-height: 100svh;
-    overflow: hidden;
     background-color: var(--color-bg-default);
   }
 
-  /* ---------- Imagem ---------- */
-  .hero__media,
-  .hero__media img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .hero__media {
-    z-index: -3;
-  }
-
-  .hero__media img {
-    object-fit: cover;
-    /* Paisagem: Maria à direita; ao recortar as laterais, preserva o lado dela. */
-    object-position: 70% 30%;
-  }
-
-  /* ---------- Degradês ----------
-   * Topo (header), base (a foto se dissolve na página) e lateral creme onde fica o texto.
-   */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
-        transparent 9rem
-      ),
-      linear-gradient(0deg, var(--color-bg-default) 0%, transparent 32%),
-      linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--color-bg-default) 94%, transparent) 0%,
-        color-mix(in srgb, var(--color-bg-default) 80%, transparent) 40%,
-        transparent 62%
-      );
-  }
-
-  /* ---------- Texto ---------- */
-  .hero__conteudo {
-    padding-block: calc(var(--space-9) + var(--space-3)) var(--space-7);
-  }
-
   .hero__texto {
-    position: relative;
     display: grid;
-    justify-items: center;
+    align-content: center;
+    justify-items: start;
     gap: var(--space-6);
-    width: min(42rem, 100%);
-    text-align: center;
-    color: var(--color-text-primary);
-  }
-
-  /* Aura: duas manchas desfocadas (dourado e rosé), atrás do texto. */
-  .hero__aura {
-    position: absolute;
-    inset: -20% -25%;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(
-        closest-side at 38% 45%,
-        color-mix(in srgb, var(--color-aura-1) 80%, transparent),
-        transparent
-      ),
-      radial-gradient(
-        closest-side at 66% 60%,
-        color-mix(in srgb, var(--color-aura-2) 24%, transparent),
-        transparent
-      );
-    filter: blur(24px);
+    padding: calc(5.5rem + var(--space-6)) var(--gutter) var(--space-8);
   }
 
   .hero__titulo {
-    text-wrap: balance;
-  }
-
-  /* Subtítulo serifado: o degrau do meio da hierarquia.
-     Cormorant entre 24px e 34px pede Medium (traços finos). */
-  .hero__descricao {
-    max-width: 36rem;
     font-family: var(--font-display);
-    font-size: var(--text-h3);
-    line-height: var(--leading-h3);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
+    font-weight: var(--weight-regular);
+    font-size: clamp(3.25rem, 1.6rem + 5.4vw, 7.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    max-width: 11ch;
     text-wrap: balance;
   }
 
-  /* ---------- Retrato (celular e tablet em pé) ----------
-   * Quebra os 100svh de propósito: o texto desce com bastante respiro e a Maria aparece
-   * inteira logo abaixo, dissolvida no fundo em cima e embaixo (página contínua).
-   */
-  @media (orientation: portrait) {
+  .hero__titulo :global(em) {
+    font-style: italic;
+  }
+
+  .hero__identidade {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+  }
+
+  .hero__identidade > span:first-child {
+    color: var(--color-text-primary);
+    font-weight: var(--weight-medium);
+  }
+
+  .hero__sep {
+    color: var(--color-accent-decorative);
+  }
+
+  .hero__cta {
+    margin-block-start: var(--space-3);
+  }
+
+  .hero__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---------- Desktop: duas metades, foto até a borda ---------- */
+  @media (min-width: 56rem) {
     .hero {
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .hero__conteudo {
-      order: 1;
-    }
-
-    .hero::before {
-      display: none;
-    }
-
-    .hero__conteudo {
-      padding-block: calc(5.5rem + var(--space-10)) var(--space-4);
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      min-height: 100svh;
     }
 
     .hero__texto {
-      width: 100%;
-      gap: var(--space-5);
-    }
-
-    /* 24px: mínimo da Cormorant (em Medium) e cabe em 2 linhas no celular. */
-    .hero__descricao {
-      font-size: 1.5rem;
+      /* Alinha o texto à margem do container do resto da página. */
+      padding-inline-start: max(var(--gutter), (100vw - var(--container-max)) / 2 + var(--gutter));
+      padding-inline-end: var(--space-8);
+      padding-block: calc(5.5rem + var(--space-6)) var(--space-8);
     }
 
     .hero__media {
-      order: 2;
       position: relative;
-      inset: auto;
-      display: block;
-      height: auto;
-      z-index: auto;
-      margin-block-start: calc(-1 * var(--space-8));
-      -webkit-mask-image: linear-gradient(
-        180deg,
-        transparent 0%,
-        #000 28%,
-        #000 82%,
-        transparent 100%
-      );
-      mask-image: linear-gradient(180deg, transparent 0%, #000 28%, #000 82%, transparent 100%);
     }
 
     .hero__media img {
-      position: static;
-      width: 100%;
-      height: auto;
-      object-fit: contain;
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      object-fit: cover;
+      object-position: 55% 18%;
     }
   }
 </style>

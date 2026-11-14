@@ -3,12 +3,12 @@
  * Home. Job: autoridade e vínculo humano.
  * Foto grande da Maria, nome em display, uma frase dela em destaque e a trajetória.
  * Desktop: foto à esquerda ocupando a altura; texto à direita, alinhado à base da foto.
+ * Tema escuro (vinho), seguindo o Método: o "entardecer" da página.
  */
 import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import Texto from '@/components/ui/Texto.astro';
 import foto from '@/assets/pessoas/hero-mobile.jpg';
-import { enfase } from '@/lib/texto';
 import { isPendente } from '@/lib/conteudo';
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
 ---
 
-<Section labelledby="sobre-titulo" id="sobre">
+<Section labelledby="sobre-titulo" id="sobre" tema="escuro">
   <div class="sobre">
     <figure class="sobre__foto" data-reveal="fade">
       <Picture
@@ -37,7 +37,9 @@ const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
 
     <div class="sobre__texto">
       <div class="sobre__nome">
-        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="fade" set:html={enfase(titulo)} />
+        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="fade">
+          {titulo}
+        </h2>
         <p class="sobre__subtitulo">{subtitulo}</p>
       </div>
 
@@ -50,6 +52,7 @@ const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
       )}
 
       <Texto texto={texto} class="t-body-l sobre__trajetoria" />
+      <p class="rascunho">Frase e trajetória: rascunho para aprovação</p>
     </div>
   </div>
 </Section>

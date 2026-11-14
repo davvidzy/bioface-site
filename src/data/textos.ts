@@ -16,6 +16,15 @@ export const navegacao = [
   { ancora: 'duvidas', rotulo: 'Dúvidas' },
 ] as const;
 
+export const AVISO_RESULTADOS = 'Resultados variam de pessoa para pessoa.';
+
+/*
+ * Itálico (*palavra*) só em dois lugares da página: o hero e o CTA final.
+ * Os demais títulos são retos: quando tudo é destaque, nada é.
+ *
+ * Textos marcados como rascunho: escritos para a prévia a partir do brief, sem conteúdo
+ * clínico nem números novos. Aparecem com a marca discreta "Rascunho para aprovação".
+ */
 export const home = {
   seo: {
     title: 'BioFace Estética Avançada | Maria Guedes, biomédica esteta no Lago Sul',
@@ -24,26 +33,37 @@ export const home = {
   hero: {
     // TODO(validar-cliente): frase-manifesto do h1 (o medo central é ficar artificial).
     titulo: 'Natural é quando o resultado *parece seu*.',
-    descricao: `Realçar, nunca transformar. Há ${site.anosAtuacao} anos cuidando de rostos no ${site.endereco.bairro}.`,
+    /** Linha de identidade logo abaixo do título: quem, o quê, há quanto tempo, onde. */
+    identidade: [
+      site.responsavel.nome,
+      site.responsavel.titulo,
+      `${site.anosAtuacao} anos`,
+      site.endereco.bairro,
+    ],
     // Imagem fictícia da Maria para a prévia (confirmado pela equipe em 2026-11-13).
     // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
   },
-  filosofia: {
-    titulo: 'O que *natural* significa aqui',
-    texto:
-      'TODO(conteudo): em 2 ou 3 frases, como a Maria define um resultado natural no método dela.',
-    // TODO(conteudo): 3 fotos verticais (3:4) para a filosofia: detalhe de procedimento, mãos, espaço.
-    imagens: 3,
-  },
+  /** Faixa de fatos logo abaixo do hero. Só fatos já confirmados no brief. */
+  /** O total de tratamentos entra na Home, contado da collection. */
+  credenciais: [
+    { valor: String(site.anosAtuacao), rotulo: 'anos de atuação em estética facial' },
+    { valor: 'Biomédica', rotulo: 'esteta, responsável por cada atendimento' },
+    { valor: site.endereco.bairro, rotulo: `${site.endereco.cidade}, ${site.endereco.uf}` },
+    // TODO(conteudo): quando houver, entrar com o número do CRBM e a nota do Google.
+  ],
   tratamentos: {
-    titulo: 'Nossos *tratamentos*',
+    titulo: 'Tratamentos',
+    intro: 'Organizados pelo que você quer cuidar. Toque em um para conversar sobre ele.',
   },
   resultados: {
-    titulo: 'Antes e *depois*',
+    titulo: 'Antes e depois',
   },
-  comoFunciona: {
-    titulo: 'Do primeiro contato ao *seu plano*',
+  metodo: {
+    titulo: 'Como a Maria trabalha',
+    // TODO(validar-cliente): rascunho para aprovação.
+    intro:
+      'Antes de qualquer procedimento, uma conversa. A Maria olha o seu rosto inteiro, entende o que incomoda você e indica só o que faz sentido para o seu caso.',
     // TODO(validar-cliente): confirmar o fluxo de atendimento.
     passos: [
       {
@@ -61,24 +81,26 @@ export const home = {
     ],
   },
   sobre: {
-    titulo: `${site.responsavel.nome.split(' ')[0]} *${site.responsavel.nome.split(' ').slice(1).join(' ')}*`,
+    titulo: site.responsavel.nome,
     subtitulo: `${site.responsavel.titulo}, ${site.anosAtuacao} anos de atuação`,
-    texto: 'TODO(conteudo): trajetória resumida da Maria em 2 ou 3 frases.',
-    citacao: 'TODO(conteudo): uma frase da Maria, na voz dela, sobre o que é um resultado natural.',
+    // TODO(validar-cliente): rascunho para aprovação; trocar pela frase dela.
+    citacao: 'O melhor elogio é quando ninguém percebe o que foi feito, só que você está bem.',
+    // TODO(validar-cliente): rascunho para aprovação; trocar pela trajetória real (formação, cursos).
+    texto: `Há ${site.anosAtuacao} anos a Maria se dedica à estética facial no ${site.endereco.bairro}. Cada atendimento começa por ela e termina com ela: da avaliação ao acompanhamento.`,
   },
   depoimentos: {
-    titulo: 'O que dizem as *pacientes*',
+    titulo: 'O que dizem sobre a Maria',
   },
   espaco: {
-    titulo: 'Um ambiente pensado *para você*',
+    titulo: 'O espaço',
     fotos: 3,
   },
   faq: {
-    titulo: 'Perguntas *frequentes*',
+    titulo: 'Perguntas frequentes',
   },
   ctaFinal: {
     titulo: 'Agende sua *avaliação*',
-    texto: 'A avaliação é o primeiro passo para um plano feito para você.',
+    texto: 'Na avaliação, a Maria entende o seu rosto e monta um plano só seu.',
   },
 };
 

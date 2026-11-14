@@ -1,7 +1,7 @@
 # BioFace Estética Avançada | Brief de arquitetura para o Claude Code
 
 > Este arquivo é a fonte da verdade estrutural do projeto. Leia inteiro antes de criar ou alterar qualquer coisa.
-> Fase atual: **Fase 0, mise en place**. Estrutura, conteúdo e infraestrutura. **Design visual NÃO está em escopo ainda.**
+> Fase atual: **design da prévia** (a Fase 0 de estrutura está concluída). A direção visual está na seção 6.1.1. Desempenho, SEO e Lighthouse ficam para a etapa final.
 
 ---
 
@@ -60,9 +60,9 @@ Fixe versões exatas no `package.json`. Rode `npm view <pacote> version` antes d
 /404                                Página não encontrada, com caminho de volta
 ```
 
-Âncoras da Home (header): `#tratamentos`, `#resultados`, `#sobre`, `#duvidas`; o CTA final é `#contato`.
+Âncoras da Home (header): `#tratamentos`, `#resultados`, `#sobre`, `#duvidas`; o Método é `#metodo` e o CTA final é `#contato`.
 
-Não existe `/contato`: o contato é o WhatsApp (header, hero, CTA final, botão flutuante no mobile) e o bloco de localização fica no CTA final da Home.
+Não existe `/contato`: o contato é o WhatsApp (header, hero, linhas de tratamento, Método e CTA final) e o bloco de localização fica no CTA final da Home.
 
 Consequência aceita: sem uma página por tratamento, o SEO local depende da Home (title, description, JSON-LD de `HealthAndBeautyBusiness` e `FAQPage`). A collection `procedimentos` continua com o modelo completo (seção 5), pronta se as páginas voltarem.
 
@@ -166,23 +166,34 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 
 ### 6.1 Home `/`
 
-| # | Seção | Job | Conteúdo | CTA |
-|---|---|---|---|---|
-| 1 | Header | Navegar e converter de qualquer ponto | Wordmark, links (Tratamentos, Resultados, Sobre), botão "Agendar avaliação" | WhatsApp |
-| 2 | Hero | Em 3 segundos: quem, o quê, onde | `h1` com a promessa de naturalidade; Maria Guedes, biomédica esteta; 18 anos; Lago Sul | WhatsApp |
-| 3 | Credenciais | Transformar promessa em fato | 18 anos, CRBM, nota do Google (se houver), número de procedimentos (se a cliente informar) | nenhum |
-| 4 | Filosofia | Diferenciar pelo medo central | O que "natural" significa no método dela | nenhum |
-| 5 | Tratamentos | Mostrar amplitude sem sobrecarregar | 3 categorias por objetivo; cada uma lista seus tratamentos e leva às páginas | links internos |
-| 6 | Resultados (prévia) | Prova visual | 2 ou 3 comparadores antes/depois | "Ver resultados" → `/resultados` |
-| 7 | Como funciona | Reduzir ansiedade de quem nunca fez | 3 passos: contato, avaliação presencial, plano personalizado | WhatsApp |
-| 8 | Sobre (prévia) | Autoridade e vínculo humano | Foto e trajetória resumida da Maria | "Conhecer a Maria" → `/sobre` |
-| 9 | Depoimentos | Prova social de terceiros | Reviews reais do Google | nenhum |
-| 10 | O espaço | Ambiente premium como parte do serviço | Fotos da clínica | nenhum |
-| 11 | FAQ | Responder objeções antes do direct | `faq` geral, acordeão acessível | nenhum |
-| 12 | CTA final + localização | Última chance de conversão, sem atrito | Chamada, endereço, horários, mapa (carregado sob demanda) | WhatsApp |
-| 13 | Rodapé | Confiança institucional e conformidade | Responsável técnica com CRBM, endereço, Instagram, `/privacidade` | nenhum |
+> **Revisão de 2026-11-14** (diagnóstico de design): a página passou de 13 para 10 seções. Filosofia e "Como funciona" viraram uma seção só (Método); a frase sobre naturalidade entrou como citação da Maria. Credenciais voltaram como faixa de fatos abaixo do hero. Depoimentos e Espaço só aparecem quando houver material real.
 
-Mais: botão flutuante de WhatsApp no mobile, que some quando o CTA final está visível (evita CTA duplicado na mesma tela).
+| # | Seção | Job | Conteúdo | Tema | CTA |
+|---|---|---|---|---|---|
+| 1 | Header | Navegar e converter de qualquer ponto | Wordmark nas cores originais (âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | sobre o hero, depois pílula suspensa | WhatsApp |
+| 2 | Hero | Em 3 segundos: quem, o quê, onde | `h1` frase-manifesto em Display/XL, alinhado à esquerda; linha "Maria Guedes · Biomédica esteta · 18 anos · Lago Sul"; foto da Maria na metade direita, até a borda, sem esfumado | claro (`bg/default`) | WhatsApp (vinho) |
+| 3 | Credenciais | Transformar promessa em fato | Faixa de fatos confirmados (anos, formação, nº de tratamentos, bairro). CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
+| 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos; número, nome em serifa grande, a dor numa frase, seta. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
+| 5 | Resultados | Prova visual | Título primeiro; comparador largo; caso atual (contador e região); miniaturas com o nome da região; aviso "resultados variam" | `bg/subtle` | nenhum |
+| 6 | Método | Diferenciar e reduzir ansiedade | "Como a Maria trabalha": frase de método + 3 passos | escuro (wine/900) | WhatsApp |
+| 7 | Maria | Autoridade e vínculo humano | Foto grande, nome em Display/XL, citação dela, trajetória | escuro | nenhum |
+| 8 | Depoimentos | Prova social de terceiros | Só com reviews reais; sem material, a seção não aparece | escuro | nenhum |
+| 9 | Espaço | Ambiente premium | Só com fotos reais da clínica; sem material, não aparece | escuro | nenhum |
+| 10 | FAQ | Responder objeções | Só perguntas já respondidas pela cliente | escuro | nenhum |
+| 11 | CTA final + localização | Última chance de conversão | Chamada, endereço, horários, mapa sob demanda | wine/950 | WhatsApp |
+| 12 | Rodapé | Confiança e conformidade | Responsável técnica com CRBM, Instagram, `/privacidade` (o endereço fica só no CTA final) | wine/950 | nenhum |
+
+Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
+
+### 6.1.1 Direção visual (decidida em 2026-11-14)
+
+- **Narrativa de luz:** a página começa no creme e escurece aos poucos até o vinho (creme → `bg/subtle` → wine/900 → wine/950), como o dia indo para o entardecer. As passagens entre fundos são faixas de degradê decorativas (`components/ui/Transicao.astro`), fora das seções, para nenhum texto ficar sobre a transição.
+- **Itálico só em dois lugares:** no `h1` do hero e no título do CTA final. Os outros títulos são retos.
+- **Botão principal = `primario`, sem seta.** Segue o tema: vinho no claro, dourado no escuro. Não existe mais variante dourada no tema claro.
+- **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
+- **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.
+- **Sem linhas de conexão entre seções.** O espaço em branco e a mudança de fundo separam.
+- **Pendências na prévia:** lacunas pequenas aparecem como "A confirmar: …" em itálico discreto. Textos de apresentação escritos para a prévia (frase do método, citação e trajetória da Maria, frase de dor de cada tratamento) levam a marca "Rascunho para aprovação" e `TODO(validar-cliente)` no código. Isso não vale para conteúdo clínico, números, preços ou depoimentos: esses continuam sem invenção.
 
 **Fica fora de propósito:** tabela de preços, blog, newsletter, "missão, visão e valores", contador animado de números sem fonte, carrossel automático.
 

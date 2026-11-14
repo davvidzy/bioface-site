@@ -1,0 +1,59 @@
+---
+/**
+ * Home, logo abaixo do hero. Job: transformar promessa em fato.
+ * Faixa de fatos curtos, com o valor em serifa grande. Só fatos confirmados no brief:
+ * nada de contador animado, número sem fonte ou nota inventada.
+ */
+interface Props {
+  itens: { valor: string; rotulo: string }[];
+}
+
+const { itens } = Astro.props;
+---
+
+<section class="credenciais" aria-label="Em números">
+  <dl class="container credenciais__lista">
+    {itens.map((item) => (
+      <div class="credenciais__item" data-reveal="fade">
+        <dt class="credenciais__rotulo">{item.rotulo}</dt>
+        <dd class="credenciais__valor">{item.valor}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .credenciais {
+    padding-block: var(--space-8);
+    border-block: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 22%, transparent);
+  }
+
+  .credenciais__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-6) var(--space-8);
+    margin: 0 auto;
+  }
+
+  /* Valor em cima, rótulo embaixo (a ordem do <dl> segue a leitura do leitor de tela). */
+  .credenciais__item {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  .credenciais__valor {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1;
+  }
+
+  .credenciais__rotulo {
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+    max-width: 22ch;
+  }
+</style>

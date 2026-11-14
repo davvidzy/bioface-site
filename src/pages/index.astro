@@ -1,23 +1,23 @@
 ---
 /**
- * Home: landing page única. A ordem das seções segue a decisão da paciente:
- * quem é, o que faz, funciona, como é o processo, posso confiar, como agendo.
+ * Home: landing page única (CLAUDE.md, seção 6.1). Ordem: Hero, Credenciais, Tratamentos,
+ * Resultados, Método, Maria, Depoimentos, Espaço, FAQ, CTA final.
+ * Seções sem material (depoimentos reais, fotos do espaço) ficam fora até chegar o conteúdo.
  * O header usa âncoras destas seções (data/textos.ts → navegacao).
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
-import Filosofia from '@/components/sections/Filosofia.astro';
+import Credenciais from '@/components/sections/Credenciais.astro';
 import TratamentosCategorias from '@/components/sections/TratamentosCategorias.astro';
 import ResultadosPrevia from '@/components/sections/ResultadosPrevia.astro';
-import ComoFunciona from '@/components/sections/ComoFunciona.astro';
+import Metodo from '@/components/sections/Metodo.astro';
 import SobrePrevia from '@/components/sections/SobrePrevia.astro';
 import Depoimentos from '@/components/sections/Depoimentos.astro';
-import Espaco from '@/components/sections/Espaco.astro';
 import Faq from '@/components/sections/Faq.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
-import Conector from '@/components/ui/Conector.astro';
+import Transicao from '@/components/ui/Transicao.astro';
 
-import { home } from '@/data/textos';
+import { home, AVISO_RESULTADOS } from '@/data/textos';
 import {
   getProcedimentosPorCategoria,
   resultadosPublicaveis,
@@ -26,7 +26,7 @@ import {
   getFaqGeral,
 } from '@/lib/conteudo';
 import { jsonLdLocalBusiness, jsonLdFaq } from '@/lib/seo';
-import { preloadsHero } from '@/lib/hero';
+import { preloadsHero, SIZES_HERO } from '@/lib/hero';
 
 const grupos = await getProcedimentosPorCategoria();
 const resultados = await resultadosPublicaveis();
@@ -36,8 +36,15 @@ const resultadosItens = await Promise.all(
     procedimento: await nomeDoProcedimento(resultado),
   })),
 );
-const depoimentos = await getDepoimentos();
-const faq = (await getFaqGeral()).map((f) => f.data);
+const depoimentosPublicados = (await getDepoimentos()).filter((d) => !d.data.pendente);
+// Perguntas ainda sem resposta da cliente ficam fora até ela responder (PENDENCIAS.md).
+const faq = (await getFaqGeral()).filter((f) => !f.data.pendente).map((f) => f.data);
+const totalTratamentos = grupos.reduce((n, g) => n + g.procedimentos.length, 0);
+const credenciais = [
+  ...home.credenciais.slice(0, 2),
+  { valor: String(totalTratamentos), rotulo: 'tratamentos faciais, organizados por objetivo' },
+  ...home.credenciais.slice(2),
+];
 const preloads = await preloadsHero();
 
 const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
@@ -69,22 +76,26 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
         type="image/avif"
         media={p.media}
         imagesrcset={p.srcset}
-        imagesizes="100vw"
+        imagesizes={SIZES_HERO}
         fetchpriority="high"
       />
     ))}
   </Fragment>
 
+  {/* Narrativa de luz: a página começa no creme e escurece aos poucos até o vinho. */}
   <Hero {...home.hero} />
-  <Filosofia {...home.filosofia} />
-  <Conector />
+  <Credenciais itens={credenciais} />
   <TratamentosCategorias {...home.tratamentos} grupos={grupos} />
-  <ResultadosPrevia {...home.resultados} itens={resultadosItens} />
-  <ComoFunciona {...home.comoFunciona} />
-  <Conector />
+  <Transicao de="var(--cream-50)" para="var(--cream-100)" />
+  <ResultadosPrevia {...home.resultados} aviso={AVISO_RESULTADOS} itens={resultadosItens} />
+  <Transicao de="var(--cream-100)" para="var(--wine-900)" altura="clamp(8rem, 20vw, 18rem)" />
+  <Metodo {...home.metodo} />
   <SobrePrevia {...home.sobre} alt={home.hero.alt} />
-  <Depoimentos {...home.depoimentos} depoimentos={depoimentos} />
-  <Espaco {...home.espaco} />
-  <Faq {...home.faq} ancora="duvidas" itens={faq} />
+  {depoimentosPublicados.length > 0 && (
+    <Depoimentos {...home.depoimentos} depoimentos={depoimentosPublicados} />
+  )}
+  {/* TODO(conteudo): seção "O espaço" volta quando houver fotos da clínica. */}
+  <Faq {...home.faq} ancora="duvidas" itens={faq} tema="escuro" />
+  <Transicao de="var(--wine-900)" para="var(--wine-950)" />
   <CtaFinal {...home.ctaFinal} origem="cta-final" comLocalizacao />
 </BaseLayout>

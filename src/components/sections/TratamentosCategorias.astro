@@ -1,303 +1,345 @@
 ---
 /**
- * Home, seção 5. Job: mostrar amplitude sem sobrecarregar.
+ * Home. Job: mostrar amplitude sem sobrecarregar.
  *
- * Três cards, um por categoria: foto e nome. No desktop (com mouse), o card sob o cursor
- * ou com foco cresce em largura (e a foto, em altura) enquanto os outros cedem espaço, e
- * abre a frase da categoria e o link de agendamento. Os tratamentos ficam sempre à vista. Tudo em CSS, sem JS.
- * Celular, toque, sem JS ou reduced motion: os cards já vêm abertos, empilhados.
- * A lista fica sempre no DOM: leitor de tela lê tudo, aberto ou não.
+ * Índice editorial: os 12 tratamentos em linhas, agrupados pelos 3 objetivos. Cada linha
+ * tem número, nome em serifa grande, a dor numa frase e uma seta; a linha inteira é um
+ * link para conversar sobre aquele tratamento no WhatsApp (mensagem já com o nome).
+ *
+ * Desktop com mouse: um selo "Conversar" acompanha o cursor sobre a lista, e a linha
+ * sob o cursor ganha fundo e desloca o nome. Celular, toque e reduced motion: só a lista.
+ * TODO(conteudo): quando houver fotos por tratamento, o selo pode virar a imagem que segue o cursor.
  */
-import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import { buildWhatsAppLink } from '@/lib/whatsapp';
 import type { Categoria } from '@/data/categorias';
-import { enfase } from '@/lib/texto';
-import type { Procedimento } from '@/lib/conteudo';
+import { isPendente, type Procedimento } from '@/lib/conteudo';
 
 interface Props {
   titulo: string;
+  intro: string;
   grupos: { categoria: Categoria; procedimentos: Procedimento[] }[];
 }
 
-const { titulo, grupos } = Astro.props;
+const { titulo, intro, grupos } = Astro.props;
+let n = 0;
+const linhas = grupos.map(({ categoria, procedimentos }) => ({
+  categoria,
+  itens: procedimentos.map((p) => ({
+    numero: String(++n).padStart(2, '0'),
+    nome: p.data.nome,
+    problema: isPendente(p.data.problema) ? undefined : p.data.problema,
+    href: buildWhatsAppLink({ procedimento: p.data.nome, origem: 'tratamentos' }),
+  })),
+}));
 ---
 
 <section id="tratamentos" class="trat" aria-labelledby="tratamentos-titulo" data-tratamentos>
   <div class="container">
-    <h2
-      id="tratamentos-titulo"
-      class="t-display-l trat__titulo"
-      data-reveal="fade"
-      set:html={enfase(titulo)}
-    />
-  </div>
+    <header class="trat__cabeca">
+      <h2 id="tratamentos-titulo" class="t-display-l" data-reveal="fade">
+        {titulo}
+      </h2>
+      <p class="trat__intro">{intro}</p>
+      <p class="rascunho">Frases de cada tratamento: rascunho para aprovação</p>
+    </header>
 
-  <div class="trat__largo">
-    <ul class="trat__cards list-reset" role="list">
-      {grupos.map(({ categoria, procedimentos }) => (
-        <li class="cat" data-trat-cat>
-          {/* TODO(conteudo): foto 5:4 de cada categoria (procedimento ou detalhe de pele). */}
-          <div class="placeholder-media cat__foto">
-            <span>Foto · {categoria.rotulo}</span>
+    <div class="trat__indice" data-trat-indice>
+      {linhas.map(({ categoria, itens }) => (
+        <section class="grupo" aria-labelledby={`grupo-${categoria.slug}`} data-trat-cat>
+          <div class="grupo__cabeca">
+            <h3 id={`grupo-${categoria.slug}`} class="grupo__titulo">
+              {categoria.rotulo}
+            </h3>
+            <p class="grupo__descricao">{categoria.descricao}</p>
           </div>
-
-          <div class="cat__cabeca">
-            <h3 class="cat__nome">{categoria.rotulo}</h3>
-            <span class="cat__mais" aria-hidden="true"></span>
-          </div>
-
-          {/* Os tratamentos ficam sempre à vista: é o que a pessoa procura. */}
-          <ul class="list-reset cat__lista" role="list">
-            {procedimentos.map((p) => (
-              <li>{p.data.nome}</li>
+          <ul class="list-reset grupo__lista" role="list">
+            {itens.map((item) => (
+              <li>
+                <a
+                  class="linha"
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track="whatsapp_click"
+                  data-origem="tratamentos"
+                  data-procedimento={item.nome}
+                >
+                  <span class="linha__numero" aria-hidden="true">
+                    {item.numero}
+                  </span>
+                  <span class="linha__texto">
+                    <span class="linha__nome">{item.nome}</span>
+                    {item.problema && <span class="linha__problema">{item.problema}</span>}
+                  </span>
+                  <span class="linha__seta" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                  </span>
+                  <span class="visually-hidden">
+                    : agendar avaliação pelo WhatsApp (abre o WhatsApp em nova aba)
+                  </span>
+                </a>
+              </li>
             ))}
           </ul>
-
-          <div class="cat__detalhe">
-            <div class="cat__detalhe-interno">
-              <p class="cat__descricao">{categoria.descricao}</p>
-              <WhatsAppLink
-                origem="tratamentos"
-                procedimento={categoria.rotulo.toLowerCase()}
-                rotulo="Agendar avaliação"
-                complementoOculto={`para ${categoria.rotulo.toLowerCase()} pelo WhatsApp`}
-                variante="texto"
-                class="cat__cta"
-              />
-            </div>
-          </div>
-        </li>
+        </section>
       ))}
-    </ul>
+      <span class="trat__selo" aria-hidden="true" data-trat-selo>
+        Conversar
+      </span>
+    </div>
   </div>
 </section>
 
 <style>
   .trat {
-    --abrir: var(--motion-fluido);
     padding-block: var(--space-section);
   }
 
-  .trat__titulo {
-    text-align: center;
+  .trat__cabeca {
+    display: grid;
+    gap: var(--space-4);
     margin-block-end: var(--space-9);
   }
 
-  /* ---------- Base: cards empilhados e abertos (celular, toque, sem JS) ---------- */
-  /* Os cards saem do container: ocupam a largura toda, travados em 1440px. */
-  .trat__largo {
-    width: min(90rem, 100% - 2 * var(--gutter));
-    margin-inline: auto;
+  .trat__intro {
+    max-width: 40rem;
+    font-size: var(--text-body-l);
+    color: var(--color-text-secondary);
   }
 
-  .trat__cards {
+  .trat__indice {
+    position: relative;
     display: grid;
     gap: var(--space-9);
   }
 
-  .cat {
+  /* ---------- Grupo (objetivo) ---------- */
+  .grupo {
     display: grid;
-    align-content: start;
+    gap: var(--space-5);
   }
 
-  .cat__foto {
-    --ratio: 3 / 2;
-    width: 100%;
+  .grupo__cabeca {
+    display: grid;
+    gap: var(--space-1);
   }
 
-  .cat__cabeca {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding-block: var(--space-4) var(--space-3);
-  }
-
-  .cat__nome {
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
+  .grupo__titulo {
+    font-family: var(--font-body);
+    font-size: var(--text-body-m);
     font-weight: var(--weight-medium);
-    line-height: var(--leading-h3);
+    letter-spacing: 0.02em;
   }
 
-  /* "+" que vira "×" quando o card abre: sinal de que há mais. */
-  .cat__mais {
-    display: none;
-    position: relative;
-    flex: none;
-    width: 2.25rem;
-    height: 2.25rem;
-    border: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 45%, transparent);
-    border-radius: 50%;
-    transition:
-      transform var(--abrir),
-      background-color var(--abrir),
-      border-color var(--abrir);
-  }
-
-  .cat__mais::before,
-  .cat__mais::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 0.75rem;
-    height: 1.5px;
-    background-color: var(--color-text-primary);
-    transition: background-color var(--abrir);
-  }
-
-  .cat__mais::after {
-    transform: rotate(90deg);
-  }
-
-  /* Tratamentos em etiquetas: legíveis de relance, sem abrir nada. */
-  .cat__lista {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .cat__lista li {
-    padding: 0.3rem 0.85rem;
-    border: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 30%, transparent);
-    border-radius: var(--radius-pill);
-    font-size: var(--text-body-s);
-    line-height: 1.4;
-    transition:
-      background-color var(--abrir),
-      border-color var(--abrir);
-  }
-
-  /* Abre com grid-template-rows 0fr → 1fr: altura real animada, sem medir nada em JS. */
-  .cat__detalhe {
-    display: grid;
-    grid-template-rows: 1fr;
-  }
-
-  .cat__detalhe-interno {
-    display: grid;
-    gap: var(--space-4);
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  /* O respiro fica dentro da área recortada: fechado, o detalhe tem altura zero. */
-  .cat__descricao {
-    margin-block-start: var(--space-4);
+  .grupo__descricao {
+    font-size: var(--text-body-m);
     color: var(--color-text-secondary);
   }
 
-  .cat :global(.cat__cta) {
-    justify-self: start;
-    font-weight: var(--weight-medium);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.3em;
+  .grupo__lista {
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 35%, transparent);
   }
 
-  /* ---------- Desktop com mouse: cards lado a lado que crescem no hover ---------- */
-  @media (hover: hover) and (pointer: fine) and (min-width: 48rem) {
-    .trat__cards {
-      display: flex;
-      align-items: flex-start;
-      gap: 0;
-      /* Sem buraco entre os cards: o cursor passa de um para o outro sem fechar tudo. */
-    }
+  .grupo__lista > li {
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 35%, transparent);
+  }
 
-    .trat__cards > .cat:first-child {
-      padding-inline-start: 0;
-    }
+  /* ---------- Linha ---------- */
+  .linha {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
 
-    .trat__cards > .cat:last-child {
-      padding-inline-end: 0;
-    }
+  /* Fundo que entra da esquerda para a direita no hover. */
+  .linha::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(-1 * var(--space-4));
+    z-index: -1;
+    border-radius: var(--radius-l);
+    background-color: var(--color-bg-subtle);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform var(--motion-fluido);
+  }
 
-    .cat {
-      flex: 1 1 0;
-      min-width: 0;
-      padding-inline: var(--space-3);
-      transition: flex-grow var(--abrir);
-    }
+  .linha__numero {
+    font-size: var(--text-caption);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-secondary);
+  }
 
-    .cat:hover,
-    .cat:focus-within {
-      flex-grow: 1.45;
-    }
+  .linha__texto {
+    display: grid;
+    gap: var(--space-1);
+    transition: transform var(--motion-fluido);
+  }
 
-    .cat__mais {
-      display: block;
-    }
+  .linha__nome {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
+    font-weight: var(--weight-medium);
+    line-height: 1.1;
+  }
 
-    .cat:is(:hover, :focus-within) .cat__mais {
-      transform: rotate(45deg);
-      background-color: var(--color-text-primary);
-      border-color: var(--color-text-primary);
-    }
+  .linha__problema {
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+  }
 
-    .cat:is(:hover, :focus-within) .cat__mais::before,
-    .cat:is(:hover, :focus-within) .cat__mais::after {
-      background-color: var(--color-bg-default);
-    }
+  .linha__seta {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 45%, transparent);
+    transition:
+      transform var(--motion-fluido),
+      background-color var(--motion-fluido),
+      color var(--motion-fluido),
+      border-color var(--motion-fluido);
+  }
 
-    .cat:is(:hover, :focus-within) .cat__lista li {
-      background-color: var(--color-bg-subtle);
-      border-color: transparent;
-    }
+  .linha:hover::before,
+  .linha:focus-visible::before {
+    transform: scaleX(1);
+    transform-origin: 0% 50%;
+  }
 
-    .cat__foto {
-      --ratio: 5 / 4;
-    }
+  .linha:hover .linha__texto,
+  .linha:focus-visible .linha__texto {
+    transform: translateX(var(--space-3));
+  }
 
-    .cat__detalhe {
-      grid-template-rows: 0fr;
-      transition: grid-template-rows var(--abrir);
-    }
+  .linha:hover .linha__seta,
+  .linha:focus-visible .linha__seta {
+    background-color: var(--color-action-primary-bg);
+    border-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+    transform: rotate(-45deg);
+  }
 
-    .cat__detalhe-interno {
+  /* ---------- Selo que segue o cursor (só desktop com mouse) ---------- */
+  .trat__selo {
+    display: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .trat__selo {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 6.5rem;
+      height: 6.5rem;
+      border-radius: 50%;
+      background-color: var(--color-action-primary-bg);
+      color: var(--color-action-primary-text);
+      font-size: var(--text-caption);
+      font-weight: var(--weight-medium);
+      letter-spacing: 0.04em;
+      pointer-events: none;
       opacity: 0;
-      transform: translateY(0.75rem);
+      scale: 0.4;
+      translate: var(--x, 0) var(--y, 0);
       transition:
-        opacity 0.35s var(--ease-standard),
-        transform var(--abrir);
+        opacity var(--motion-fluido),
+        scale var(--motion-fluido);
     }
 
-    .cat:hover .cat__detalhe,
-    .cat:focus-within .cat__detalhe {
-      grid-template-rows: 1fr;
-    }
-
-    /* O texto entra um pouco depois do card começar a crescer, como no movimento de referência. */
-    .cat:hover .cat__detalhe-interno,
-    .cat:focus-within .cat__detalhe-interno {
+    .trat__indice[data-selo-ativo] .trat__selo {
       opacity: 1;
-      transform: none;
-      transition:
-        opacity 0.5s var(--ease-standard) 0.15s,
-        transform var(--abrir) 0.1s;
+      scale: 1;
+    }
+  }
+
+  /* ---------- Desktop: objetivo à esquerda (fixo), tratamentos à direita ---------- */
+  @media (min-width: 64rem) {
+    .grupo {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+      gap: var(--space-8);
+      align-items: start;
     }
 
-    /* Os cards que cedem espaço ficam um pouco mais discretos. */
-    .trat__cards:has(.cat:hover, .cat:focus-within) .cat:not(:hover, :focus-within) .cat__foto {
-      opacity: 0.75;
+    .grupo__cabeca {
+      position: sticky;
+      inset-block-start: 7rem;
+      padding-block-start: var(--space-5);
     }
 
-    .cat__foto {
-      transition: opacity var(--abrir);
+    .linha {
+      grid-template-columns: 3.5rem 1fr auto;
+      padding-block: var(--space-6);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cat,
-    .cat__foto,
-    .cat__detalhe,
-    .cat__detalhe-interno,
-    .cat__mais,
-    .cat__mais::before,
-    .cat__mais::after,
-    .cat__lista li {
-      transition: none !important;
+    .linha::before,
+    .linha__texto,
+    .linha__seta {
+      transition: none;
     }
   }
 </style>
+
+<script>
+  // Selo "Conversar" que acompanha o cursor sobre a lista, com atraso suave (lerp).
+  const reduzido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function montar(indice: HTMLElement) {
+    if (indice.dataset.montado) return;
+    indice.dataset.montado = '';
+    const selo = indice.querySelector<HTMLElement>('[data-trat-selo]');
+    if (!selo) return;
+    let alvoX = 0;
+    let alvoY = 0;
+    let x = 0;
+    let y = 0;
+    let quadro = 0;
+
+    const passo = () => {
+      x += (alvoX - x) * 0.16;
+      y += (alvoY - y) * 0.16;
+      const meia = selo.offsetWidth / 2;
+      selo.style.setProperty('--x', `${x - meia}px`);
+      selo.style.setProperty('--y', `${y - meia}px`);
+      quadro =
+        Math.abs(alvoX - x) > 0.3 || Math.abs(alvoY - y) > 0.3 ? requestAnimationFrame(passo) : 0;
+    };
+
+    indice.addEventListener('pointermove', (e) => {
+      if (reduzido() || e.pointerType !== 'mouse') return;
+      const r = indice.getBoundingClientRect();
+      alvoX = e.clientX - r.left;
+      alvoY = e.clientY - r.top;
+      const sobreLinha = (e.target as Element).closest('.linha') !== null;
+      if (sobreLinha && !indice.hasAttribute('data-selo-ativo')) {
+        // Entrando: o selo nasce já no cursor, sem atravessar a tela.
+        x = alvoX;
+        y = alvoY;
+      }
+      indice.toggleAttribute('data-selo-ativo', sobreLinha);
+      if (!quadro) quadro = requestAnimationFrame(passo);
+    });
+    indice.addEventListener('pointerleave', () => indice.removeAttribute('data-selo-ativo'));
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-trat-indice]').forEach(montar);
+  });
+</script>

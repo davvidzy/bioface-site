@@ -117,13 +117,31 @@ html.lenis body {
  * Texto: wine/900 sobre cream/100 (contraste > 7:1).
  */
 .placeholder {
-  border-inline-start: 2px solid var(--color-accent-decorative);
-  background-color: var(--color-bg-subtle);
-  color: var(--color-text-primary);
-  padding: var(--space-3) var(--space-4);
-  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  /* Pendência discreta: "A confirmar: …" em itálico, sem caixa. A prévia não pode parecer
+     inacabada, mas a lacuna continua marcada (e listada em PENDENCIAS.md). */
+  color: var(--color-text-secondary);
   font-size: var(--text-body-s);
   line-height: var(--leading-body-s);
+  font-style: italic;
+}
+
+/* Marca discreta de texto escrito para a prévia, à espera da aprovação da cliente. */
+.rascunho {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+  color: var(--color-text-secondary);
+  font-size: var(--text-caption);
+  letter-spacing: 0.02em;
+}
+
+.rascunho::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent-decorative);
 }
 
 /* Lugar de foto: bloco suave e arredondado, legenda discreta no canto. */

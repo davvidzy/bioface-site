@@ -16,7 +16,7 @@ test.describe('WhatsApp', () => {
 });
 
 test.describe('Hero', () => {
-  test('altura, título, descrição e CTA', async ({ page, isMobile }) => {
+  test('altura, título, identidade e CTA', async ({ page, isMobile }) => {
     await page.goto('/');
     const hero = page.locator('.hero');
     const altura = await hero.evaluate((h) => h.getBoundingClientRect().height);
@@ -25,23 +25,18 @@ test.describe('Hero', () => {
     if (isMobile) expect(altura).toBeGreaterThan(tela);
     else expect(Math.round(altura)).toBe(tela);
     await expect(hero.locator('h1')).toHaveCount(1);
-    await expect(hero.locator('.hero__descricao')).toBeVisible();
+    await expect(hero.locator('.hero__identidade')).toContainText('Maria Guedes');
+    await expect(hero.locator('.hero__identidade')).toContainText('Biomédica esteta');
     await expect(hero.locator('a[data-origem="hero"]')).toBeVisible();
   });
 
-  test('foto certa por orientação', async ({ page, isMobile }) => {
+  test('desktop: foto ocupa a metade direita até a borda', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'layout em duas metades só no desktop');
     await page.goto('/', { waitUntil: 'networkidle' });
-    const src = await page.locator('.hero img').evaluate((i) => (i as HTMLImageElement).currentSrc);
-    expect(src).toContain(isMobile ? 'hero-mobile' : 'hero-desktop');
-  });
-
-  test('descrição em no máximo 2 linhas', async ({ page }) => {
-    await page.goto('/');
-    const linhas = await page.locator('.hero__descricao').evaluate((p) => {
-      const lh = parseFloat(getComputedStyle(p).lineHeight);
-      return Math.round(p.getBoundingClientRect().height / lh);
-    });
-    expect(linhas).toBeLessThanOrEqual(2);
+    const r = await page.locator('.hero img').evaluate((i) => i.getBoundingClientRect().toJSON());
+    const largura = page.viewportSize()!.width;
+    expect(Math.round(r.right)).toBe(largura);
+    expect(Math.round(r.left)).toBe(largura / 2);
   });
 });
 
@@ -89,35 +84,28 @@ test.describe('Conteúdo e SEO', () => {
 });
 
 test.describe('Tratamentos', () => {
-  test('desktop: card cresce e abre a lista no hover', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'hover só no desktop');
+  test('índice com os 12 tratamentos em 3 objetivos, cada um levando ao WhatsApp', async ({
+    page,
+  }) => {
     await page.goto('/');
-    const cards = page.locator('[data-trat-cat]');
-    await expect(cards).toHaveCount(3);
-    await cards.first().scrollIntoViewIfNeeded();
-    const larguraAntes = await cards.nth(1).evaluate((c) => c.getBoundingClientRect().width);
-    const detalhe = cards.nth(1).locator('.cat__detalhe-interno');
-    await expect
-      .poll(() => detalhe.evaluate((d) => d.getBoundingClientRect().height))
-      .toBeLessThan(2);
-    await cards.nth(1).hover();
-    await expect
-      .poll(() => cards.nth(1).evaluate((c) => c.getBoundingClientRect().width))
-      .toBeGreaterThan(larguraAntes * 1.2);
-    await expect(detalhe).toHaveCSS('opacity', '1');
-    await expect(cards.nth(1).getByText('Fios de PDO')).toBeVisible();
+    await expect(page.locator('#tratamentos [data-trat-cat]')).toHaveCount(3);
+    const linhas = page.locator('#tratamentos a.linha');
+    await expect(linhas).toHaveCount(12);
+    const href = decodeURIComponent((await linhas.first().getAttribute('href')) ?? '');
+    expect(href).toContain('Limpeza de pele');
+    await linhas.nth(6).scrollIntoViewIfNeeded();
+    await expect(linhas.nth(6)).toContainText('Fios de PDO');
   });
 
-  test('mobile: cards já abertos, com todos os tratamentos', async ({ page, isMobile }) => {
-    test.skip(!isMobile, 'regra do mobile');
+  test('desktop: selo acompanha o cursor sobre as linhas', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'cursor só no desktop');
     await page.goto('/');
-    const cards = page.locator('[data-trat-cat]');
-    await expect(cards).toHaveCount(3);
-    for (const nome of ['Limpeza de pele', 'Fios de PDO', 'Toxina botulínica']) {
-      const item = page.locator('#tratamentos').getByText(nome, { exact: true });
-      await item.scrollIntoViewIfNeeded();
-      await expect(item).toBeVisible();
-    }
+    const linha = page.locator('#tratamentos a.linha').first();
+    await linha.scrollIntoViewIfNeeded();
+    await linha.hover();
+    const caixa = (await linha.boundingBox())!;
+    await page.mouse.move(caixa.x + caixa.width / 2 + 10, caixa.y + caixa.height / 2);
+    await expect(page.locator('[data-trat-indice]')).toHaveAttribute('data-selo-ativo', '');
   });
 });
 

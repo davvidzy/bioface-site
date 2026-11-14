@@ -1,8 +1,8 @@
 ---
 /**
  * CTA final. Job: última chance de conversão, sem atrito.
- * Um cartão arredondado em vinho dentro da página clara (não é faixa de seção),
- * com o monograma da marca como detalhe. Localização logo abaixo, no fundo claro.
+ * Seção inteira no vinho mais escuro (wine/950), com o monograma como detalhe e a
+ * localização logo abaixo. O rodapé continua no mesmo tom.
  */
 import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
@@ -22,13 +22,13 @@ interface Props {
 const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.props;
 ---
 
-<Section labelledby="cta-final-titulo" id="contato">
-  <div class="cta" data-theme="escuro">
+<Section labelledby="cta-final-titulo" id="contato" tema="escuro" class="cta-final">
+  <div class="cta">
     <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
     <div class="cta__conteudo">
-      <h2 id="cta-final-titulo" class="t-display-l" data-reveal="fade" set:html={enfase(titulo)} />
-      {texto && <p class="t-body-l text-secondary">{texto}</p>}
-      <WhatsAppLink origem={origem} procedimento={procedimento} variante="destaque" />
+      <h2 id="cta-final-titulo" class="t-display-xl" data-reveal="fade" set:html={enfase(titulo)} />
+      {texto && <p class="cta__texto">{texto}</p>}
+      <WhatsAppLink origem={origem} procedimento={procedimento} />
     </div>
   </div>
   {comLocalizacao && (
@@ -39,33 +39,45 @@ const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.pr
 </Section>
 
 <style>
+  /* O vinho mais escuro da página: fim do "entardecer". */
+  .cta-final {
+    background-color: var(--color-bg-subtle);
+  }
+
   .cta {
     position: relative;
-    overflow: hidden;
     isolation: isolate;
-    border-radius: calc(var(--radius-l) * 1.6);
-    padding: clamp(var(--space-7), 6vw, var(--space-10)) clamp(var(--space-5), 6vw, var(--space-9));
+    padding-block: var(--space-6) var(--space-9);
   }
 
   .cta__monograma {
     position: absolute;
-    inset-block-end: -12%;
-    inset-inline-end: -4%;
+    inset-block-start: 50%;
+    inset-inline-end: 0;
     z-index: -1;
-    width: clamp(12rem, 34vw, 26rem);
+    width: clamp(12rem, 30vw, 24rem);
     height: auto;
+    translate: 0 -50%;
     color: var(--color-accent-decorative);
-    opacity: 0.18;
+    opacity: 0.12;
   }
 
   .cta__conteudo {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-6);
     justify-items: start;
-    max-width: 36rem;
+    max-width: 44rem;
+  }
+
+  .cta__texto {
+    font-size: var(--text-body-l);
+    color: var(--color-text-secondary);
+    max-width: 32rem;
   }
 
   .cta__localizacao {
-    margin-block-start: var(--space-8);
+    padding-block-start: var(--space-8);
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 35%, transparent);
   }
 </style>

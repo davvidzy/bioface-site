@@ -4,7 +4,8 @@ categoria: pele
 ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'TODO(conteudo): a dor que este tratamento resolve, em uma frase e na linguagem da paciente.'
+# TODO(validar-cliente): rascunho para aprovação da frase de problema.
+problema: 'Manchas escuras que voltam com o sol.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

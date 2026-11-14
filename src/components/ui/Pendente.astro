@@ -1,7 +1,7 @@
 ---
 /**
- * Placeholder visível para conteúdo que ainda depende da cliente.
- * Sempre marcado: "Conteúdo pendente". Nunca substitui texto por invenção.
+ * Marca discreta para conteúdo que ainda depende da cliente: "A confirmar: …".
+ * Nunca substitui texto por invenção.
  */
 import { descricaoPendente } from '@/lib/conteudo';
 
@@ -15,11 +15,11 @@ interface Props {
 const { texto = '', as: Tag = 'p', class: className } = Astro.props;
 const descricao = descricaoPendente(texto);
 // Rótulo montado aqui para a formatação do markup não inserir espaço antes dos dois-pontos.
-const rotulo = descricao ? 'Conteúdo pendente:' : 'Conteúdo pendente';
+const rotulo = descricao ? 'A confirmar:' : 'A confirmar';
 ---
 
 <Tag class:list={['placeholder', className]} data-pendente>
-  <strong>{rotulo}</strong>
+  <span>{rotulo}</span>
   {descricao}
   <slot />
 </Tag>

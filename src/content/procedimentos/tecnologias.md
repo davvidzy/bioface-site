@@ -6,7 +6,8 @@ categoria: rejuvenescimento
 ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'TODO(conteudo): a dor que este tratamento resolve, em uma frase e na linguagem da paciente.'
+# TODO(validar-cliente): rascunho para aprovação da frase de problema.
+problema: 'Flacidez e textura da pele, tratadas com aparelhos.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

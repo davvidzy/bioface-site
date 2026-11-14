@@ -1,0 +1,27 @@
+---
+/**
+ * Faixa decorativa entre duas seções de fundos diferentes: um degradê vertical que leva
+ * de uma cor à outra. É o que faz a página "anoitecer" aos poucos, do creme ao vinho,
+ * sem cortes de seção. Fica fora das seções, então nenhum texto passa por cima dela.
+ */
+interface Props {
+  de: string;
+  para: string;
+  altura?: string;
+}
+
+const { de, para, altura = 'clamp(6rem, 14vw, 12rem)' } = Astro.props;
+---
+
+<div
+  class="transicao"
+  aria-hidden="true"
+  style={`--de: ${de}; --para: ${para}; --altura: ${altura}`}
+></div>
+
+<style>
+  .transicao {
+    height: var(--altura);
+    background: linear-gradient(180deg, var(--de), var(--para));
+  }
+</style>
