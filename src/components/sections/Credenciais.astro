@@ -1,8 +1,9 @@
 ---
 /**
  * Home, logo abaixo do hero. Job: transformar promessa em fato.
- * Faixa de fatos curtos, com o valor em serifa grande. Só fatos confirmados no brief:
- * nada de contador animado, número sem fonte ou nota inventada.
+ * Faixa discreta e padronizada: cada fato é "valor curto + rótulo curto", na mesma escala,
+ * separados por fios finos. Só fatos confirmados no brief: nada de contador animado,
+ * número sem fonte ou nota inventada.
  */
 interface Props {
   itens: { valor: string; rotulo: string }[];
@@ -11,10 +12,10 @@ interface Props {
 const { itens } = Astro.props;
 ---
 
-<section class="credenciais" aria-label="Em números">
+<section class="credenciais" aria-label="Em resumo">
   <dl class="container credenciais__lista">
     {itens.map((item) => (
-      <div class="credenciais__item" data-reveal="fade">
+      <div class="credenciais__item">
         <dt class="credenciais__rotulo">{item.rotulo}</dt>
         <dd class="credenciais__valor">{item.valor}</dd>
       </div>
@@ -24,15 +25,14 @@ const { itens } = Astro.props;
 
 <style>
   .credenciais {
-    padding-block: var(--space-8);
-    border-block: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 22%, transparent);
+    padding-block: var(--space-6);
   }
 
   .credenciais__lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-    gap: var(--space-6) var(--space-8);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4) 0;
     margin: 0 auto;
   }
 
@@ -40,20 +40,45 @@ const { itens } = Astro.props;
   .credenciais__item {
     display: flex;
     flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: var(--space-2);
+    align-items: center;
+    gap: 0.15rem;
+    padding-inline: clamp(var(--space-5), 4vw, var(--space-8));
+    text-align: center;
+  }
+
+  .credenciais__item + .credenciais__item {
+    border-inline-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 30%, transparent);
   }
 
   .credenciais__valor {
     margin: 0;
     font-family: var(--font-display);
-    font-size: var(--text-h2);
-    line-height: 1;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 
   .credenciais__rotulo {
-    font-size: var(--text-body-m);
+    font-size: var(--text-caption);
+    letter-spacing: 0.02em;
     color: var(--color-text-secondary);
-    max-width: 22ch;
+  }
+
+  /* Celular: duas colunas, sem fios. */
+  @media (max-width: 40rem) {
+    .credenciais__lista {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5) var(--space-3);
+    }
+
+    .credenciais__item {
+      padding-inline: 0;
+    }
+
+    .credenciais__item + .credenciais__item {
+      border-inline-start: 0;
+    }
   }
 </style>

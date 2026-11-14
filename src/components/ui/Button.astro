@@ -1,195 +1,153 @@
 ---
 /**
- * Botão ou link com aparência de botão, em pílula.
+ * Botão em pílula, padrão único de CTA do site.
  * Com href vira <a>; sem href vira <button>. Alvo de toque mínimo de 44px.
- * Padrão do site (sem seta): o primário segue o tema da seção (vinho no claro, dourado
- * no escuro). O destaque (dourado no claro) é só do hero. A seta é opcional (prop seta).
+ *
+ * Hover "fluido" (recriado a partir da referência Fluid Button, do Framer):
+ * - um preenchimento em elipse sobe de baixo e, ao cobrir o botão, perde a curva;
+ * - o rótulo rola para cima e dá lugar a uma cópia na cor invertida;
+ * - o botão cresce 4%.
+ * Cores pelo tema da seção: no claro, vinho com texto creme e preenchimento creme;
+ * no escuro, dourado com texto vinho e preenchimento vinho. Contraste ≥ 9,4:1 nos dois estados.
+ * A cópia do rótulo é aria-hidden: o leitor de tela lê o texto uma vez só.
  */
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
-  variante?: 'primario' | 'secundario' | 'destaque';
+  /** Texto visível do botão. */
+  rotulo: string;
   href?: string | undefined;
-  /** Mostra a seta no círculo. Padrão: não. */
-  seta?: boolean;
 };
 
-const { variante = 'primario', href, seta, class: className, ...rest } = Astro.props;
-const comSeta = seta ?? false;
-const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label', className];
+const { rotulo, href, class: className, ...rest } = Astro.props;
+const classes = ['btn', className];
 ---
 
 {href ? (
   <a href={href} class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
-    <span class="btn__texto">
-      <slot />
-    </span>
-    {comSeta && (
-      <span class="btn__seta" aria-hidden="true">
-        <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" />
-        </svg>
+    <span class="btn__preenchimento" aria-hidden="true"></span>
+    <span class="btn__janela">
+      <span class="btn__rolo">
+        <span class="btn__linha">{rotulo}</span>
+        <span class="btn__linha" aria-hidden="true">
+          {rotulo}
+        </span>
       </span>
-    )}
+    </span>
+    <slot />
   </a>
 ) : (
   <button type="button" class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
-    <span class="btn__texto">
-      <slot />
+    <span class="btn__preenchimento" aria-hidden="true"></span>
+    <span class="btn__janela">
+      <span class="btn__rolo">
+        <span class="btn__linha">{rotulo}</span>
+        <span class="btn__linha" aria-hidden="true">
+          {rotulo}
+        </span>
+      </span>
     </span>
+    <slot />
   </button>
 )}
 
 <style>
-  /*
-   * Hover: um preenchimento varre o botão da esquerda para a direita
-   * (--color-action-hover-*) e a seta inverte as cores e avança.
-   * Contraste no hover: vinho sobre dourado 9,4:1; no tema escuro, vinho sobre creme 13,5:1.
-   */
   .btn {
-    --morph: var(--motion-fluido);
+    --fundo: var(--color-action-primary-bg);
+    --texto: var(--color-action-primary-text);
+    --curva: cubic-bezier(0.4, 0, 0, 1);
+    --tempo: var(--duration-fluida) var(--curva);
     position: relative;
     isolation: isolate;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
     min-height: var(--tap-min);
-    padding: var(--space-3) var(--space-6);
-    border: var(--border-width) solid var(--color-action-primary-bg);
+    padding: 0.95rem 2.25rem;
+    border: 1.5px solid var(--fundo);
     border-radius: var(--radius-pill);
+    background-color: var(--fundo);
+    color: var(--texto);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
     text-decoration: none;
-    text-align: center;
     white-space: nowrap;
-    transition:
-      color var(--morph),
-      border-color var(--morph);
+    cursor: pointer;
+    transition: scale var(--tempo);
   }
 
-  /* Camada de preenchimento do hover. */
-  .btn::before {
-    content: '';
+  /* Elipse que sobe de baixo; no hover cobre o botão e endireita os cantos. */
+  .btn__preenchimento {
     position: absolute;
-    inset: 0;
+    inset-inline: 0;
+    top: 100%;
     z-index: -1;
-    border-radius: inherit;
-    background-color: var(--color-action-hover-bg);
-    transform: scaleX(0);
-    transform-origin: 100% 50%;
-    transition: transform var(--morph);
-  }
-
-  .btn:hover::before {
-    transform: scaleX(1);
-    transform-origin: 0% 50%;
-  }
-
-  .btn--seta {
-    padding-inline-end: var(--space-2);
-  }
-
-  .btn--primario {
-    background-color: var(--color-action-primary-bg);
-    color: var(--color-action-primary-text);
-  }
-
-  .btn--primario:hover {
-    color: var(--color-action-hover-text);
-    border-color: var(--color-action-hover-bg);
-  }
-
-  /* Destaque: simples. Dourado sólido, sem seta; no hover preenche em vinho. */
-  .btn--destaque {
-    background-color: var(--color-action-destaque-bg);
-    color: var(--color-action-destaque-text);
-    border-color: var(--color-action-destaque-bg);
-    padding-inline: var(--space-7);
-  }
-
-  .btn--destaque::before {
-    background-color: var(--color-action-destaque-hover-bg);
-  }
-
-  .btn--destaque:hover {
-    color: var(--color-action-destaque-hover-text);
-    border-color: var(--color-action-destaque-hover-bg);
-  }
-
-  .btn--secundario {
-    background-color: transparent;
-    color: var(--color-text-primary);
-    border-color: var(--color-text-primary);
-  }
-
-  /* Secundário: preenche com a cor do texto e o texto vira o fundo. */
-  .btn--secundario::before {
-    background-color: var(--color-text-primary);
-  }
-
-  .btn--secundario:hover {
-    color: var(--color-bg-default);
-  }
-
-  .btn__seta {
-    display: inline-grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    height: 110%;
     border-radius: 50%;
-    background-color: var(--color-action-primary-text);
-    color: var(--color-action-primary-bg);
+    background-color: var(--texto);
     transition:
-      transform var(--morph),
-      background-color var(--morph),
-      color var(--morph);
+      top var(--tempo),
+      border-radius var(--tempo);
   }
 
-  .btn__seta svg {
-    transition: transform var(--morph);
+  /* Janela de uma linha: o rolo desliza dentro dela. */
+  .btn__janela {
+    display: block;
+    height: 1.25em;
+    overflow: hidden;
   }
 
-  .btn--primario:hover .btn__seta {
-    background-color: var(--color-action-hover-text);
-    color: var(--color-action-hover-bg);
+  .btn__rolo {
+    display: grid;
+    transition: translate var(--tempo);
   }
 
-  .btn--secundario .btn__seta {
-    background-color: var(--color-text-primary);
-    color: var(--color-bg-default);
+  .btn__linha {
+    display: block;
+    height: 1.25em;
   }
 
-  .btn--secundario:hover .btn__seta {
-    background-color: var(--color-bg-default);
-    color: var(--color-text-primary);
+  .btn__linha + .btn__linha {
+    color: var(--fundo);
   }
 
-  .btn:hover .btn__seta svg {
-    transform: translateX(2px) rotate(-45deg);
+  .btn:hover {
+    scale: 1.04;
   }
 
-  .btn:active::before {
-    transition-duration: var(--duration-fast);
+  .btn:hover .btn__preenchimento {
+    top: -5%;
+    border-radius: 0;
   }
 
-  /* Celular: pílula mais compacta para caber numa linha. */
+  .btn:hover .btn__rolo {
+    translate: 0 -1.25em;
+  }
+
+  .btn:active {
+    scale: 0.98;
+  }
+
+  /* Celular: pílula mais compacta. */
   @media (max-width: 30rem) {
     .btn {
-      gap: var(--space-3);
-      padding-inline: var(--space-5);
-    }
-
-    .btn--seta {
-      padding-inline-end: var(--space-1);
+      padding-inline: var(--space-6);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .btn,
-    .btn::before,
-    .btn__seta,
-    .btn__seta svg {
+    .btn__preenchimento,
+    .btn__rolo {
       transition: none;
+    }
+
+    .btn:hover {
+      scale: none;
     }
   }
 </style>

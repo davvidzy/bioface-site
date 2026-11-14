@@ -15,9 +15,8 @@ interface Props {
   rotulo?: string;
   /** Complemento só para leitor de tela, quando o rótulo visível é curto. */
   complementoOculto?: string;
-  /** Complemento visível só em telas largas; no celular fica só para leitor de tela. */
-  complementoVisivel?: string;
-  variante?: 'primario' | 'secundario' | 'destaque' | 'texto';
+  /** "botao" (padrão único de CTA) ou "texto" (link sublinhado). */
+  variante?: 'botao' | 'texto';
   class?: string | undefined;
 }
 
@@ -26,8 +25,7 @@ const {
   procedimento,
   rotulo = 'Agendar avaliação pelo WhatsApp',
   complementoOculto = '',
-  complementoVisivel,
-  variante = 'primario',
+  variante = 'botao',
   class: className,
 } = Astro.props;
 
@@ -49,9 +47,7 @@ const aviso = `${complementoOculto} (abre o WhatsApp em nova aba)`;
     <span class="visually-hidden">{aviso}</span>
   </a>
 ) : (
-  <Button variante={variante} class={className} {...attrs}>
-    {rotulo}
-    {complementoVisivel && <span class="wa-complemento">{complementoVisivel}</span>}
+  <Button rotulo={rotulo} class={className} {...attrs}>
     <span class="visually-hidden">{aviso}</span>
   </Button>
 )}

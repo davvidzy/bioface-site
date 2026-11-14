@@ -36,15 +36,6 @@
   --color-text-accent: var(--gold-900);
   --color-action-primary-bg: var(--wine-900);
   --color-action-primary-text: var(--cream-50);
-  /* Hover dos botões: preenchimento dourado com texto vinho (9,4:1). */
-  --color-action-hover-bg: var(--gold-200);
-  --color-action-hover-text: var(--wine-900);
-  /* CTA de destaque (hero): dourado sólido com texto vinho (9,4:1). */
-  --color-action-destaque-bg: var(--gold-200);
-  --color-action-destaque-text: var(--wine-900);
-  /* Hover do destaque: preenche em vinho com texto creme (13,5:1). */
-  --color-action-destaque-hover-bg: var(--wine-900);
-  --color-action-destaque-hover-text: var(--cream-50);
   --color-border-default: var(--wine-500);
   --color-focus-ring: var(--wine-900);
   --color-accent-decorative: var(--gold-400);
@@ -53,8 +44,8 @@
   --color-aura-2: var(--wine-500);
 
   /* ---------- Tipografia ---------- */
-  --font-display: 'Cormorant Garamond', 'Cormorant Garamond Fallback', 'Times New Roman', serif;
-  --font-body: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --font-display: 'Newsreader', 'Newsreader Fallback', 'Times New Roman', serif;
+  --font-body: 'Instrument Sans', 'Instrument Sans Fallback', system-ui, sans-serif;
   --measure: 68ch; /* comprimento de linha alvo: 60 a 80 caracteres */
 
   /*
@@ -153,12 +144,6 @@
   --color-text-accent: var(--gold-200);
   --color-action-primary-bg: var(--gold-200);
   --color-action-primary-text: var(--wine-900);
-  /* No escuro o botão já é dourado: o hover preenche em creme (13,5:1). */
-  --color-action-hover-bg: var(--cream-50);
-  --color-action-hover-text: var(--wine-900);
   --color-border-default: var(--gold-400);
   --color-focus-ring: var(--gold-200);
-  /* Destaque sobre vinho: o hover preenche em creme. */
-  --color-action-destaque-hover-bg: var(--cream-50);
-  --color-action-destaque-hover-text: var(--wine-900);
 }

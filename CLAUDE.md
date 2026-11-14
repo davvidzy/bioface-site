@@ -171,8 +171,8 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 | # | Seção | Job | Conteúdo | Tema | CTA |
 |---|---|---|---|---|---|
 | 1 | Header | Navegar e converter de qualquer ponto | Wordmark nas cores originais (âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | sobre o hero, depois pílula suspensa | WhatsApp |
-| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto, descrição "Realçar, nunca transformar…" e CTA dourado, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp (dourado) |
-| 3 | Credenciais | Transformar promessa em fato | Faixa de fatos confirmados (anos, formação, nº de tratamentos, bairro). CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
+| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto, descrição "Realçar, nunca transformar…" e CTA, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
+| 3 | Credenciais | Transformar promessa em fato | Faixa discreta e padronizada (valor curto + rótulo curto, separados por fios): anos, formação, nº de tratamentos, bairro. CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
 | 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos (nomes curtos aprovados em 2026-11-14, ex.: "Controle do melasma", "Laser e ultrassom"); número, nome em serifa, a dor numa frase, seta. Hierarquia: título da seção > objetivo > nome > dor. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
 | 5 | Resultados | Prova visual | Comparador em moldura 3:4 à esquerda; à direita título, caso atual (contador e região) e miniaturas meio antes/meio depois. Sem o aviso "resultados variam" (removido a pedido; validar com a cliente) | `bg/subtle` | nenhum |
 | 6 | Método | Diferenciar e reduzir ansiedade | "Como a Maria trabalha": frase de método + 3 passos | escuro (wine/900) | WhatsApp |
@@ -189,7 +189,7 @@ Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
 
 - **Narrativa de luz:** a página começa no creme e escurece aos poucos até o vinho (creme → `bg/subtle` → wine/900 → wine/950), como o dia indo para o entardecer. As passagens entre fundos são faixas de degradê decorativas (`components/ui/Transicao.astro`), fora das seções, para nenhum texto ficar sobre a transição.
 - **Itálico só em dois lugares:** no `h1` do hero e no título do CTA final. Os outros títulos são retos.
-- **Botão principal = `primario`, sem seta.** Segue o tema: vinho no claro, dourado no escuro. Exceção: o CTA do hero usa a variante `destaque` (dourado sobre o claro).
+- **Um único botão de CTA em todo o site** (`components/ui/Button.astro`): pílula com hover "fluido" (preenchimento em elipse que sobe de baixo, rótulo que rola para a cópia invertida, leve crescimento). Cores pelo tema: vinho no claro, dourado no escuro. Sem variantes.
 - **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
 - **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.
 - **Sem linhas de conexão entre seções.** O espaço em branco e a mudança de fundo separam.
@@ -357,8 +357,8 @@ As variáveis do Figma já têm `code syntax` WEB igual aos nomes abaixo. Coleç
   --color-focus-ring: var(--wine-900);
   --color-accent-decorative: var(--gold-400);
 
-  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display: 'Newsreader', 'Times New Roman', serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
   --measure: 68ch; /* comprimento de linha alvo: 60 a 80 caracteres */
 }
 
@@ -379,9 +379,10 @@ As variáveis do Figma já têm `code syntax` WEB igual aos nomes abaixo. Coleç
 O tema é **por seção**, não por preferência do sistema: a narrativa da página alterna seções claras e escuras. Componentes só consomem tokens semânticos, nunca primitivos.
 
 ### Tipografia
-- **Display:** Cormorant Garamond (licença SIL OFL, gratuita para web, cobertura completa de acentos). Substitui a "Bellyna Tuberos Demo", que era versão demo e não tinha acentos. Os traços finos somem em tamanho pequeno: Regular a partir de 34px, Medium entre 24px e 34px, nunca abaixo de 24px.
-- **Texto:** Inter **Regular 400** no corpo. Light (300) só a partir de 24px.
-- Self-host em WOFF2, subset Latin + Latin Extended, `font-display: swap`, preload apenas da Cormorant Regular.
+- **Decisão de 2026-11-14:** display em **Newsreader** e texto em **Instrument Sans** (ambas SIL OFL), no lugar de Cormorant Garamond e Inter. As tabelas abaixo continuam valendo para tamanhos e entrelinhas; onde diz Cormorant, leia Newsreader, e onde diz Inter, leia Instrument Sans.
+- **Display:** Newsreader variável (peso 400 a 500, tamanho óptico automático). Mais robusta em tamanho pequeno que a Cormorant, então a regra "nunca abaixo de 24px" não se aplica mais.
+- **Texto:** Instrument Sans **Regular 400** no corpo, Medium 500 em rótulos e botões.
+- Self-host em WOFF2, subset Latin + Latin Extended, `font-display: swap`, preload só da Newsreader (regular e itálico do hero).
 
 Estilos de texto no Figma (desktop; no código, vire `clamp()` com mínimo para mobile):
 

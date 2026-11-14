@@ -39,8 +39,8 @@ export const home = {
   /** Faixa de fatos logo abaixo do hero. Só fatos já confirmados no brief. */
   /** O total de tratamentos entra na Home, contado da collection. */
   credenciais: [
-    { valor: String(site.anosAtuacao), rotulo: 'anos de atuação em estética facial' },
-    { valor: 'Biomédica', rotulo: 'esteta, responsável por cada atendimento' },
+    { valor: `${site.anosAtuacao} anos`, rotulo: 'de atuação' },
+    { valor: 'Biomédica esteta', rotulo: 'responsável técnica' },
     { valor: site.endereco.bairro, rotulo: `${site.endereco.cidade}, ${site.endereco.uf}` },
     // TODO(conteudo): quando houver, entrar com o número do CRBM e a nota do Google.
   ],

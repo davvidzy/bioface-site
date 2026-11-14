@@ -16,8 +16,8 @@ const SAIDA = join(RAIZ, 'public', 'og');
 // Fontes embutidas como data URL: a página do setContent não pode ler file://.
 const fonte = (nome) =>
   `data:font/woff2;base64,${readFileSync(join(RAIZ, 'public', 'fonts', nome)).toString('base64')}`;
-const CORMORANT = fonte('cormorant-garamond-400-latin.woff2');
-const INTER = fonte('inter-500-latin.woff2');
+const DISPLAY = fonte('newsreader-latin.woff2');
+const TEXTO = fonte('instrument-sans-latin.woff2');
 const WORDMARK = readFileSync(join(RAIZ, 'src', 'assets', 'brand', 'wordmark.svg'), 'utf8');
 
 function listarHtml(dir) {
@@ -53,15 +53,15 @@ const escapar = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>
 
 function template({ titulo, eyebrow }) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>
-    @font-face { font-family: 'Cormorant Garamond'; font-weight: 400; src: url('${CORMORANT}') format('woff2'); }
-    @font-face { font-family: 'Inter'; font-weight: 500; src: url('${INTER}') format('woff2'); }
+    @font-face { font-family: 'Newsreader'; font-weight: 400 500; src: url('${DISPLAY}') format('woff2'); }
+    @font-face { font-family: 'Instrument Sans'; font-weight: 400 600; src: url('${TEXTO}') format('woff2'); }
     * { margin: 0; box-sizing: border-box; }
     body { width: 1200px; height: 630px; background: #401e2f; color: #faf6f1;
       display: flex; flex-direction: column; justify-content: space-between; padding: 72px 80px; }
     .marca svg { width: 260px; height: auto; display: block; }
-    .eyebrow { font: 500 22px/1.4 'Inter'; letter-spacing: .12em; text-transform: uppercase; color: #edc9a7; margin-bottom: 20px; }
-    h1 { font: 400 76px/1.04 'Cormorant Garamond'; letter-spacing: -0.01em; max-width: 980px; }
-    .rodape { font: 500 22px/1.4 'Inter'; color: #f3e3d2; }
+    .eyebrow { font: 500 22px/1.4 'Instrument Sans'; letter-spacing: .12em; text-transform: uppercase; color: #edc9a7; margin-bottom: 20px; }
+    h1 { font: 400 76px/1.04 'Newsreader'; letter-spacing: -0.01em; max-width: 980px; }
+    .rodape { font: 500 22px/1.4 'Instrument Sans'; color: #f3e3d2; }
   </style></head><body>
     <div class="marca">${WORDMARK}</div>
     <div>${eyebrow ? `<p class="eyebrow">${escapar(eyebrow)}</p>` : ''}<h1>${escapar(titulo)}</h1></div>
