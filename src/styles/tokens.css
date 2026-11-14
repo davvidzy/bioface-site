@@ -104,7 +104,8 @@
   --radius-l: 1.25rem; /* imagens e cartões */
   --radius-pill: 999px; /* botões e header flutuante */
   --border-width: 1px;
-  --shadow-flutuante: 0 0.5rem 2rem rgb(43 20 32 / 0.08), 0 0.125rem 0.5rem rgb(43 20 32 / 0.05);
+  --shadow-flutuante:
+    0 0.75rem 2.25rem -0.5rem rgb(43 20 32 / 0.22), 0 0.125rem 0.5rem rgb(43 20 32 / 0.08);
 
   /* ---------- Acessibilidade ---------- */
   --tap-min: 44px; /* alvo de toque mínimo */

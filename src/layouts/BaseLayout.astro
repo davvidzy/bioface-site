@@ -128,6 +128,23 @@ const robots = noindex || !INDEXAR;
         header.toggleAttribute('data-sobre-escuro', escuroAtras);
         if (suspenso && !escuroAtras) barra.dataset['theme'] = 'escuro';
         else delete barra.dataset['theme'];
+        atualizarOcultacao(header);
+      };
+
+      // Some ao rolar para baixo e volta ao rolar para cima, na página inteira (só no topo,
+      // antes de virar pílula, ele fica sempre visível).
+      // Não some com o menu do celular aberto nem com o foco dentro do header.
+      let ultimoY = window.scrollY;
+      const DELTA = 6;
+      const atualizarOcultacao = (header: HTMLElement) => {
+        const y = window.scrollY;
+        const diferenca = y - ultimoY;
+        if (Math.abs(diferenca) < DELTA) return;
+        ultimoY = y;
+        const menuAberto = Boolean(document.querySelector('[data-menu-movel][open]'));
+        const focoNoHeader = header.contains(document.activeElement);
+        const ocultar = diferenca > 0 && y > LIMITE_HEADER && !menuAberto && !focoNoHeader;
+        header.toggleAttribute('data-oculto', ocultar);
       };
       let quadroHeader = 0;
       const agendarHeader = () => {

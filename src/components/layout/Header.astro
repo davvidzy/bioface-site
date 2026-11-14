@@ -184,7 +184,9 @@ const { sobreposto = false } = Astro.props;
       0 0 0 rgb(43 20 32 / 0),
       0 0 0 rgb(43 20 32 / 0);
     transform: translateX(-50%);
+    translate: 0 0;
     transition:
+      translate var(--morph),
       inset-block-start var(--morph),
       width var(--morph),
       min-height var(--morph),
@@ -193,6 +195,11 @@ const { sobreposto = false } = Astro.props;
       background-color var(--morph),
       box-shadow var(--morph),
       backdrop-filter var(--morph);
+  }
+
+  /* ---------- Oculto: sobe para fora da tela ao rolar para baixo ---------- */
+  .site-header[data-oculto] .site-header__barra {
+    translate: 0 calc(-100% - var(--space-5));
   }
 
   /* ---------- Estado suspenso ---------- */
