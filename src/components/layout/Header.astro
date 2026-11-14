@@ -46,8 +46,15 @@ const { sobreposto = false } = Astro.props;
 </header>
 
 <style>
+  /*
+   * A barra é sempre fixa no topo. Os dois estados são o mesmo elemento: ao rolar,
+   * ela desce alguns pixels, estreita, arredonda e ganha fundo e sombra, em transição
+   * contínua (morph). O <header> guarda a altura no fluxo para a página não pular.
+   */
   .site-header {
     --altura: 5.5rem;
+    --altura-flutuante: 3.75rem;
+    --morph: 0.6s var(--ease-out-soft);
     min-height: var(--altura);
   }
 
@@ -59,44 +66,50 @@ const { sobreposto = false } = Astro.props;
   }
 
   .site-header__barra {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    z-index: var(--z-header);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3) var(--space-6);
-    width: 100%;
-    max-width: var(--container-max);
+    width: min(var(--container-max), 100%);
     min-height: var(--altura);
-    margin-inline: auto;
-    padding-inline: var(--gutter);
+    padding: 0 var(--gutter);
+    border-radius: 0;
+    background-color: color-mix(in srgb, var(--color-bg-default) 0%, transparent);
+    box-shadow:
+      0 0 0 rgb(43 20 32 / 0),
+      0 0 0 rgb(43 20 32 / 0);
+    transform: translateX(-50%);
+    transition:
+      inset-block-start var(--morph),
+      width var(--morph),
+      min-height var(--morph),
+      padding var(--morph),
+      border-radius var(--morph),
+      background-color var(--morph),
+      box-shadow var(--morph),
+      backdrop-filter var(--morph);
   }
 
-  /* ---------- Suspensa ao rolar ---------- */
+  /* ---------- Estado suspenso ---------- */
   .site-header[data-flutuante] .site-header__barra {
-    position: fixed;
     inset-block-start: var(--space-3);
-    inset-inline: var(--space-3);
-    z-index: var(--z-header);
-    width: auto;
-    max-width: min(var(--container-max), calc(100% - 2 * var(--space-3)));
-    min-height: 0;
-    margin-inline: auto;
+    width: min(68rem, calc(100% - 2 * var(--space-3)));
+    min-height: var(--altura-flutuante);
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
-    border-radius: var(--radius-pill);
+    border-radius: 2.5rem;
     background-color: color-mix(in srgb, var(--color-bg-default) 92%, transparent);
     box-shadow: var(--shadow-flutuante);
     backdrop-filter: blur(12px);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .site-header[data-flutuante] .site-header__barra {
-      animation: header-desce var(--duration-base) var(--ease-out-soft);
-    }
-  }
-
-  @keyframes header-desce {
-    from {
-      opacity: 0;
-      transform: translateY(-120%);
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__barra,
+    .site-header__wordmark {
+      transition: none;
     }
   }
 
@@ -110,27 +123,37 @@ const { sobreposto = false } = Astro.props;
   .site-header__wordmark {
     width: 9rem;
     height: auto;
+    transition: width var(--morph);
   }
 
   .site-header[data-flutuante] .site-header__wordmark {
     width: 7.5rem;
   }
 
+  /* ---------- Navegação: pílula de fundo no hover ---------- */
   .site-header__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 var(--space-6);
+    gap: 0 var(--space-1);
   }
 
   .site-header__links a {
     display: inline-flex;
     align-items: center;
     min-height: var(--tap-min);
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-pill);
     text-decoration: none;
+    background-color: color-mix(in srgb, var(--color-text-primary) 0%, transparent);
+    transition: background-color var(--duration-fast) var(--ease-standard);
   }
 
   .site-header__links a:hover {
-    text-decoration: underline;
+    background-color: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+  }
+
+  .site-header__links a:active {
+    background-color: color-mix(in srgb, var(--color-text-primary) 14%, transparent);
   }
 
   @media (max-width: 48rem) {

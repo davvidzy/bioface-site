@@ -40,7 +40,16 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
 )}
 
 <style>
+  /*
+   * Hover: um preenchimento varre o botão da esquerda para a direita
+   * (--color-action-hover-*) e a seta inverte as cores e avança.
+   * Contraste no hover: vinho sobre dourado 9,4:1; no tema escuro, vinho sobre creme 13,5:1.
+   */
   .btn {
+    --morph: var(--duration-base) var(--ease-out-soft);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -52,8 +61,26 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
     text-decoration: none;
     text-align: center;
     transition:
-      background-color var(--duration-fast) var(--ease-standard),
-      color var(--duration-fast) var(--ease-standard);
+      color var(--morph),
+      border-color var(--morph);
+  }
+
+  /* Camada de preenchimento do hover. */
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: var(--color-action-hover-bg);
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform var(--morph);
+  }
+
+  .btn:hover::before {
+    transform: scaleX(1);
+    transform-origin: 0% 50%;
   }
 
   .btn--seta {
@@ -65,10 +92,24 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
     color: var(--color-action-primary-text);
   }
 
+  .btn--primario:hover {
+    color: var(--color-action-hover-text);
+    border-color: var(--color-action-hover-bg);
+  }
+
   .btn--secundario {
     background-color: transparent;
     color: var(--color-text-primary);
     border-color: var(--color-text-primary);
+  }
+
+  /* Secundário: preenche com a cor do texto e o texto vira o fundo. */
+  .btn--secundario::before {
+    background-color: var(--color-text-primary);
+  }
+
+  .btn--secundario:hover {
+    color: var(--color-bg-default);
   }
 
   .btn__seta {
@@ -79,7 +120,19 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
     border-radius: 50%;
     background-color: var(--color-action-primary-text);
     color: var(--color-action-primary-bg);
-    transition: transform var(--duration-base) var(--ease-out-soft);
+    transition:
+      transform var(--morph),
+      background-color var(--morph),
+      color var(--morph);
+  }
+
+  .btn__seta svg {
+    transition: transform var(--morph);
+  }
+
+  .btn--primario:hover .btn__seta {
+    background-color: var(--color-action-hover-text);
+    color: var(--color-action-hover-bg);
   }
 
   .btn--secundario .btn__seta {
@@ -87,14 +140,25 @@ const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label',
     color: var(--color-bg-default);
   }
 
-  .btn:hover .btn__texto {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+  .btn--secundario:hover .btn__seta {
+    background-color: var(--color-bg-default);
+    color: var(--color-text-primary);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .btn:hover .btn__seta {
-      transform: translateX(3px);
+  .btn:hover .btn__seta svg {
+    transform: translateX(2px) rotate(-45deg);
+  }
+
+  .btn:active::before {
+    transition-duration: var(--duration-fast);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn::before,
+    .btn__seta,
+    .btn__seta svg {
+      transition: none;
     }
   }
 </style>
