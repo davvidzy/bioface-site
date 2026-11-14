@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 110 marcadores.
+Total: 109 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -123,7 +123,6 @@ Total: 110 marcadores.
 - [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:36](src/data/textos.ts#L36)
 - [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:58](src/data/textos.ts#L58)
 - [ ] rascunho para aprovação; trocar pela frase dela. [src/data/textos.ts:77](src/data/textos.ts#L77)
-- [ ] rascunho para aprovação; trocar pela trajetória real (formação, cursos). [src/data/textos.ts:79](src/data/textos.ts#L79)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

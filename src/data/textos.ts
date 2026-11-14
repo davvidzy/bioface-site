@@ -76,8 +76,7 @@ export const home = {
     subtitulo: `${site.responsavel.titulo}, ${site.anosAtuacao} anos de atuação`,
     // TODO(validar-cliente): rascunho para aprovação; trocar pela frase dela.
     citacao: 'O melhor elogio é quando ninguém percebe o que foi feito, só que você está bem.',
-    // TODO(validar-cliente): rascunho para aprovação; trocar pela trajetória real (formação, cursos).
-    texto: `Há ${site.anosAtuacao} anos a Maria se dedica à estética facial no ${site.endereco.bairro}. Cada atendimento começa por ela e termina com ela: da avaliação ao acompanhamento.`,
+    alt: `${site.responsavel.nome}, de jaleco branco e braços cruzados, em fundo claro`,
   },
   depoimentos: {
     titulo: 'O que dizem sobre a Maria',

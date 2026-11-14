@@ -1,122 +1,159 @@
 ---
 /**
  * Home. Job: autoridade e vínculo humano.
- * Foto grande da Maria, nome em display, uma frase dela em destaque e a trajetória.
- * Desktop: foto à esquerda ocupando a altura; texto à direita, alinhado à base da foto.
+ * Layout do Figma (node 18:5): foto da Maria à esquerda, em moldura alta com cantos
+ * arredondados; à direita, centralizados na altura, o nome em display, a formação e a
+ * frase dela em itálico com um fio dourado.
  * Tema escuro (vinho), seguindo o Método: o "entardecer" da página.
  */
 import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import Texto from '@/components/ui/Texto.astro';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
-import foto from '@/assets/pessoas/hero-mobile.jpg';
+import foto from '@/assets/pessoas/maria.png';
 import { isPendente } from '@/lib/conteudo';
 
 interface Props {
   titulo: string;
   subtitulo: string;
-  texto: string;
   citacao: string;
   alt: string;
 }
 
-const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
+const { titulo, subtitulo, citacao, alt } = Astro.props;
 ---
 
 <Section labelledby="sobre-titulo" id="sobre" tema="escuro" class="com-marca-dagua">
   <MarcaDagua
-    lado="esquerda"
-    base="6%"
+    lado="direita"
+    base="4%"
     tamanho="clamp(12rem, 22vw, 20rem)"
-    corte={0.55}
-    opacidade={0.07}
-    giro={-8}
+    corte={0.5}
+    opacidade={0.06}
+    giro={8}
   />
   <div class="sobre">
     <figure class="sobre__foto" data-reveal="imagem">
       <Picture
         src={foto}
         alt={alt}
-        widths={[480, 800, 1100]}
-        sizes="(min-width: 56rem) 40vw, 100vw"
+        widths={[480, 720, 941]}
+        sizes="(min-width: 56rem) 33vw, 100vw"
         formats={['avif', 'webp']}
         loading="lazy"
       />
     </figure>
 
     <div class="sobre__texto">
-      <div class="sobre__nome">
-        <h2 id="sobre-titulo" class="t-display-xl" data-reveal="lines">
-          {titulo}
-        </h2>
-        <p class="sobre__subtitulo">{subtitulo}</p>
-      </div>
+      <h2 id="sobre-titulo" class="sobre__nome" data-reveal="lines">
+        {titulo}
+      </h2>
+      <p class="sobre__subtitulo" data-reveal="fade">{subtitulo}</p>
 
       {isPendente(citacao) ? (
         <Texto texto={citacao} />
       ) : (
         <blockquote class="sobre__citacao" data-reveal="fade">
-          <p>{citacao}</p>
+          <p>“{citacao}”</p>
         </blockquote>
       )}
-
-      <Texto texto={texto} class="t-body-l sobre__trajetoria" />
-      <p class="rascunho">Frase e trajetória: rascunho para aprovação</p>
+      <p class="rascunho">Frase: rascunho para aprovação</p>
     </div>
   </div>
 </Section>
 
 <style>
+  /* Medidas do Figma (frame de 1440px): foto 469 × 723, raio 25; nome 82px; formação
+     20px; frase 38px / 1,13 com fio de 2px; 32px entre os blocos. */
   .sobre {
     display: grid;
     gap: var(--space-8);
   }
 
   .sobre__foto :global(img) {
+    display: block;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 469 / 723;
     object-fit: cover;
-    object-position: 60% 15%;
-    border-radius: var(--radius-l);
+    object-position: center;
+    border-radius: 1.5625rem;
   }
 
   .sobre__texto {
     display: grid;
-    gap: var(--space-7);
-    align-content: end;
-    max-width: 36rem;
+    align-content: center;
+    justify-items: start;
+    gap: var(--space-6);
   }
 
   .sobre__nome {
-    display: grid;
-    gap: var(--space-3);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: clamp(3rem, 1.9rem + 4.1vw, 5.125rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
   }
 
   .sobre__subtitulo {
+    font-size: clamp(1.0625rem, 0.95rem + 0.35vw, 1.25rem);
     color: var(--color-text-secondary);
-    font-size: var(--text-body-l);
   }
 
-  /* Frase da Maria: serifa itálica grande com um fio dourado à esquerda. */
+  /* Frase da Maria: serifa itálica com um fio dourado à esquerda. */
   .sobre__citacao {
-    margin: 0;
-    padding-inline-start: var(--space-6);
-    border-inline-start: 1px solid var(--gold-600);
+    display: flex;
+    gap: var(--space-5);
+    margin: var(--space-5) 0 0;
+    padding-inline-start: var(--space-2);
     font-family: var(--font-display);
-    font-size: var(--text-h2);
+    font-size: clamp(1.625rem, 1.2rem + 1.3vw, 2.375rem);
     font-style: italic;
-    line-height: var(--leading-h2);
+    line-height: 1.13;
+    color: var(--color-text-primary);
   }
 
-  .sobre__trajetoria {
-    color: var(--color-text-secondary);
+  .sobre__citacao::before {
+    content: '';
+    flex: none;
+    width: 2px;
+    border-radius: 5px;
+    background-color: var(--gold-600);
+  }
+
+  .sobre__citacao p {
+    max-width: 23ch;
   }
 
   @media (min-width: 56rem) {
+    /* Mais larga que o container, como no Figma: 24px de margem em cada lado da tela, foto centrada na coluna. */
     .sobre {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      column-gap: clamp(var(--space-8), 7vw, 8rem);
-      align-items: end;
+      margin-inline: min(0px, (100% - (100vw - 3rem)) / 2);
+      grid-template-columns: minmax(0, 543fr) minmax(0, 825fr);
+      gap: var(--space-5);
+      align-items: center;
+    }
+
+    /* A foto ocupa quase a altura da tela, sem passar dela. */
+    .sobre__foto {
+      width: min(100%, calc(88svh * 469 / 723));
+      justify-self: center;
+    }
+
+    .sobre__texto {
+      padding-inline: var(--space-5);
+    }
+
+    .sobre__citacao p {
+      max-width: 17.5em;
+    }
+  }
+
+  /* Celular: foto menos alta, para o nome aparecer logo em seguida. */
+  @media (max-width: 55.99rem) {
+    .sobre__foto :global(img) {
+      aspect-ratio: 4 / 5;
+      object-position: center 20%;
     }
   }
 </style>
