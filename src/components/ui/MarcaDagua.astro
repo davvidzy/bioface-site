@@ -21,6 +21,10 @@ interface Props {
   opacidade?: number;
   /** Inclinação em graus, para não parecer carimbo repetido. */
   giro?: number;
+  /** Parallax vertical leve ao rolar. Desligue quando outro movimento controla o elemento. */
+  parallax?: boolean;
+  /** Atributos extras (ex.: um data-* para o JS de movimento encontrar o elemento). */
+  [key: `data-${string}`]: string | boolean | undefined;
 }
 
 const {
@@ -31,6 +35,8 @@ const {
   corte = 0.35,
   opacidade = 0.07,
   giro = 0,
+  parallax = true,
+  ...extras
 } = Astro.props;
 
 const estilo = [
@@ -49,7 +55,8 @@ const estilo = [
   class:list={['marca-dagua', `marca-dagua--${lado}`]}
   style={estilo}
   aria-hidden="true"
-  data-parallax="0.25"
+  data-parallax={parallax ? '0.25' : undefined}
+  {...extras}
 >
   <Monograma focusable="false" />
 </span>

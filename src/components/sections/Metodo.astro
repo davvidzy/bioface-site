@@ -32,15 +32,18 @@ const posicoes = ['24%', '50%', '76%'];
   aria-labelledby="metodo-titulo"
   data-linha-do-tempo
 >
-  <MarcaDagua
-    lado="direita"
-    topo="8%"
-    tamanho="clamp(16rem, 28vw, 26rem)"
-    corte={0.4}
-    opacidade={0.08}
-    giro={6}
-  />
   <div class="metodo__palco">
+    {/* Monograma no canto inferior direito; no desktop ele desliza junto com o trilho. */}
+    <MarcaDagua
+      lado="direita"
+      base="-14%"
+      tamanho="clamp(16rem, 28vw, 26rem)"
+      corte={0.3}
+      opacidade={0.08}
+      giro={6}
+      parallax={false}
+      data-ldt-marca
+    />
     <div class="metodo__trilho" data-ldt-trilho>
       <div class="placeholder-media metodo__foto" aria-hidden="true">
         <span>Foto · atendimento</span>
@@ -93,6 +96,10 @@ const posicoes = ['24%', '50%', '76%'];
   /* ---------- Base: coluna (celular, sem JS, reduced motion) ---------- */
   .metodo {
     padding-block: var(--space-section);
+  }
+
+  .metodo__palco {
+    position: relative;
   }
 
   .metodo__trilho {
@@ -220,8 +227,9 @@ const posicoes = ['24%', '50%', '76%'];
       max-width: none;
       height: min(32vw, 68vh);
       margin: 0;
-      /* Sobra no fim: a última etapa chega ao meio da tela antes de a seção soltar. */
-      padding-inline: 5vw 30vw;
+      /* Começa centralizado (foto e título no meio da tela); sobra no fim para a última
+         etapa chegar ao centro antes de a seção soltar. */
+      padding-inline: 16vw 30vw;
       will-change: transform;
     }
 

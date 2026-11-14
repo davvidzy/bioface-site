@@ -38,6 +38,22 @@ function montar(secao: HTMLElement): void {
     },
   });
 
+  // O monograma do canto acompanha o trilho, na mesma velocidade.
+  const marca = secao.querySelector<HTMLElement>('[data-ldt-marca]');
+  if (marca) {
+    gsap.to(marca, {
+      x: () => -distancia(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: secao,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
+    });
+  }
+
   gsap.fromTo(
     linha,
     { scaleX: 0 },
