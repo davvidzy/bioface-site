@@ -9,16 +9,20 @@ export const CATEGORIAS = [
   {
     slug: 'pele',
     rotulo: 'Saúde e qualidade da pele',
+    /** Uma palavra, para o card da Home. */
+    curto: 'Pele',
     descricao: 'Para manchas, acne e textura.',
   },
   {
     slug: 'rejuvenescimento',
     rotulo: 'Firmeza e rejuvenescimento',
+    curto: 'Firmeza',
     descricao: 'Para flacidez e sinais do tempo.',
   },
   {
     slug: 'contorno',
     rotulo: 'Expressão e contorno',
+    curto: 'Contorno',
     descricao: 'Para rugas, volume e contorno.',
   },
 ] as const;

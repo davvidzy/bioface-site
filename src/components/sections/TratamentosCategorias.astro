@@ -2,12 +2,17 @@
 /**
  * Home. Job: mostrar amplitude sem sobrecarregar.
  *
- * Três cards, um por objetivo. Cada card leva à página da categoria
- * (/tratamentos/[categoria]), onde os tratamentos aparecem em cards próprios.
- * No card: número, quantidade, nome do objetivo em serifa e os nomes dos tratamentos.
- * Hover: um preenchimento sobe de baixo (no espírito do CTA), o card sobe um pouco e a seta gira.
+ * Três cards com foto, um por objetivo, levando à página da categoria
+ * (/tratamentos/[categoria]). Foto de fundo em 2:3 (a proporção das originais, então
+ * quase não há recorte e nunca há zoom), degradê vinho embaixo, fio fino por dentro,
+ * nome do objetivo em uma palavra, quantidade e "Ver tratamentos".
+ * Hover: o card sobe um pouco, o degradê sobe junto e a seta avança. A foto não muda.
  */
+import { Picture } from 'astro:assets';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
+import fotoPele from '@/assets/tratamentos/pele.jpg';
+import fotoRejuvenescimento from '@/assets/tratamentos/rejuvenescimento.jpg';
+import fotoContorno from '@/assets/tratamentos/contorno.jpg';
 import type { Categoria } from '@/data/categorias';
 import type { Procedimento } from '@/lib/conteudo';
 
@@ -17,6 +22,12 @@ interface Props {
 }
 
 const { titulo, grupos } = Astro.props;
+// TODO(validar-cliente): fotos de banco enviadas para a prévia; confirmar licença ou trocar por fotos da clínica.
+const fotos: Record<Categoria['slug'], ImageMetadata> = {
+  pele: fotoPele,
+  rejuvenescimento: fotoRejuvenescimento,
+  contorno: fotoContorno,
+};
 ---
 
 <section
@@ -32,23 +43,29 @@ const { titulo, grupos } = Astro.props;
     </h2>
 
     <ul class="list-reset trat__cards" role="list">
-      {grupos.map(({ categoria, procedimentos }, i) => (
+      {grupos.map(({ categoria, procedimentos }) => (
         <li data-trat-cat>
           <a class="card" href={`/tratamentos/${categoria.slug}`}>
-            <span class="card__topo">
-              <span class="card__numero" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
+            <Picture
+              src={fotos[categoria.slug]}
+              alt=""
+              class="card__foto"
+              widths={[400, 640, 900]}
+              sizes="(min-width: 56rem) 30vw, 100vw"
+              formats={['avif', 'webp']}
+              loading="lazy"
+            />
+            <span class="card__texto">
+              <span class="card__nome">
+                {categoria.curto}
+                <span class="visually-hidden">: {categoria.rotulo}</span>
               </span>
               <span class="card__qtd">{procedimentos.length} tratamentos</span>
-            </span>
-            <span class="card__nome">{categoria.rotulo}</span>
-            <span class="card__lista">{procedimentos.map((p) => p.data.nome).join(' · ')}</span>
-            <span class="card__rodape">
-              <span class="card__ver">Ver tratamentos</span>
-              <span class="card__seta" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" />
-                </svg>
+              <span class="card__ver">
+                Ver tratamentos
+                <span class="card__seta" aria-hidden="true">
+                  →
+                </span>
               </span>
             </span>
           </a>
@@ -72,107 +89,137 @@ const { titulo, grupos } = Astro.props;
     gap: var(--space-5);
   }
 
-  @media (min-width: 56rem) {
+  @media (min-width: 40rem) {
     .trat__cards {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
+  /* Celular: carrossel horizontal com encaixe; o card seguinte aparece cortado na borda. */
+  @media (max-width: 39.99rem) {
+    .trat__cards {
+      grid-auto-flow: column;
+      grid-auto-columns: 78%;
+      gap: var(--space-4);
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+      padding-block-end: var(--space-5);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+
+    .trat__cards::-webkit-scrollbar {
+      display: none;
+    }
+
+    .trat__cards > li {
+      scroll-snap-align: start;
+    }
+  }
+
+  /* ---------- Card com foto ---------- */
   .card {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
     display: grid;
-    grid-template-rows: auto 1fr auto auto;
-    gap: var(--space-5);
-    height: 100%;
-    min-height: 24rem;
-    padding: var(--space-7) var(--space-6) var(--space-6);
+    align-items: end;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
     border-radius: var(--radius-l);
-    background-color: var(--color-bg-subtle);
-    color: var(--color-text-primary);
+    background-color: var(--wine-900);
+    color: var(--cream-50);
     text-decoration: none;
+    box-shadow: 0 24px 48px -32px rgb(43 20 32 / 0.55);
     transition:
       translate var(--motion-fluido),
       box-shadow var(--motion-fluido);
   }
 
-  /* Preenchimento que sobe de baixo no hover. */
+  .card :global(.card__foto),
+  .card :global(.card__foto img) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Degradê vinho embaixo: garante contraste do texto creme sobre qualquer foto. */
   .card::before {
     content: '';
     position: absolute;
-    inset-inline: 0;
-    top: 100%;
+    inset: 0;
     z-index: -1;
-    height: 110%;
-    border-radius: 50% 50% 0 0;
-    background-color: color-mix(in srgb, var(--gold-200) 45%, var(--color-bg-subtle));
-    transition:
-      top var(--motion-fluido),
-      border-radius var(--motion-fluido);
+    background: linear-gradient(
+      0deg,
+      rgb(43 20 32 / 0.9) 0%,
+      rgb(43 20 32 / 0.55) 30%,
+      rgb(43 20 32 / 0) 58%
+    );
+    transition: opacity var(--motion-fluido);
   }
 
-  .card__topo {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: var(--text-caption);
-    color: var(--color-text-secondary);
-    font-variant-numeric: tabular-nums;
+  /* Fio fino por dentro, como uma moldura. */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: var(--space-3);
+    border: 1px solid rgb(250 246 241 / 0.28);
+    border-radius: calc(var(--radius-l) - var(--space-2));
+    pointer-events: none;
+    transition: inset var(--motion-fluido);
+  }
+
+  .card__texto {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-7);
   }
 
   .card__nome {
-    align-self: end;
     font-family: var(--font-display);
-    font-size: clamp(2rem, 1.5rem + 1.4vw, 2.75rem);
-    line-height: 1.08;
-    max-width: 12ch;
+    font-size: clamp(2.25rem, 1.6rem + 1.8vw, 3.25rem);
+    line-height: 1;
   }
 
-  .card__lista {
+  .card__qtd {
     font-size: var(--text-body-s);
-    line-height: var(--leading-body-s);
-    color: var(--color-text-secondary);
+    color: rgb(250 246 241 / 0.82);
   }
 
-  .card__rodape {
-    display: flex;
+  .card__ver {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding-block-start: var(--space-4);
-    border-block-start: var(--border-width) solid
-      color-mix(in srgb, var(--color-border-default) 30%, transparent);
+    gap: var(--space-2);
+    margin-block-start: var(--space-3);
+    font-size: var(--text-body-s);
     font-weight: var(--weight-medium);
   }
 
   .card__seta {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background-color: var(--color-action-primary-bg);
-    color: var(--color-action-primary-text);
-    transition: rotate var(--motion-fluido);
+    transition: translate var(--motion-fluido);
   }
 
   .card:hover {
-    translate: 0 -4px;
-    box-shadow: 0 18px 40px -24px rgb(43 20 32 / 0.35);
+    translate: 0 -6px;
+    box-shadow: 0 32px 56px -30px rgb(43 20 32 / 0.6);
   }
 
-  .card:hover::before {
-    top: 0;
-    border-radius: 0;
+  .card:hover::after {
+    inset: var(--space-4);
   }
 
   .card:hover .card__seta {
-    rotate: -45deg;
+    translate: var(--space-2) 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .card,
-    .card::before,
+    .card::after,
     .card__seta {
       transition: none;
     }
