@@ -10,6 +10,7 @@
  * sob o cursor ganha fundo e desloca o nome. Celular, toque e reduced motion: só a lista.
  * TODO(conteudo): quando houver fotos por tratamento, o selo pode virar a imagem que segue o cursor.
  */
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 import type { Categoria } from '@/data/categorias';
 import { isPendente, type Procedimento } from '@/lib/conteudo';
@@ -32,7 +33,13 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
 }));
 ---
 
-<section id="tratamentos" class="trat" aria-labelledby="tratamentos-titulo" data-tratamentos>
+<section
+  id="tratamentos"
+  class="trat com-marca-dagua"
+  aria-labelledby="tratamentos-titulo"
+  data-tratamentos
+>
+  <MarcaDagua lado="direita" topo="38%" corte={0.45} giro={8} />
   <div class="container">
     <header class="trat__cabeca">
       <h2 id="tratamentos-titulo" class="t-display-l" data-reveal="fade">
@@ -124,11 +131,11 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
    */
   .grupo__titulo {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 1.5rem + 1.6vw, 3rem);
+    font-size: clamp(1.875rem, 1.4rem + 1.2vw, 2.625rem);
     font-weight: var(--weight-regular);
     line-height: 1.08;
     letter-spacing: -0.005em;
-    max-width: 14ch;
+    overflow-wrap: normal;
   }
 
   .grupo__descricao {
@@ -269,7 +276,7 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
   /* ---------- Desktop: objetivo à esquerda (fixo), tratamentos à direita ---------- */
   @media (min-width: 64rem) {
     .grupo {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 2.2fr);
       gap: var(--space-8);
       align-items: start;
     }

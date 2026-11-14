@@ -164,3 +164,11 @@ html.lenis body {
   list-style: none;
   padding: 0;
 }
+
+/* Seções que recebem o monograma como marca d'água (components/ui/MarcaDagua.astro).
+   clip (e não hidden) corta o que sai da tela sem quebrar position: sticky. */
+.com-marca-dagua {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}

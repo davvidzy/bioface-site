@@ -141,8 +141,9 @@ const inicial = 50;
     width: 100%;
     height: 100%;
     aspect-ratio: var(--ratio);
-    /* Nunca recortar nem ampliar a foto: ela aparece inteira dentro da moldura. */
-    object-fit: contain;
+    /* Preenche a moldura só o necessário (cover, centralizado): sem zoom extra. */
+    object-fit: cover;
+    object-position: center;
   }
 
   .ba__rotulo {

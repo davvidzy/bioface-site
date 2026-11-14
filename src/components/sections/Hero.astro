@@ -13,6 +13,7 @@
  * É o LCP da Home: eager, fetchpriority=high e preload no <head> (index.astro).
  */
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { imagensHero, MEDIA_RETRATO } from '@/lib/hero';
 import { enfase } from '@/lib/texto';
 
@@ -28,6 +29,14 @@ const { paisagem, retrato } = await imagensHero();
 ---
 
 <section class="hero" aria-labelledby="hero-titulo">
+  <MarcaDagua
+    lado="esquerda"
+    base="-6%"
+    tamanho="clamp(16rem, 30vw, 28rem)"
+    corte={0.4}
+    opacidade={0.08}
+    giro={-6}
+  />
   <picture class="hero__media">
     <source
       media={MEDIA_RETRATO}

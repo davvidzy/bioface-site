@@ -1,0 +1,76 @@
+---
+/**
+ * Monograma BF como marca d'água: elemento de identidade espalhado pela página.
+ * Decorativo (aria-hidden), muito sutil e sempre atrás do conteúdo. Pode sair pela
+ * lateral da tela ("cortado"): a seção que o recebe usa overflow-x: clip.
+ * Quem usa precisa ter position: relative (a classe .com-marca-dagua já faz isso).
+ */
+import Monograma from '@/assets/brand/monograma-mono.svg';
+
+interface Props {
+  /** Lado da tela onde o monograma encosta (e é cortado). */
+  lado: 'esquerda' | 'direita';
+  /** Posição vertical: distância do topo ou da base da seção (CSS). */
+  topo?: string;
+  base?: string;
+  /** Largura do monograma (CSS). */
+  tamanho?: string;
+  /** Quanto do monograma fica para fora da tela (0 a 1). */
+  corte?: number;
+  /** Opacidade: sutil por padrão. */
+  opacidade?: number;
+  /** Inclinação em graus, para não parecer carimbo repetido. */
+  giro?: number;
+}
+
+const {
+  lado,
+  topo,
+  base,
+  tamanho = 'clamp(14rem, 26vw, 24rem)',
+  corte = 0.35,
+  opacidade = 0.07,
+  giro = 0,
+} = Astro.props;
+
+const estilo = [
+  `--tamanho: ${tamanho}`,
+  `--corte: ${corte}`,
+  `--opacidade: ${opacidade}`,
+  `--giro: ${giro}deg`,
+  topo ? `top: ${topo}` : '',
+  base ? `bottom: ${base}` : '',
+]
+  .filter(Boolean)
+  .join('; ');
+---
+
+<span class:list={['marca-dagua', `marca-dagua--${lado}`]} style={estilo} aria-hidden="true">
+  <Monograma focusable="false" />
+</span>
+
+<style>
+  .marca-dagua {
+    position: absolute;
+    z-index: -1;
+    width: var(--tamanho);
+    color: var(--color-accent-decorative);
+    opacity: var(--opacidade);
+    pointer-events: none;
+    rotate: var(--giro);
+  }
+
+  .marca-dagua :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .marca-dagua--esquerda {
+    left: calc(var(--tamanho) * var(--corte) * -1);
+  }
+
+  .marca-dagua--direita {
+    right: calc(var(--tamanho) * var(--corte) * -1);
+  }
+</style>

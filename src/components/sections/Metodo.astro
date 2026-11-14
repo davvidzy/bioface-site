@@ -8,6 +8,7 @@
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 
 interface Props {
   titulo: string;
@@ -18,7 +19,15 @@ interface Props {
 const { titulo, intro, passos } = Astro.props;
 ---
 
-<Section labelledby="metodo-titulo" id="metodo" tema="escuro" class="metodo">
+<Section labelledby="metodo-titulo" id="metodo" tema="escuro" class="metodo com-marca-dagua">
+  <MarcaDagua
+    lado="direita"
+    topo="8%"
+    tamanho="clamp(16rem, 28vw, 26rem)"
+    corte={0.4}
+    opacidade={0.08}
+    giro={6}
+  />
   <div class="metodo__cabeca">
     <SectionHeader id="metodo-titulo" titulo={titulo} estilo="t-display-l" />
     <p class="metodo__intro">{intro}</p>

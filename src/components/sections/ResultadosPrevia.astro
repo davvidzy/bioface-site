@@ -16,6 +16,7 @@
  */
 import { Image } from 'astro:assets';
 import BeforeAfter from '@/components/ui/BeforeAfter.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { enfase } from '@/lib/texto';
 import type { Resultado } from '@/lib/conteudo';
 
@@ -30,7 +31,20 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 {itens.length > 0 && (
-  <section id="resultados" class="res" aria-labelledby="resultados-titulo" data-resultados>
+  <section
+    id="resultados"
+    class="res com-marca-dagua"
+    aria-labelledby="resultados-titulo"
+    data-resultados
+  >
+    <MarcaDagua
+      lado="esquerda"
+      base="4%"
+      tamanho="clamp(12rem, 20vw, 18rem)"
+      corte={0.5}
+      opacidade={0.06}
+      giro={-10}
+    />
     <div class="container res__grade">
       <h2
         id="resultados-titulo"
@@ -246,7 +260,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   .res__mini :global(img) {
     width: 50%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .res__mini:hover {

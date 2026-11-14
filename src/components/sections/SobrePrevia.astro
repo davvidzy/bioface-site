@@ -8,6 +8,7 @@
 import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import Texto from '@/components/ui/Texto.astro';
+import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import foto from '@/assets/pessoas/hero-mobile.jpg';
 import { isPendente } from '@/lib/conteudo';
 
@@ -22,7 +23,15 @@ interface Props {
 const { titulo, subtitulo, texto, citacao, alt } = Astro.props;
 ---
 
-<Section labelledby="sobre-titulo" id="sobre" tema="escuro">
+<Section labelledby="sobre-titulo" id="sobre" tema="escuro" class="com-marca-dagua">
+  <MarcaDagua
+    lado="esquerda"
+    base="6%"
+    tamanho="clamp(12rem, 22vw, 20rem)"
+    corte={0.55}
+    opacidade={0.07}
+    giro={-8}
+  />
   <div class="sobre">
     <figure class="sobre__foto" data-reveal="fade">
       <Picture

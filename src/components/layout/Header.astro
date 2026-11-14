@@ -10,6 +10,7 @@
  * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
  */
 import Wordmark from '@/assets/brand/wordmark.svg';
+import Monograma from '@/assets/brand/monograma.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import { site } from '@/data/site';
 import { navegacao } from '@/data/textos';
@@ -24,6 +25,7 @@ const { sobreposto = false } = Astro.props;
 <header class:list={['site-header', { 'site-header--sobreposto': sobreposto }]} data-header>
   <div class="site-header__barra">
     <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
+      <Monograma aria-hidden="true" focusable="false" class="site-header__icone" />
       <Wordmark aria-hidden="true" focusable="false" class="site-header__wordmark" />
     </a>
     <nav aria-label="Principal">
@@ -193,26 +195,41 @@ const { sobreposto = false } = Astro.props;
 
   @media (prefers-reduced-motion: reduce) {
     .site-header__barra,
-    .site-header__wordmark {
+    .site-header__marca,
+    .site-header__marca > :global(svg) {
       transition: none;
     }
   }
 
+  /*
+   * Logo completo do Figma (node 12:2): monograma BF + wordmark, nas cores originais.
+   * Tudo escala por --logo (largura do wordmark), mantendo as proporções do arquivo:
+   * ícone = 0,317 × wordmark; espaço entre eles = 0,084 × wordmark.
+   */
   .site-header__marca {
+    --logo: 9rem;
     display: inline-flex;
     align-items: center;
+    gap: calc(var(--logo) * 0.084);
     min-height: var(--tap-min);
     color: var(--color-text-primary);
+    transition: gap var(--morph);
   }
 
-  .site-header__wordmark {
-    width: 9rem;
+  .site-header__icone {
+    width: calc(var(--logo) * 0.317);
     height: auto;
     transition: width var(--morph);
   }
 
-  .site-header[data-flutuante] .site-header__wordmark {
-    width: 7.5rem;
+  .site-header__wordmark {
+    width: var(--logo);
+    height: auto;
+    transition: width var(--morph);
+  }
+
+  .site-header[data-flutuante] .site-header__marca {
+    --logo: 7.5rem;
   }
 
   /* ---------- Navegação: barra que cresce sob o texto ----------
@@ -382,8 +399,12 @@ const { sobreposto = false } = Astro.props;
       column-gap: var(--space-3);
     }
 
-    .site-header__wordmark {
-      width: 7.5rem;
+    .site-header__marca {
+      --logo: 7rem;
+    }
+
+    .site-header[data-flutuante] .site-header__marca {
+      --logo: 6.5rem;
     }
 
     .site-header[data-flutuante] .site-header__barra {
