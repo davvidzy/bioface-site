@@ -51,7 +51,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
               resultado={resultado}
               procedimento={procedimento}
               ratio="3 / 4"
-              sizes="(min-width: 64rem) 30rem, 100vw"
+              sizes="(min-width: 64rem) 26rem, 100vw"
               prioritaria={false}
             />
           </div>
@@ -88,8 +88,8 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
               aria-label={`Caso ${i + 1}: ${resultado.data.legenda ?? ''}`}
               data-res-mini
             >
-              <Image src={resultado.data.antes} alt="" width={96} height={144} />
-              <Image src={resultado.data.depois} alt="" width={96} height={144} />
+              <Image src={resultado.data.antes} alt="" width={120} />
+              <Image src={resultado.data.depois} alt="" width={120} />
             </button>
           </li>
         ))}
@@ -127,7 +127,8 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   :global(html[data-js]) .res__palco {
     gap: 0;
     width: 100%;
-    max-width: 30rem;
+    /* Do tamanho das fotos originais (~410 × 555 px): a moldura não amplia a imagem. */
+    max-width: 26rem;
   }
 
   :global(html[data-js]) .res__caso {
@@ -232,7 +233,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
     border: 0;
     border-radius: 0.75rem;
     cursor: pointer;
-    background: var(--color-bg-subtle);
+    background: var(--color-bg-default);
     opacity: 0.5;
     outline-offset: var(--focus-offset);
     box-shadow: 0 0 0 0 var(--color-text-primary);
@@ -245,7 +246,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   .res__mini :global(img) {
     width: 50%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .res__mini:hover {
@@ -263,7 +264,7 @@ const num = (i: number) => String(i + 1).padStart(2, '0');
   /* ---------- Desktop: comparador à esquerda, caso e miniaturas à direita ---------- */
   @media (min-width: 64rem) {
     :global(html[data-js]) .res__grade {
-      grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
       /* Coluna da direita centrada na altura do comparador. */
       grid-template-areas:
         'palco .'
