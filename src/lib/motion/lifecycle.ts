@@ -17,6 +17,7 @@ import {
   getLenis,
 } from './index';
 import { criarReveals } from './reveal';
+import { criarTratamentos } from './tratamentos';
 import { MOTION_CONDITIONS, MQ_REDUCE } from './reduced-motion';
 
 let mm: gsap.MatchMedia | null = null;
@@ -24,18 +25,41 @@ let iniciado = false;
 /** Na primeira montagem o movimento chega depois da pintura: o que já está na tela fica como está. */
 let primeiraMontagem = true;
 
+/**
+ * Elemento de referência da rolagem: o foco atual (ex.: destino de uma âncora) ou o que
+ * estiver no meio da tela. Usado para compensar o espaço que o pin acrescenta à página.
+ */
+function referenciaDeRolagem(): Element | null {
+  const foco = document.activeElement;
+  if (foco && foco !== document.body && foco !== document.documentElement) {
+    const r = foco.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight) return foco;
+  }
+  return document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+}
+
 function montarPagina(): void {
+  // O movimento chega depois que a pessoa já pode ter rolado (ou seguido uma âncora).
+  // O pin dos tratamentos acrescenta altura acima de quem está mais abaixo: guardamos
+  // onde a referência estava para devolvê-la ao mesmo ponto da tela.
+  const referencia = window.scrollY > 0 ? referenciaDeRolagem() : null;
+  const topoAntes = referencia?.getBoundingClientRect().top;
+
   mm?.revert();
   mm = gsap.matchMedia();
   mm.add(MOTION_CONDITIONS, (ctx) => {
-    const { full } = ctx.conditions as { full: boolean; reduce: boolean };
+    const { full, desktop } = ctx.conditions as { full: boolean; desktop: boolean };
     if (full) {
       iniciarLenis();
       criarReveals(document, { ignorarVisiveis: primeiraMontagem });
+      // Cena 3D com pin só no desktop; a limpeza volta ao layout estático.
+      const limparTratamentos = desktop ? criarTratamentos(document) : undefined;
+      if (limparTratamentos) return limparTratamentos;
     } else {
       // Reduced motion: sem Lenis, sem reveals. Conteúdo já está visível.
       destruirLenis();
     }
+    return undefined;
   });
 
   // Depois de navegar, o Lenis precisa saber a altura e a posição da página nova.
@@ -45,6 +69,15 @@ function montarPagina(): void {
   if (lenis && !primeiraMontagem) {
     lenis.resize();
     lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+  }
+
+  if (referencia && topoAntes !== undefined) {
+    ScrollTrigger.refresh();
+    const desvio = referencia.getBoundingClientRect().top - topoAntes;
+    if (Math.abs(desvio) > 1) {
+      window.scrollBy({ top: desvio, behavior: 'instant' });
+      getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
+    }
   }
 
   primeiraMontagem = false;

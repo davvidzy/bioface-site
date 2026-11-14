@@ -19,7 +19,8 @@
     "pendencias": "node scripts/pendencias.mjs",
     "og": "astro build && node scripts/og.mjs && astro build",
     "test": "npm run build && playwright test && lhci autorun",
-    "otimizar-3d": "node scripts/otimizar-3d.mjs"
+    "otimizar-3d": "node scripts/otimizar-3d.mjs",
+    "poster-3d": "node scripts/poster-3d.mjs"
   },
   "dependencies": {
     "astro": "6.4.8",

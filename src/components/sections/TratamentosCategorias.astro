@@ -1,7 +1,17 @@
 ---
-/** Home, seção 5. Job: mostrar amplitude sem sobrecarregar. */
+/**
+ * Home, seção 5. Job: mostrar amplitude sem sobrecarregar.
+ *
+ * Layout base (celular, reduced motion, sem JS): imagem estática da maca e as
+ * categorias empilhadas, tudo legível.
+ * Desktop com movimento (lib/motion/tratamentos.ts adiciona .trat--animado):
+ * a seção fixa na tela, uma categoria por vez alternando os lados, e a maca 3D
+ * gira e desliza de leve a cada troca.
+ */
+import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
+import poster from '@/assets/3d/maca.png';
 import type { Categoria } from '@/data/categorias';
 import type { Procedimento } from '@/lib/conteudo';
 
@@ -13,33 +23,70 @@ interface Props {
 }
 
 const { eyebrow, titulo, intro, grupos } = Astro.props;
+const total = String(grupos.length).padStart(2, '0');
 ---
 
 <Section labelledby="tratamentos-titulo" id="tratamentos">
   <SectionHeader id="tratamentos-titulo" eyebrow={eyebrow} titulo={titulo} intro={intro} />
-  <div class="categorias">
-    {grupos.map(({ categoria, procedimentos }) => (
-      <div class="categoria">
-        <h3 class="t-h3">{categoria.rotulo}</h3>
-        <p class="text-secondary">{categoria.descricao}</p>
-        <ul class="list-reset categoria__lista" role="list">
-          {procedimentos.map((p) => (
-            <li>{p.data.nome}</li>
-          ))}
-        </ul>
-      </div>
-    ))}
+
+  <div class="trat" data-tratamentos>
+    <div class="trat__palco" data-trat-palco>
+      <Picture
+        src={poster}
+        alt=""
+        class="trat__poster"
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 48rem) 40rem, 100vw"
+        formats={['avif', 'webp']}
+        loading="lazy"
+      />
+    </div>
+
+    <ol class="trat__categorias list-reset" role="list">
+      {grupos.map(({ categoria, procedimentos }, i) => (
+        <li class="trat__cat" data-trat-cat>
+          <p class="t-eyebrow eyebrow" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')} / {total}
+          </p>
+          <h3 class="t-h3">{categoria.rotulo}</h3>
+          <p class="text-secondary">{categoria.descricao}</p>
+          <ul class="list-reset trat__lista" role="list">
+            {procedimentos.map((p) => (
+              <li>{p.data.nome}</li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
   </div>
 </Section>
 
 <style>
-  .categorias {
+  /* ---------- Layout base: estático ---------- */
+  .trat {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .trat__palco {
+    position: relative;
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  .trat__poster {
+    width: 100%;
+    height: auto;
+  }
+
+  .trat__categorias {
     display: grid;
     gap: var(--space-7);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   }
 
-  .categoria {
+  .trat__cat {
     display: grid;
     gap: var(--space-3);
     align-content: start;
@@ -47,8 +94,68 @@ const { eyebrow, titulo, intro, grupos } = Astro.props;
     border-block-start: var(--border-width) solid var(--color-border-default);
   }
 
-  .categoria__lista {
+  .trat__lista {
     display: grid;
     gap: var(--space-2);
+  }
+
+  /* ---------- Desktop animado (classe aplicada pelo JS) ---------- */
+  .trat.trat--animado {
+    position: relative;
+    display: block;
+    height: 100vh;
+    height: 100svh;
+  }
+
+  .trat--animado .trat__palco {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+  }
+
+  /* No modo animado o poster sai; a maca 3D entra com fade quando carregar. */
+  .trat--animado .trat__poster {
+    display: none;
+  }
+
+  .trat__palco :global(.trat__canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out-soft);
+  }
+
+  .trat__palco:global(.trat__palco--3d) :global(.trat__canvas) {
+    opacity: 1;
+  }
+
+  .trat--animado .trat__categorias {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .trat--animado .trat__cat {
+    /* Centralizado na vertical sem transform: o GSAP anima o y por transform. */
+    position: absolute;
+    inset-block: 0;
+    margin-block: auto;
+    height: fit-content;
+    width: min(24rem, 30%);
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  /* Uma categoria para cada lado: 1ª e 3ª à esquerda, 2ª à direita. */
+  .trat--animado .trat__cat:nth-child(odd) {
+    inset-inline-start: 0;
+  }
+
+  .trat--animado .trat__cat:nth-child(even) {
+    inset-inline-end: 0;
+    text-align: end;
   }
 </style>
