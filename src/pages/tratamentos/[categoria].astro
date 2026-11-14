@@ -15,6 +15,8 @@ import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import Transicao from '@/components/ui/Transicao.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
+import Accordion from '@/components/ui/Accordion.astro';
+import { jsonLdFaq } from '@/lib/seo';
 import { CATEGORIAS } from '@/data/categorias';
 import { getProcedimentosPorCategoria, isPendente } from '@/lib/conteudo';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
@@ -31,11 +33,21 @@ if (!grupo) return Astro.redirect('/404');
 const { categoria, procedimentos } = grupo;
 const outras = grupos.filter((g) => g.categoria.slug !== categoria.slug);
 
+const comFaq = procedimentos.filter((p) => p.data.faq.length > 0);
+const jsonLd = [jsonLdFaq(comFaq.flatMap((p) => p.data.faq))].filter(
+  (ld): ld is Record<string, unknown> => ld !== null,
+);
+
 const titulo = `${categoria.rotulo} | ${site.marca}`;
 const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome).join(', ')}. Avaliação individual com ${site.responsavel.nome} no ${site.endereco.bairro}, ${site.endereco.cidade}.`;
 ---
 
-<BaseLayout title={titulo} description={descricao} path={`/tratamentos/${categoria.slug}`}>
+<BaseLayout
+  title={titulo}
+  description={descricao}
+  path={`/tratamentos/${categoria.slug}`}
+  jsonLd={jsonLd}
+>
   <!-- ---------- Hero ---------- -->
   <section class="cat-hero com-marca-dagua" aria-labelledby="categoria-titulo">
     <MarcaDagua lado="esquerda" base="-8%" corte={0.45} opacidade={0.06} giro={-6} />
@@ -77,6 +89,9 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
     </div>
   </section>
 
+  {/* Degradê que funde o hero (creme) com a lista (creme mais fundo). */}
+  <Transicao de="var(--cream-50)" para="var(--cream-100)" />
+
   <!-- ---------- Tratamentos ---------- -->
   <section class="cat-lista" aria-labelledby="lista-titulo">
     <div class="container">
@@ -111,6 +126,24 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
         })}
       </ul>
 
+      {comFaq.length > 0 && (
+        <section class="faq-cat" aria-labelledby="faq-cat-titulo">
+          <div class="faq-cat__cabeca">
+            <h2 id="faq-cat-titulo" class="t-display-l" data-reveal="lines">
+              Perguntas frequentes
+            </h2>
+          </div>
+          <div class="faq-cat__grupos">
+            {comFaq.map((p) => (
+              <div class="faq-cat__grupo">
+                <h3 class="faq-cat__tratamento">{p.data.nome}</h3>
+                <Accordion itens={p.data.faq} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section class="outras" aria-labelledby="outras-titulo">
         <h2 id="outras-titulo" class="outras__titulo">
           Outros objetivos
@@ -135,8 +168,12 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
 
 <style>
   /* ---------- Hero ---------- */
+  /* Um pouco mais alto: o hero ocupa quase a tela toda, com o conteúdo no meio. */
   .cat-hero {
-    padding-block: var(--space-6) var(--space-section);
+    display: grid;
+    align-items: center;
+    min-height: calc(100svh - 6.75rem);
+    padding-block: var(--space-6) var(--space-8);
   }
 
   .cat-hero__grade {
@@ -268,7 +305,7 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
   }
 
   .card-trat__foto {
-    --ratio: 16 / 9;
+    --ratio: 3 / 4;
     position: relative;
     margin-block-end: var(--space-3);
     background:
@@ -298,6 +335,38 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
 
   .card-trat:hover .card-trat__nome {
     translate: var(--space-2) 0;
+  }
+
+  /* ---------- Perguntas frequentes dos tratamentos ---------- */
+  .faq-cat {
+    display: grid;
+    gap: var(--space-7);
+    margin-block-start: var(--space-section);
+  }
+
+  .faq-cat__grupos {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .faq-cat__tratamento {
+    margin-block-end: var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+  }
+
+  @media (min-width: 56rem) {
+    .faq-cat {
+      grid-template-columns: 2fr 3fr;
+      gap: var(--space-9);
+      align-items: start;
+    }
+
+    .faq-cat__cabeca {
+      position: sticky;
+      inset-block-start: 7rem;
+    }
   }
 
   /* ---------- Outros objetivos ---------- */

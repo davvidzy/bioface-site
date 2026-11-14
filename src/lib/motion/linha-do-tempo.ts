@@ -61,11 +61,12 @@ function montar(secao: HTMLElement): void {
       scaleX: 1,
       transformOrigin: '0% 50%',
       ease: 'none',
+      // A linha cresce junto com o scroll da seção inteira. (Usar a própria linha como
+      // gatilho não funciona: com scaleX 0 a largura medida é zero e ela "pula" inteira.)
       scrollTrigger: {
-        trigger: linha,
-        containerAnimation: deslize,
-        start: 'left 75%',
-        end: 'right 70%',
+        trigger: secao,
+        start: 'top top',
+        end: 'bottom bottom',
         scrub: true,
       },
     },

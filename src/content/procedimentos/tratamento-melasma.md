@@ -10,8 +10,16 @@ resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
 expectativa: {}
-# TODO(conteudo): perguntas frequentes deste tratamento.
-faq: []
+faq:
+  - pergunta: 'Melasma tem cura?'
+    resposta: 'O melasma é uma condição crônica: tem controle, não cura. Com tratamento e cuidados diários, as manchas clareiam e ficam estáveis.'
+    pendente: false
+  - pergunta: 'O melasma pode voltar?'
+    resposta: 'Pode, principalmente com sol, calor e variações hormonais. Por isso o protetor solar diário faz parte do tratamento.'
+    pendente: false
+  - pergunta: 'Em quanto tempo vejo resultado?'
+    resposta: 'O clareamento é gradual e depende da profundidade das manchas. Na avaliação você recebe uma estimativa para o seu caso.'
+    pendente: false
 relacionados: ['limpeza-de-pele', 'tratamento-acne', 'peelings-quimicos']
 seo:
   title: 'Tratamento para melasma no Lago Sul, Brasília | BioFace'

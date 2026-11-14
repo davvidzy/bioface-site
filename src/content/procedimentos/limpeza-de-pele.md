@@ -10,8 +10,16 @@ resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
 expectativa: {}
-# TODO(conteudo): perguntas frequentes deste tratamento.
-faq: []
+faq:
+  - pergunta: 'Com que frequência devo fazer?'
+    resposta: 'Depende do seu tipo de pele e da oleosidade. A frequência ideal é definida na avaliação e ajustada conforme a pele responde.'
+    pendente: false
+  - pergunta: 'A pele fica vermelha depois?'
+    resposta: 'Pode ficar levemente avermelhada por algumas horas. No dia seguinte a pele costuma estar calma e com mais viço.'
+    pendente: false
+  - pergunta: 'Posso usar maquiagem logo depois?'
+    resposta: 'O ideal é deixar a pele respirar até o dia seguinte. Você recebe as orientações de cuidado ao final do atendimento.'
+    pendente: false
 relacionados: ['tratamento-acne', 'tratamento-melasma', 'peelings-quimicos']
 seo:
   title: 'Limpeza de pele no Lago Sul, Brasília | BioFace'

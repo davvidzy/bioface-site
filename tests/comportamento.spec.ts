@@ -110,6 +110,28 @@ test.describe('Tratamentos', () => {
   });
 });
 
+test.describe('Navegação', () => {
+  test('abrir uma categoria pela Home começa no topo da página', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'fluxo com Lenis e ponteiro');
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.mouse.move(200, 200);
+    await expect(page.locator('html')).toHaveClass(/lenis/);
+    await page.locator('#tratamentos a.card').nth(1).scrollIntoViewIfNeeded();
+    await page.locator('#tratamentos a.card').nth(1).click();
+    await page.waitForURL('**/tratamentos/rejuvenescimento');
+    await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(0);
+  });
+
+  test('página da categoria traz as perguntas frequentes dos tratamentos', async ({ page }) => {
+    await page.goto('/tratamentos/contorno');
+    await expect(page.locator('.faq-cat__tratamento')).toHaveText([
+      'Toxina botulínica',
+      'Preenchimento facial',
+    ]);
+    await expect(page.locator('.faq-cat details')).toHaveCount(6);
+  });
+});
+
 test.describe('Comparador antes/depois', () => {
   test('teclado move o controle e anuncia porcentagem', async ({ page }) => {
     await page.goto('/');

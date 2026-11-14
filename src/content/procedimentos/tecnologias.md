@@ -12,8 +12,16 @@ resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
 expectativa: {}
-# TODO(conteudo): perguntas frequentes deste tratamento.
-faq: []
+faq:
+  - pergunta: 'Qual tecnologia é indicada para mim?'
+    resposta: 'Depende do que você quer tratar. A escolha entre laser, ultrassom microfocado ou outra tecnologia é feita na avaliação.'
+    pendente: false
+  - pergunta: 'O ultrassom microfocado dói?'
+    resposta: 'Você sente calor e um desconforto pontual durante a aplicação. A sensação passa logo depois da sessão.'
+    pendente: false
+  - pergunta: 'Tem tempo de recuperação?'
+    resposta: 'Na maioria dos casos é mínimo, e você volta à rotina no mesmo dia. Alguns lasers pedem cuidados extras por alguns dias.'
+    pendente: false
 relacionados: ['bioestimuladores-de-colageno', 'fios-de-pdo', 'tratamentos-regenerativos']
 seo:
   title: 'Laser e ultrassom microfocado no Lago Sul, Brasília | BioFace'

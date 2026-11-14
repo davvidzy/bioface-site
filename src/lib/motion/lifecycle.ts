@@ -122,6 +122,19 @@ export function iniciarMovimento(): void {
 
   document.addEventListener('astro:page-load', montarPagina);
   document.addEventListener('astro:before-swap', desmontarPagina);
+
+  // Navegar para outra página começa no topo dela (o Lenis guardava a posição anterior).
+  // Voltar/avançar no histórico (traverse) e links com #âncora mantêm o comportamento do Astro.
+  let tipoNavegacao = 'push';
+  document.addEventListener('astro:before-preparation', (e) => {
+    tipoNavegacao = (e as Event & { navigationType?: string }).navigationType ?? 'push';
+  });
+  document.addEventListener('astro:after-swap', () => {
+    const lenis = getLenis();
+    if (!lenis || tipoNavegacao === 'traverse' || window.location.hash) return;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    lenis.scrollTo(0, { immediate: true, force: true });
+  });
   document.addEventListener('focusin', garantirFocoVisivel);
 
   // Carregado sob demanda: o astro:page-load da primeira página já passou.

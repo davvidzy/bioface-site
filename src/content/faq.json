@@ -1,44 +1,91 @@
 [
   {
-    "id": "quanto-custa",
+    "id": "quanto-custa-um-tratamento",
     "ordem": 1,
-    "pergunta": "Quanto custa?",
-    "resposta": "O valor é definido na avaliação, porque cada plano de tratamento é individual.",
+    "pergunta": "Quanto custa um tratamento?",
+    "resposta": "O valor é definido na avaliação, porque cada plano é montado para o seu rosto e o seu objetivo. Assim você sabe exatamente o que vai fazer e quanto vai investir antes de começar.",
     "pendente": false
   },
   {
-    "id": "como-agendar",
+    "id": "a-avaliacao-e-paga",
     "ordem": 2,
-    "pergunta": "Como agendo uma avaliação?",
-    "resposta": "Pelo WhatsApp. Envie uma mensagem e combinamos o melhor dia e horário para você.",
+    "pergunta": "A avaliação é paga?",
+    "resposta": "TODO(validar-cliente): confirmar com a Maria se a avaliação é gratuita, paga ou abatida do valor do tratamento.",
+    "pendente": true,
+    "$comentario": "TODO(validar-cliente): confirmar esta resposta com a Maria antes de publicar."
+  },
+  {
+    "id": "como-agendo-minha-avaliacao",
+    "ordem": 3,
+    "pergunta": "Como agendo minha avaliação?",
+    "resposta": "Pelo WhatsApp. Você manda uma mensagem, conta o que quer cuidar e combinamos o melhor dia e horário para você.",
     "pendente": false
   },
   {
-    "id": "avaliacao-paga",
-    "ordem": 3,
-    "pergunta": "A avaliação é paga?",
-    "resposta": "TODO(conteudo): confirmar com a Maria se a avaliação é paga e, se for, se o valor é abatido do tratamento.",
-    "pendente": true
-  },
-  {
-    "id": "dor",
+    "id": "quem-faz-os-procedimentos",
     "ordem": 4,
-    "pergunta": "Os procedimentos doem?",
-    "resposta": "TODO(conteudo): resposta da Maria sobre desconforto e anestesia. Não usar \"sem dor\" absoluto.",
-    "pendente": true
+    "pergunta": "Quem faz os procedimentos?",
+    "resposta": "Todos os atendimentos são feitos pela Maria Guedes, biomédica esteta com 18 anos de atuação. Ela acompanha você da avaliação até o retorno.",
+    "pendente": false
   },
   {
-    "id": "seguranca-produtos",
+    "id": "vou-ficar-com-aparencia-artificial",
     "ordem": 5,
-    "pergunta": "Os produtos usados são seguros?",
-    "resposta": "TODO(conteudo): resposta da Maria sobre registro dos produtos na Anvisa e procedência.",
-    "pendente": true
+    "pergunta": "Vou ficar com aparência artificial?",
+    "resposta": "Não é esse o objetivo. O trabalho busca realçar o que já é seu, com doses e técnicas escolhidas para o seu rosto. O melhor resultado é quando ninguém percebe o que foi feito.",
+    "pendente": false
   },
   {
-    "id": "formas-pagamento",
+    "id": "os-procedimentos-doem",
     "ordem": 6,
+    "pergunta": "Os procedimentos doem?",
+    "resposta": "A maioria causa só um desconforto leve. Quando indicado, usamos anestésico tópico. Na avaliação você fica sabendo o que esperar de cada etapa.",
+    "pendente": false
+  },
+  {
+    "id": "os-produtos-usados-sao-seguros",
+    "ordem": 7,
+    "pergunta": "Os produtos usados são seguros?",
+    "resposta": "Usamos apenas produtos com registro na Anvisa, aplicados com técnica e material descartável. Você pode pedir para ver a embalagem e o lote de qualquer produto.",
+    "pendente": true,
+    "$comentario": "TODO(validar-cliente): confirmar esta resposta com a Maria antes de publicar."
+  },
+  {
+    "id": "posso-voltar-a-rotina-no-mesmo-dia",
+    "ordem": 8,
+    "pergunta": "Posso voltar à rotina no mesmo dia?",
+    "resposta": "Na maioria dos casos, sim. Alguns tratamentos pedem cuidados por alguns dias, como evitar sol e atividade física intensa. Cada página de tratamento traz os detalhes.",
+    "pendente": false
+  },
+  {
+    "id": "posso-fazer-tratamentos-gravida-ou-amame",
+    "ordem": 9,
+    "pergunta": "Posso fazer tratamentos grávida ou amamentando?",
+    "resposta": "Muitos procedimentos não são indicados durante a gestação e a amamentação. Conte na avaliação, e a Maria indica o que pode ser feito com segurança nessa fase.",
+    "pendente": false
+  },
+  {
+    "id": "quais-sao-as-formas-de-pagamento",
+    "ordem": 10,
     "pergunta": "Quais são as formas de pagamento?",
-    "resposta": "TODO(conteudo): formas de pagamento e parcelamento aceitos.",
-    "pendente": true
+    "resposta": "TODO(validar-cliente): confirmar com a Maria as formas de pagamento e se há parcelamento.",
+    "pendente": true,
+    "$comentario": "TODO(validar-cliente): confirmar esta resposta com a Maria antes de publicar."
+  },
+  {
+    "id": "atende-homens",
+    "ordem": 11,
+    "pergunta": "Atende homens?",
+    "resposta": "TODO(validar-cliente): confirmar com a Maria se atende homens e quais tratamentos são mais procurados por eles.",
+    "pendente": true,
+    "$comentario": "TODO(validar-cliente): confirmar esta resposta com a Maria antes de publicar."
+  },
+  {
+    "id": "onde-fica-a-clinica",
+    "ordem": 12,
+    "pergunta": "Onde fica a clínica?",
+    "resposta": "No Lago Sul, em Brasília.",
+    "pendente": true,
+    "$comentario": "TODO(conteudo): endereço completo e referência de estacionamento."
   }
 ]

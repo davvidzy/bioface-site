@@ -10,8 +10,17 @@ resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
 expectativa: {}
-# TODO(conteudo): perguntas frequentes deste tratamento.
-faq: []
+# TODO(validar-cliente): confirmar com a Maria as respostas com pendente: true.
+faq:
+  - pergunta: 'Vou ficar sem expressão?'
+    resposta: 'Não. A dose é calculada para suavizar as linhas sem travar o rosto. Você continua sorrindo e se expressando normalmente.'
+    pendente: false
+  - pergunta: 'Quando aparece o efeito?'
+    resposta: 'Em geral, começa a aparecer em poucos dias e atinge o resultado final em cerca de duas semanas.'
+    pendente: true
+  - pergunta: 'Quanto tempo dura?'
+    resposta: 'Em geral, alguns meses, variando de pessoa para pessoa. A Maria indica o melhor momento para a reaplicação.'
+    pendente: true
 relacionados: ['preenchimento-facial']
 seo:
   title: 'Toxina botulínica no Lago Sul, Brasília | BioFace'

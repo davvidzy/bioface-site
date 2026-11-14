@@ -37,8 +37,8 @@ const resultadosItens = await Promise.all(
   })),
 );
 const depoimentosPublicados = (await getDepoimentos()).filter((d) => !d.data.pendente);
-// Perguntas ainda sem resposta da cliente ficam fora até ela responder (PENDENCIAS.md).
-const faq = (await getFaqGeral()).filter((f) => !f.data.pendente).map((f) => f.data);
+// Todas aparecem na prévia; as pendentes (validar com a Maria) ficam fora do JSON-LD.
+const faq = (await getFaqGeral()).map((f) => f.data);
 const totalTratamentos = grupos.reduce((n, g) => n + g.procedimentos.length, 0);
 const credenciais = [
   ...home.credenciais.slice(0, 2),

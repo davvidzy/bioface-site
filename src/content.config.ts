@@ -29,7 +29,14 @@ const procedimentos = defineCollection({
       inicioResultado: z.string().optional(),
       duracaoResultado: z.string().optional(),
     }),
-    faq: z.array(z.object({ pergunta: z.string(), resposta: z.string() })),
+    faq: z.array(
+      z.object({
+        pergunta: z.string(),
+        resposta: z.string(),
+        /** true: resposta ainda precisa da confirmação da Maria (aparece na prévia, fica fora do JSON-LD). */
+        pendente: z.boolean().default(false),
+      }),
+    ),
     relacionados: z.array(reference('procedimentos')),
     seo: z.object({ title: z.string(), description: z.string() }),
     pendente: z.boolean(),

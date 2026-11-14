@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 109 marcadores.
+Total: 110 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -12,10 +12,7 @@ Total: 109 marcadores.
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
-- [ ] confirmar com a Maria se a avaliação é paga e, se for, se o valor é abatido do tratamento. [src/content/faq.json:20](src/content/faq.json#L20)
-- [ ] resposta da Maria sobre desconforto e anestesia. Não usar "sem dor" absoluto. [src/content/faq.json:27](src/content/faq.json#L27)
-- [ ] resposta da Maria sobre registro dos produtos na Anvisa e procedência. [src/content/faq.json:34](src/content/faq.json#L34)
-- [ ] formas de pagamento e parcelamento aceitos. [src/content/faq.json:41](src/content/faq.json#L41)
+- [ ] endereço completo e referência de estacionamento. [src/content/faq.json:89](src/content/faq.json#L89)
 - [ ] resumo de 1 a 2 frases para o card. Em 12 arquivos:
   - [src/content/procedimentos/bioestimuladores-de-colageno.md:8](src/content/procedimentos/bioestimuladores-de-colageno.md#L8)
   - [src/content/procedimentos/fios-de-pdo.md:8](src/content/procedimentos/fios-de-pdo.md#L8)
@@ -55,32 +52,19 @@ Total: 109 marcadores.
   - [src/content/procedimentos/tratamento-acne.md:11](src/content/procedimentos/tratamento-acne.md#L11)
   - [src/content/procedimentos/tratamento-melasma.md:11](src/content/procedimentos/tratamento-melasma.md#L11)
   - [src/content/procedimentos/tratamentos-regenerativos.md:11](src/content/procedimentos/tratamentos-regenerativos.md#L11)
-- [ ] perguntas frequentes deste tratamento. Em 12 arquivos:
-  - [src/content/procedimentos/bioestimuladores-de-colageno.md:13](src/content/procedimentos/bioestimuladores-de-colageno.md#L13)
-  - [src/content/procedimentos/fios-de-pdo.md:13](src/content/procedimentos/fios-de-pdo.md#L13)
-  - [src/content/procedimentos/jato-de-plasma-palpebras.md:16](src/content/procedimentos/jato-de-plasma-palpebras.md#L16)
-  - [src/content/procedimentos/limpeza-de-pele.md:13](src/content/procedimentos/limpeza-de-pele.md#L13)
-  - [src/content/procedimentos/microagulhamento.md:13](src/content/procedimentos/microagulhamento.md#L13)
-  - [src/content/procedimentos/peelings-quimicos.md:13](src/content/procedimentos/peelings-quimicos.md#L13)
-  - [src/content/procedimentos/preenchimento-facial.md:13](src/content/procedimentos/preenchimento-facial.md#L13)
-  - [src/content/procedimentos/tecnologias.md:15](src/content/procedimentos/tecnologias.md#L15)
-  - [src/content/procedimentos/toxina-botulinica.md:13](src/content/procedimentos/toxina-botulinica.md#L13)
-  - [src/content/procedimentos/tratamento-acne.md:13](src/content/procedimentos/tratamento-acne.md#L13)
-  - [src/content/procedimentos/tratamento-melasma.md:13](src/content/procedimentos/tratamento-melasma.md#L13)
-  - [src/content/procedimentos/tratamentos-regenerativos.md:13](src/content/procedimentos/tratamentos-regenerativos.md#L13)
 - [ ] "Como funciona", em markdown. Texto clínico validado pela Maria. Em 12 arquivos:
-  - [src/content/procedimentos/bioestimuladores-de-colageno.md:22](src/content/procedimentos/bioestimuladores-de-colageno.md#L22)
-  - [src/content/procedimentos/fios-de-pdo.md:22](src/content/procedimentos/fios-de-pdo.md#L22)
-  - [src/content/procedimentos/jato-de-plasma-palpebras.md:25](src/content/procedimentos/jato-de-plasma-palpebras.md#L25)
-  - [src/content/procedimentos/limpeza-de-pele.md:22](src/content/procedimentos/limpeza-de-pele.md#L22)
-  - [src/content/procedimentos/microagulhamento.md:22](src/content/procedimentos/microagulhamento.md#L22)
-  - [src/content/procedimentos/peelings-quimicos.md:22](src/content/procedimentos/peelings-quimicos.md#L22)
-  - [src/content/procedimentos/preenchimento-facial.md:22](src/content/procedimentos/preenchimento-facial.md#L22)
-  - [src/content/procedimentos/tecnologias.md:24](src/content/procedimentos/tecnologias.md#L24)
-  - [src/content/procedimentos/toxina-botulinica.md:22](src/content/procedimentos/toxina-botulinica.md#L22)
-  - [src/content/procedimentos/tratamento-acne.md:22](src/content/procedimentos/tratamento-acne.md#L22)
-  - [src/content/procedimentos/tratamento-melasma.md:22](src/content/procedimentos/tratamento-melasma.md#L22)
-  - [src/content/procedimentos/tratamentos-regenerativos.md:22](src/content/procedimentos/tratamentos-regenerativos.md#L22)
+  - [src/content/procedimentos/bioestimuladores-de-colageno.md:31](src/content/procedimentos/bioestimuladores-de-colageno.md#L31)
+  - [src/content/procedimentos/fios-de-pdo.md:31](src/content/procedimentos/fios-de-pdo.md#L31)
+  - [src/content/procedimentos/jato-de-plasma-palpebras.md:34](src/content/procedimentos/jato-de-plasma-palpebras.md#L34)
+  - [src/content/procedimentos/limpeza-de-pele.md:30](src/content/procedimentos/limpeza-de-pele.md#L30)
+  - [src/content/procedimentos/microagulhamento.md:31](src/content/procedimentos/microagulhamento.md#L31)
+  - [src/content/procedimentos/peelings-quimicos.md:30](src/content/procedimentos/peelings-quimicos.md#L30)
+  - [src/content/procedimentos/preenchimento-facial.md:31](src/content/procedimentos/preenchimento-facial.md#L31)
+  - [src/content/procedimentos/tecnologias.md:32](src/content/procedimentos/tecnologias.md#L32)
+  - [src/content/procedimentos/toxina-botulinica.md:31](src/content/procedimentos/toxina-botulinica.md#L31)
+  - [src/content/procedimentos/tratamento-acne.md:30](src/content/procedimentos/tratamento-acne.md#L30)
+  - [src/content/procedimentos/tratamento-melasma.md:30](src/content/procedimentos/tratamento-melasma.md#L30)
+  - [src/content/procedimentos/tratamentos-regenerativos.md:31](src/content/procedimentos/tratamentos-regenerativos.md#L31)
 - [ ] número do CRBM da Maria Guedes. [src/data/site.ts:38](src/data/site.ts#L38)
 - [ ] endereço completo. [src/data/site.ts:42](src/data/site.ts#L42)
 - [ ] CEP. [src/data/site.ts:46](src/data/site.ts#L46)
@@ -96,6 +80,14 @@ Total: 109 marcadores.
 
 - [ ] o aviso "Resultados variam de pessoa para pessoa" saiu a pedido. [src/components/sections/ResultadosPrevia.astro:13](src/components/sections/ResultadosPrevia.astro#L13)
 - [ ] fotos de banco enviadas para a prévia; confirmar licença ou trocar por fotos da clínica. [src/components/sections/TratamentosCategorias.astro:26](src/components/sections/TratamentosCategorias.astro#L26)
+- [ ] confirmar com a Maria se a avaliação é gratuita, paga ou abatida do valor do tratamento. [src/content/faq.json:13](src/content/faq.json#L13)
+- [ ] confirmar esta resposta com a Maria antes de publicar. Em 4 arquivos:
+  - [src/content/faq.json:15](src/content/faq.json#L15)
+  - [src/content/faq.json:51](src/content/faq.json#L51)
+  - [src/content/faq.json:73](src/content/faq.json#L73)
+  - [src/content/faq.json:81](src/content/faq.json#L81)
+- [ ] confirmar com a Maria as formas de pagamento e se há parcelamento. [src/content/faq.json:71](src/content/faq.json#L71)
+- [ ] confirmar com a Maria se atende homens e quais tratamentos são mais procurados por eles. [src/content/faq.json:79](src/content/faq.json#L79)
 - [ ] quais tratamentos ganham destaque na Home. Em 12 arquivos:
   - [src/content/procedimentos/bioestimuladores-de-colageno.md:5](src/content/procedimentos/bioestimuladores-de-colageno.md#L5)
   - [src/content/procedimentos/fios-de-pdo.md:5](src/content/procedimentos/fios-de-pdo.md#L5)
@@ -109,8 +101,18 @@ Total: 109 marcadores.
   - [src/content/procedimentos/tratamento-acne.md:5](src/content/procedimentos/tratamento-acne.md#L5)
   - [src/content/procedimentos/tratamento-melasma.md:5](src/content/procedimentos/tratamento-melasma.md#L5)
   - [src/content/procedimentos/tratamentos-regenerativos.md:5](src/content/procedimentos/tratamentos-regenerativos.md#L5)
+- [ ] confirmar com a Maria as respostas com pendente: true. Em 7 arquivos:
+  - [src/content/procedimentos/bioestimuladores-de-colageno.md:13](src/content/procedimentos/bioestimuladores-de-colageno.md#L13)
+  - [src/content/procedimentos/fios-de-pdo.md:13](src/content/procedimentos/fios-de-pdo.md#L13)
+  - [src/content/procedimentos/jato-de-plasma-palpebras.md:16](src/content/procedimentos/jato-de-plasma-palpebras.md#L16)
+  - [src/content/procedimentos/microagulhamento.md:13](src/content/procedimentos/microagulhamento.md#L13)
+  - [src/content/procedimentos/preenchimento-facial.md:13](src/content/procedimentos/preenchimento-facial.md#L13)
+  - [src/content/procedimentos/toxina-botulinica.md:13](src/content/procedimentos/toxina-botulinica.md#L13)
+  - [src/content/procedimentos/tratamentos-regenerativos.md:13](src/content/procedimentos/tratamentos-regenerativos.md#L13)
 - [ ] nome do procedimento. No Figma original era "Blefaroplastia sem corte". [src/content/procedimentos/jato-de-plasma-palpebras.md:2](src/content/procedimentos/jato-de-plasma-palpebras.md#L2)
+- [ ] confirmar com a Maria o produto (ex.: ácido hialurônico) e as marcas utilizadas. [src/content/procedimentos/preenchimento-facial.md:16](src/content/procedimentos/preenchimento-facial.md#L16)
 - [ ] se a cliente quiser uma página por tecnologia, este item vira categoria própria. [src/content/procedimentos/tecnologias.md:2](src/content/procedimentos/tecnologias.md#L2)
+- [ ] confirmar com a Maria quais técnicas ela usa (ex.: bioestimulação com ativos, exossomos, PDRN) e descrever em linguagem simples. [src/content/procedimentos/tratamentos-regenerativos.md:16](src/content/procedimentos/tratamentos-regenerativos.md#L16)
 - [ ] autorização escrita da paciente, regras atuais do CRBM e qual tratamento aparece neste caso. Em 4 arquivos:
   - [src/content/resultados/par-1.json:2](src/content/resultados/par-1.json#L2)
   - [src/content/resultados/par-2.json:2](src/content/resultados/par-2.json#L2)

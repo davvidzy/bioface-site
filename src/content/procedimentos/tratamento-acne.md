@@ -10,8 +10,16 @@ resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
 expectativa: {}
-# TODO(conteudo): perguntas frequentes deste tratamento.
-faq: []
+faq:
+  - pergunta: 'Acne na fase adulta tem tratamento?'
+    resposta: 'Sim. A acne adulta costuma pedir um tratamento combinado, ajustado à sua pele e à sua rotina, com acompanhamento ao longo das sessões.'
+    pendente: false
+  - pergunta: 'O tratamento também trata as marcas?'
+    resposta: 'O foco aqui é controlar as espinhas ativas. Para marcas e cicatrizes, outros tratamentos, como o microagulhamento, podem entrar no plano.'
+    pendente: false
+  - pergunta: 'Preciso de acompanhamento médico?'
+    resposta: 'Em casos de acne inflamatória intensa, pode ser indicado acompanhamento com dermatologista em paralelo. A Maria avalia e orienta você.'
+    pendente: false
 relacionados: ['limpeza-de-pele', 'tratamento-melasma', 'peelings-quimicos']
 seo:
   title: 'Tratamento para acne no Lago Sul, Brasília | BioFace'
