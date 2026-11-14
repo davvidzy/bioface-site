@@ -2,7 +2,15 @@ import { site, faltando } from '@/data/site';
 
 /** De onde veio o clique. Usado em analytics para saber qual CTA converte. */
 export type OrigemWhatsApp =
-  'header' | 'menu' | 'hero' | 'tratamentos' | 'como-funciona' | 'cta-final' | 'flutuante' | 'rodape' | '404';
+  | 'header'
+  | 'menu'
+  | 'hero'
+  | 'tratamentos'
+  | 'como-funciona'
+  | 'cta-final'
+  | 'flutuante'
+  | 'rodape'
+  | '404';
 
 export interface WhatsAppLinkOptions {
   /** Nome do tratamento, exatamente como aparece no site. */

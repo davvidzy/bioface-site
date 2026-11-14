@@ -3,11 +3,12 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 121 marcadores.
+Total: 116 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
 - [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:18](src/components/sections/Espaco.astro#L18)
+- [ ] foto 5:4 de cada categoria (procedimento ou detalhe de pele). [src/components/sections/TratamentosCategorias.astro:38](src/components/sections/TratamentosCategorias.astro#L38)
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
@@ -93,12 +94,6 @@ Total: 121 marcadores.
   - [src/content/procedimentos/tratamento-acne.md:22](src/content/procedimentos/tratamento-acne.md#L22)
   - [src/content/procedimentos/tratamento-melasma.md:22](src/content/procedimentos/tratamento-melasma.md#L22)
   - [src/content/procedimentos/tratamentos-regenerativos.md:22](src/content/procedimentos/tratamentos-regenerativos.md#L22)
-- [ ] originais sem texto gravado e com mesmo enquadramento. Em 5 arquivos:
-  - [src/content/resultados/par-1.json:2](src/content/resultados/par-1.json#L2)
-  - [src/content/resultados/par-2.json:2](src/content/resultados/par-2.json#L2)
-  - [src/content/resultados/par-3.json:2](src/content/resultados/par-3.json#L2)
-  - [src/content/resultados/par-4.json:2](src/content/resultados/par-4.json#L2)
-  - [src/content/resultados/par-5.json:2](src/content/resultados/par-5.json#L2)
 - [ ] número do CRBM da Maria Guedes. [src/data/site.ts:38](src/data/site.ts#L38)
 - [ ] endereço completo. [src/data/site.ts:42](src/data/site.ts#L42)
 - [ ] CEP. [src/data/site.ts:46](src/data/site.ts#L46)
@@ -127,12 +122,11 @@ Total: 121 marcadores.
   - [src/content/procedimentos/tratamentos-regenerativos.md:5](src/content/procedimentos/tratamentos-regenerativos.md#L5)
 - [ ] nome do procedimento. No Figma original era "Blefaroplastia sem corte". [src/content/procedimentos/jato-de-plasma-palpebras.md:2](src/content/procedimentos/jato-de-plasma-palpebras.md#L2)
 - [ ] se a cliente quiser uma página por tecnologia, este item vira categoria própria. [src/content/procedimentos/tecnologias.md:2](src/content/procedimentos/tecnologias.md#L2)
-- [ ] autorização escrita da paciente, regras atuais do CRBM e qual tratamento aparece neste par. Em 5 arquivos:
+- [ ] autorização escrita da paciente, regras atuais do CRBM e qual tratamento aparece neste caso. Em 4 arquivos:
   - [src/content/resultados/par-1.json:2](src/content/resultados/par-1.json#L2)
   - [src/content/resultados/par-2.json:2](src/content/resultados/par-2.json#L2)
   - [src/content/resultados/par-3.json:2](src/content/resultados/par-3.json#L2)
   - [src/content/resultados/par-4.json:2](src/content/resultados/par-4.json#L2)
-  - [src/content/resultados/par-5.json:2](src/content/resultados/par-5.json#L2)
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
 - [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:27](src/data/textos.ts#L27)
 - [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:31](src/data/textos.ts#L31)

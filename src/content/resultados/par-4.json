@@ -1,10 +1,11 @@
 {
-  "$comment": "Par 4 do Figma (Antes X Depois). consentimento=true só na prévia de prospecção: a foto já é pública no Instagram da clínica. TODO(validar-cliente): autorização escrita da paciente, regras atuais do CRBM e qual tratamento aparece neste par. TODO(conteudo): originais sem texto gravado e com mesmo enquadramento.",
+  "$comment": "Caso 4, fotos enviadas para a prévia (antesxdepois/4-1 e 4-2). consentimento=true só na prévia de prospecção. TODO(validar-cliente): autorização escrita da paciente, regras atuais do CRBM e qual tratamento aparece neste caso.",
   "antes": "../../assets/resultados/par-4-antes.png",
   "depois": "../../assets/resultados/par-4-depois.png",
   "alt": {
-    "antes": "Rosto de perfil, contorno da mandíbula e pescoço antes do tratamento",
-    "depois": "Rosto de perfil, contorno da mandíbula e pescoço depois do tratamento"
+    "antes": "Região dos olhos e das bochechas antes do tratamento",
+    "depois": "Região dos olhos e das bochechas depois do tratamento"
   },
+  "legenda": "Olhar e terço médio",
   "consentimento": true
 }

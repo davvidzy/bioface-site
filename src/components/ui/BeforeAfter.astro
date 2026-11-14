@@ -20,20 +20,32 @@ interface Props {
   procedimento?: string | undefined;
   /** Imagem acima da dobra? Desliga o lazy load. */
   prioritaria?: boolean;
+  /** Proporção fixa do palco (ex.: "2 / 3"). Padrão: a da foto de antes. */
+  ratio?: string;
+  /** Atributo sizes das fotos. */
+  sizes?: string;
+  /** Esconde a legenda (quando quem usa mostra as informações do caso fora). */
+  semLegenda?: boolean;
 }
 
-const { resultado, procedimento, prioritaria = false } = Astro.props;
+const {
+  resultado,
+  procedimento,
+  prioritaria = false,
+  ratio: ratioFixo,
+  sizes = '(min-width: 48rem) 30vw, 100vw',
+  semLegenda = false,
+} = Astro.props;
 const { antes, depois, alt, legenda, intervalo } = resultado.data;
 const loading = prioritaria ? 'eager' : 'lazy';
 // A foto de depois é a camada inteira de baixo: é ela que vira LCP quando o par está no topo.
 // Os demais pares ficam em prioridade baixa para não disputar banda com o LCP.
 const prioridade = prioritaria ? 'high' : 'low';
 const prioridadeAntes = prioritaria ? undefined : 'low';
-const sizes = '(min-width: 48rem) 30vw, 100vw';
 const textoLegenda = [procedimento, legenda, intervalo].filter(Boolean).join('. ');
 const regiao = alt.antes.replace(/\s+antes do tratamento$/i, '');
 // A proporção da foto de antes define o palco; a de depois é recortada para alinhar.
-const ratio = `${antes.width} / ${antes.height}`;
+const ratio = ratioFixo ?? `${antes.width} / ${antes.height}`;
 const inicial = 50;
 ---
 
@@ -70,7 +82,20 @@ const inicial = 50;
       </span>
     </div>
     <div class="ba__divisor" aria-hidden="true">
-      <span class="ba__alca"></span>
+      <span class="ba__alca">
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 7l-5 5 5 5M15 7l5 5-5 5" />
+        </svg>
+      </span>
     </div>
     <input
       class="ba__controle"
@@ -84,7 +109,9 @@ const inicial = 50;
       data-ba-controle
     />
   </div>
-  {textoLegenda && <figcaption class="t-caption ba__legenda">{textoLegenda}</figcaption>}
+  {textoLegenda && !semLegenda && (
+    <figcaption class="t-caption ba__legenda">{textoLegenda}</figcaption>
+  )}
 </figure>
 
 <style>
@@ -118,18 +145,19 @@ const inicial = 50;
 
   .ba__rotulo {
     position: absolute;
-    inset-block-end: var(--space-2);
-    padding: var(--space-1) var(--space-2);
+    inset-block-start: var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
     background-color: var(--color-bg-default);
     color: var(--color-text-primary);
   }
 
   .ba__rotulo--antes {
-    inset-inline-start: var(--space-2);
+    inset-inline-start: var(--space-3);
   }
 
   .ba__rotulo--depois {
-    inset-inline-end: var(--space-2);
+    inset-inline-end: var(--space-3);
   }
 
   .ba__divisor {
@@ -183,9 +211,12 @@ const inicial = 50;
     width: var(--tap-min);
     height: var(--tap-min);
     translate: -50% -50%;
+    display: grid;
+    place-items: center;
     border-radius: 50%;
-    border: 2px solid var(--color-text-primary);
     background-color: var(--color-bg-default);
+    color: var(--color-text-primary);
+    box-shadow: 0 4px 18px rgb(43 20 32 / 0.18);
   }
 
   /* Sem JS o input não serve para nada: fica fora. */

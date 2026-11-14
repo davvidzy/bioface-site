@@ -112,7 +112,9 @@ test.describe('Tratamentos', () => {
     await cards.first().scrollIntoViewIfNeeded();
     const larguraAntes = await cards.nth(1).evaluate((c) => c.getBoundingClientRect().width);
     const detalhe = cards.nth(1).locator('.cat__detalhe-interno');
-    await expect.poll(() => detalhe.evaluate((d) => d.getBoundingClientRect().height)).toBeLessThan(2);
+    await expect
+      .poll(() => detalhe.evaluate((d) => d.getBoundingClientRect().height))
+      .toBeLessThan(2);
     await cards.nth(1).hover();
     await expect
       .poll(() => cards.nth(1).evaluate((c) => c.getBoundingClientRect().width))
@@ -143,6 +145,24 @@ test.describe('Comparador antes/depois', () => {
     await expect(controle).toHaveAttribute('aria-valuetext', '51% antes, 49% depois');
     await page.keyboard.press('End');
     await expect(controle).toHaveAttribute('aria-valuetext', '100% antes, 0% depois');
+  });
+});
+
+test.describe('Resultados', () => {
+  test('miniaturas trocam o caso em destaque', async ({ page }) => {
+    await page.goto('/');
+    const minis = page.locator('[data-res-mini]');
+    await expect(minis).toHaveCount(4);
+    await minis.nth(2).scrollIntoViewIfNeeded();
+    await minis.nth(2).click();
+    await expect(minis.nth(2)).toHaveAttribute('aria-pressed', 'true');
+    await expect(minis.nth(0)).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('[data-res-caso][data-ativo]')).toHaveId('resultado-caso-3');
+    await expect(page.locator('[data-res-info][data-ativo]')).toContainText('Perfil');
+    // O caso novo termina a varredura no meio.
+    await expect(page.locator('#resultado-caso-3 [data-ba-controle]')).toHaveValue('50', {
+      timeout: 5000,
+    });
   });
 });
 

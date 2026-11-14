@@ -1,8 +1,18 @@
 ---
-/** Home. Job: prova visual. Mostra todos os pares com consentimento. */
-import Section from '@/components/ui/Section.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
-import ResultadosGrade from './ResultadosGrade.astro';
+/**
+ * Home. Job: prova visual.
+ *
+ * Um comparador grande em destaque, com as informações do caso ao lado e miniaturas
+ * (metade antes, metade depois) para trocar de caso. Ao entrar na tela, a divisória
+ * faz uma varredura curta sozinha, mostrando que dá para arrastar; ao trocar de caso,
+ * o novo entra com uma varredura do antes para o meio.
+ *
+ * Sem JS: todos os comparadores empilhados, cada um com sua legenda. Sem miniaturas.
+ * Reduced motion: troca de caso sem varredura nem fade.
+ */
+import { Image } from 'astro:assets';
+import BeforeAfter from '@/components/ui/BeforeAfter.astro';
+import { enfase } from '@/lib/texto';
 import type { Resultado } from '@/lib/conteudo';
 
 interface Props {
@@ -12,11 +22,419 @@ interface Props {
 }
 
 const { titulo, aviso, itens } = Astro.props;
+const total = String(itens.length).padStart(2, '0');
+const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 {itens.length > 0 && (
-  <Section labelledby="resultados-titulo" id="resultados">
-    <SectionHeader id="resultados-titulo" titulo={titulo} estilo="t-display-l" />
-    <ResultadosGrade itens={itens} aviso={aviso} />
-  </Section>
+  <section id="resultados" class="res" aria-labelledby="resultados-titulo" data-resultados>
+    <div class="container res__grade">
+      <h2
+        id="resultados-titulo"
+        class="t-display-l res__titulo"
+        data-reveal="fade"
+        set:html={enfase(titulo)}
+      />
+
+      <div class="res__palco" data-res-palco>
+        {itens.map(({ resultado, procedimento }, i) => (
+          <div
+            class="res__caso"
+            id={`resultado-caso-${i + 1}`}
+            data-res-caso
+            data-ativo={i === 0 ? '' : undefined}
+          >
+            <BeforeAfter
+              resultado={resultado}
+              procedimento={procedimento}
+              ratio="2 / 3"
+              sizes="(min-width: 64rem) 30rem, 100vw"
+              prioritaria={false}
+            />
+          </div>
+        ))}
+        <p class="res__dica" aria-hidden="true">
+          Arraste para comparar
+        </p>
+      </div>
+
+      <div class="res__infos" aria-live="polite">
+        {itens.map(({ resultado, procedimento }, i) => (
+          <div class="res__info" data-res-info data-ativo={i === 0 ? '' : undefined}>
+            <p class="res__contador">
+              <span class="visually-hidden">Caso </span>
+              {num(i)} <span aria-hidden="true">/</span>
+              <span class="visually-hidden"> de </span>
+              {total}
+            </p>
+            <p class="res__regiao">{resultado.data.legenda}</p>
+            {procedimento && <p class="res__proc">{procedimento}</p>}
+            {resultado.data.intervalo && <p class="res__proc">{resultado.data.intervalo}</p>}
+          </div>
+        ))}
+      </div>
+
+      <ul class="res__miniaturas list-reset" role="list" aria-label="Escolher caso">
+        {itens.map(({ resultado }, i) => (
+          <li>
+            <button
+              type="button"
+              class="res__mini"
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              aria-controls={`resultado-caso-${i + 1}`}
+              aria-label={`Caso ${i + 1}: ${resultado.data.legenda ?? ''}`}
+              data-res-mini
+            >
+              <Image src={resultado.data.antes} alt="" width={96} height={144} />
+              <Image src={resultado.data.depois} alt="" width={96} height={144} />
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <p class="t-caption res__aviso">{aviso}</p>
+    </div>
+  </section>
 )}
+
+<style>
+  .res {
+    --troca: 0.6s var(--ease-out-soft);
+    padding-block: var(--space-section);
+  }
+
+  .res__grade {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  /* ---------- Palco: casos sobrepostos na mesma célula ---------- */
+  .res__palco {
+    position: relative;
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .res__dica,
+  .res__infos,
+  .res__miniaturas {
+    display: none;
+  }
+
+  :global(html[data-js]) .res__palco {
+    gap: 0;
+    width: 100%;
+    max-width: 30rem;
+  }
+
+  :global(html[data-js]) .res__caso {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--troca),
+      visibility 0s linear 0.6s;
+  }
+
+  :global(html[data-js]) .res__caso[data-ativo] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--troca);
+  }
+
+  /* Com JS a legenda do comparador sai: as informações do caso ficam ao lado. */
+  :global(html[data-js]) .res :global(.ba__legenda) {
+    display: none;
+  }
+
+  /* Dica de arraste: some depois da primeira interação. */
+  :global(html[data-js]) .res__dica {
+    display: block;
+    position: absolute;
+    inset-block-end: var(--space-4);
+    inset-inline: 0;
+    width: fit-content;
+    margin-inline: auto;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    background-color: color-mix(in srgb, var(--color-bg-default) 92%, transparent);
+    color: var(--color-text-primary);
+    font-size: var(--text-caption);
+    pointer-events: none;
+    transition: opacity var(--troca);
+  }
+
+  .res__palco[data-tocado] .res__dica {
+    opacity: 0;
+  }
+
+  /* ---------- Informações do caso ---------- */
+  :global(html[data-js]) .res__infos {
+    display: grid;
+  }
+
+  .res__info {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.3s var(--ease-standard),
+      transform var(--troca),
+      visibility 0s linear 0.3s;
+  }
+
+  .res__info[data-ativo] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.5s var(--ease-standard) 0.1s,
+      transform var(--troca) 0.1s;
+  }
+
+  .res__contador {
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+  }
+
+  .res__regiao {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-h2);
+    font-style: italic;
+  }
+
+  .res__proc {
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- Miniaturas: metade antes, metade depois ---------- */
+  :global(html[data-js]) .res__miniaturas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .res__mini {
+    display: flex;
+    width: 4.5rem;
+    aspect-ratio: 2 / 3;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    background: var(--color-bg-subtle);
+    opacity: 0.5;
+    outline-offset: var(--focus-offset);
+    box-shadow: 0 0 0 0 var(--color-text-primary);
+    transition:
+      opacity var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-out-soft),
+      box-shadow var(--duration-base) var(--ease-out-soft);
+  }
+
+  .res__mini :global(img) {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .res__mini:hover {
+    opacity: 0.85;
+    transform: translateY(-3px);
+  }
+
+  .res__mini[aria-pressed='true'] {
+    opacity: 1;
+    box-shadow:
+      0 0 0 2px var(--color-bg-default),
+      0 0 0 3.5px var(--color-text-primary);
+  }
+
+  .res__aviso {
+    color: var(--color-text-secondary);
+  }
+
+  /* ---------- Desktop: comparador à esquerda, caso e miniaturas à direita ---------- */
+  @media (min-width: 64rem) {
+    :global(html[data-js]) .res__grade {
+      grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+      /* Coluna da direita centrada na altura do comparador. */
+      grid-template-areas:
+        'palco .'
+        'palco titulo'
+        'palco info'
+        'palco minis'
+        'palco aviso'
+        'palco .';
+      grid-template-rows: 1fr auto auto auto auto 1fr;
+      column-gap: clamp(var(--space-8), 8vw, 9rem);
+      row-gap: var(--space-6);
+      align-items: start;
+      max-width: 72rem;
+    }
+
+    :global(html[data-js]) .res__titulo {
+      grid-area: titulo;
+    }
+
+    :global(html[data-js]) .res__palco {
+      grid-area: palco;
+    }
+
+    :global(html[data-js]) .res__infos {
+      grid-area: info;
+    }
+
+    :global(html[data-js]) .res__miniaturas {
+      grid-area: minis;
+      gap: var(--space-4);
+    }
+
+    :global(html[data-js]) .res__mini {
+      width: 5.5rem;
+    }
+
+    :global(html[data-js]) .res__aviso {
+      grid-area: aviso;
+      padding-block-start: var(--space-4);
+    }
+  }
+
+  /* Celular: título, palco, caso e miniaturas em coluna; palco centralizado. */
+  @media (max-width: 63.99rem) {
+    .res__titulo {
+      text-align: center;
+    }
+
+    :global(html[data-js]) .res__palco {
+      justify-self: center;
+    }
+
+    /* Palco menos alto no celular: a foto é recortada ao centro. */
+    .res :global(.ba__palco) {
+      --ratio: 4 / 5 !important;
+    }
+
+    :global(html[data-js]) .res__infos,
+    :global(html[data-js]) .res__aviso {
+      text-align: center;
+    }
+
+    :global(html[data-js]) .res__info {
+      justify-items: center;
+    }
+
+    :global(html[data-js]) .res__miniaturas {
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .res__caso,
+    .res__info,
+    .res__mini,
+    .res__dica {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  /*
+   * Troca de caso pelas miniaturas e varredura automática da divisória.
+   * A varredura move o <input type="range"> do comparador e dispara "input": o próprio
+   * BeforeAfter atualiza a posição e o aria-valuetext. Para no primeiro toque da pessoa.
+   */
+  const reduzido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const suave = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+
+  function montar(raiz: HTMLElement) {
+    if (raiz.dataset.montado) return;
+    raiz.dataset.montado = '';
+    const palco = raiz.querySelector<HTMLElement>('[data-res-palco]');
+    const casos = [...raiz.querySelectorAll<HTMLElement>('[data-res-caso]')];
+    const infos = [...raiz.querySelectorAll<HTMLElement>('[data-res-info]')];
+    const minis = [...raiz.querySelectorAll<HTMLButtonElement>('[data-res-mini]')];
+    if (!palco || casos.length === 0) return;
+
+    let quadro = 0;
+    const parar = () => cancelAnimationFrame(quadro);
+
+    /** Move a divisória do caso por uma sequência de posições (em %). */
+    function varrer(caso: HTMLElement, pontos: number[], duracao: number) {
+      parar();
+      const controle = caso.querySelector<HTMLInputElement>('[data-ba-controle]');
+      if (!controle) return;
+      const definir = (v: number) => {
+        controle.value = String(Math.round(v));
+        controle.dispatchEvent(new Event('input'));
+      };
+      if (reduzido() || pontos.length < 2) {
+        definir(pontos.at(-1) ?? 50);
+        return;
+      }
+      const trechos = pontos.length - 1;
+      const inicio = performance.now();
+      const passo = (agora: number) => {
+        const t = Math.min(1, (agora - inicio) / duracao);
+        const i = Math.min(trechos - 1, Math.floor(t * trechos));
+        const local = suave(t * trechos - i);
+        const de = pontos[i] ?? 50;
+        const ate = pontos[i + 1] ?? 50;
+        definir(de + (ate - de) * local);
+        if (t < 1) quadro = requestAnimationFrame(passo);
+      };
+      quadro = requestAnimationFrame(passo);
+    }
+
+    // A pessoa assumiu: para a varredura e esconde a dica.
+    const assumir = () => {
+      parar();
+      palco.dataset.tocado = '';
+    };
+    palco.addEventListener('pointerdown', assumir);
+    palco.addEventListener('keydown', assumir);
+
+    function ativar(indice: number) {
+      casos.forEach((c, i) => c.toggleAttribute('data-ativo', i === indice));
+      infos.forEach((c, i) => c.toggleAttribute('data-ativo', i === indice));
+      minis.forEach((m, i) => m.setAttribute('aria-pressed', String(i === indice)));
+      const caso = casos[indice];
+      // O caso novo entra mostrando o antes e abre até o meio: a mudança aparece sozinha.
+      if (caso) varrer(caso, [92, 50], 1100);
+    }
+
+    minis.forEach((m, i) => m.addEventListener('click', () => ativar(i)));
+
+    // Primeira vez na tela: varredura curta para mostrar que dá para arrastar.
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        if (!entradas.some((e) => e.isIntersecting)) return;
+        observador.disconnect();
+        const ativo = casos.find((c) => c.hasAttribute('data-ativo'));
+        if (ativo && !palco.hasAttribute('data-tocado')) varrer(ativo, [50, 74, 28, 50], 2400);
+      },
+      { threshold: 0.6 },
+    );
+    observador.observe(palco);
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        observador.disconnect();
+        parar();
+      },
+      { once: true },
+    );
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-resultados]').forEach(montar);
+  });
+</script>
