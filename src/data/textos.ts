@@ -42,9 +42,7 @@ export const home = {
       'TODO(conteudo): em 2 ou 3 frases, como a Maria define um resultado natural no método dela.',
   },
   tratamentos: {
-    eyebrow: 'Tratamentos',
-    titulo: 'Escolha pelo que você quer resolver',
-    intro: 'Os tratamentos estão agrupados pelo seu objetivo. A indicação final sai da avaliação.',
+    titulo: 'Tratamentos que fazemos',
   },
   resultados: {
     eyebrow: 'Resultados',

@@ -10,7 +10,7 @@
  * leitor de tela, sem elementos focáveis dentro), nunca visibility/display.
  */
 import { gsap } from './index';
-import { MACA } from './maca-config';
+import { MACA, type EstadoMaca } from './maca-config';
 import { EASE } from './tokens';
 import type { Maca3D } from './maca3d';
 
@@ -27,7 +27,7 @@ export function criarTratamentos(raiz: ParentNode = document): (() => void) | un
 
   bloco.classList.add('trat--animado');
   const pose0 = MACA.poses[0] ?? { ry: 0, x: 0 };
-  const estado = { ...pose0 };
+  const estado: EstadoMaca = { ...pose0, y: 0 };
   gsap.set(categorias.slice(1), { opacity: 0, y: DESLOCAMENTO });
 
   const tl = gsap.timeline({
@@ -52,16 +52,21 @@ export function criarTratamentos(raiz: ParentNode = document): (() => void) | un
   tl.addLabel('categoria-1');
   categorias.forEach((categoria, i) => {
     if (i === 0) return;
-    const anterior = categorias[i - 1];
+    const anterior = categorias[i - 1]!;
     const pose = MACA.poses[i] ?? pose0;
-    tl.to({}, { duration: 0.3 }) // repouso na categoria atual
-      .to(anterior!, { opacity: 0, y: -DESLOCAMENTO, duration: 0.45 })
-      .to(estado, { ry: pose.ry, x: pose.x, duration: 1 }, '<')
+    tl.to({}, { duration: 0.3 }); // repouso na categoria atual
+    // Posições absolutas (t): rótulos extras virariam pontos de snap.
+    const t = tl.duration();
+    tl.to(anterior, { opacity: 0, y: -DESLOCAMENTO, duration: 0.45 }, t)
+      .to(estado, { ry: pose.ry, x: pose.x, duration: 1 }, t)
+      // Sobe um pouco no meio da troca e assenta: dá peso ao movimento.
+      .to(estado, { y: MACA.elevacao, duration: 0.5, ease: 'sine.out' }, t)
+      .to(estado, { y: 0, duration: 0.5, ease: 'sine.in' }, t + 0.5)
       .fromTo(
         categoria,
         { opacity: 0, y: DESLOCAMENTO },
         { opacity: 1, y: 0, duration: 0.45 },
-        '<0.55',
+        t + 0.55,
       )
       .addLabel(`categoria-${i + 1}`);
   });

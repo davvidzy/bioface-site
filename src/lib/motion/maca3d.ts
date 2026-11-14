@@ -5,6 +5,7 @@
  * Leveza:
  * - renderiza só enquanto o palco está visível (IntersectionObserver)
  * - pixel ratio limitado a 1,5; sem sombras; luz por ambiente (RoomEnvironment)
+ * - reage ao mouse (inclinação suave), só com ponteiro fino
  * - a pose vem de fora (`estado`), animada pelo timeline do ScrollTrigger
  */
 import {
@@ -24,13 +25,13 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { gsap } from './index';
-import { MACA, type PoseMaca } from './maca-config';
+import { MACA, type EstadoMaca } from './maca-config';
 
 export interface Maca3D {
   destruir(): void;
 }
 
-export async function criarMaca3D(palco: HTMLElement, estado: PoseMaca): Promise<Maca3D> {
+export async function criarMaca3D(palco: HTMLElement, estado: EstadoMaca): Promise<Maca3D> {
   const renderer = new WebGLRenderer({
     antialias: true,
     alpha: true,
@@ -86,12 +87,26 @@ export async function criarMaca3D(palco: HTMLElement, estado: PoseMaca): Promise
   });
   io.observe(palco);
 
+  // Reação ao mouse: só com ponteiro fino (mouse/trackpad), sem efeito em toque.
+  const alvoMouse = { x: 0, y: 0 };
+  const mouse = { x: 0, y: 0 };
+  const ponteiroFino = window.matchMedia('(pointer: fine)').matches;
+  const aoMover = (e: PointerEvent) => {
+    alvoMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    alvoMouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+  };
+  if (ponteiroFino) window.addEventListener('pointermove', aoMover, { passive: true });
+
   const { rotacao, altura, velocidade } = MACA.respiro;
+  const { giro, inclinacao, suavizacao } = MACA.mouse;
   const quadro = (tempo: number) => {
     if (!visivel) return;
-    pivo.rotation.y = estado.ry + Math.sin(tempo * velocidade) * rotacao;
+    mouse.x += (alvoMouse.x - mouse.x) * suavizacao;
+    mouse.y += (alvoMouse.y - mouse.y) * suavizacao;
+    pivo.rotation.y = estado.ry + Math.sin(tempo * velocidade) * rotacao + mouse.x * giro;
+    pivo.rotation.x = mouse.y * inclinacao;
     pivo.position.x = estado.x;
-    pivo.position.y = Math.sin(tempo * velocidade * 1.3) * altura;
+    pivo.position.y = estado.y + Math.sin(tempo * velocidade * 1.3) * altura;
     renderer.render(cena, camera);
   };
   gsap.ticker.add(quadro);
@@ -99,6 +114,7 @@ export async function criarMaca3D(palco: HTMLElement, estado: PoseMaca): Promise
   return {
     destruir() {
       gsap.ticker.remove(quadro);
+      window.removeEventListener('pointermove', aoMover);
       ro.disconnect();
       io.disconnect();
       modelo.traverse((o) => {

@@ -11,19 +11,28 @@ export interface PoseMaca {
   x: number;
 }
 
+/** Estado animado pelo scroll: a pose atual mais a elevação durante as trocas. */
+export interface EstadoMaca extends PoseMaca {
+  y: number;
+}
+
 export const MACA = {
   modelo: '/models/maca.glb',
   /** Maior dimensão da maca, normalizada, em unidades de cena. */
-  tamanho: 2.3,
+  tamanho: 1.9,
   fov: 26,
   camera: [0, 1.4, 6.4] as const,
   alvo: [0, -0.1, 0] as const,
-  /** "Respiro" contínuo, bem sutil: amplitude e velocidade. */
-  respiro: { rotacao: 0.015, altura: 0.012, velocidade: 0.7 },
+  /** "Respiro" contínuo: amplitude e velocidade. */
+  respiro: { rotacao: 0.05, altura: 0.035, velocidade: 0.6 },
+  /** Quanto a maca sobe no meio de cada troca de categoria. */
+  elevacao: 0.12,
+  /** Reação ao mouse (só em ponteiro fino): inclinação máxima e suavização por quadro. */
+  mouse: { giro: 0.14, inclinacao: 0.06, suavizacao: 0.06 },
   poses: [
-    // Sempre do mesmo lado da maca, girando aos poucos até o perfil (movimento sutil).
-    { ry: -0.6, x: 0.55 },
-    { ry: -1.0, x: -0.6 },
-    { ry: -1.35, x: 0.45 },
+    // Sempre do mesmo lado da maca, girando até o perfil: ~0,6 rad por troca.
+    { ry: -0.2, x: 0.5 },
+    { ry: -0.85, x: -0.5 },
+    { ry: -1.45, x: 0.45 },
   ] satisfies PoseMaca[],
 };

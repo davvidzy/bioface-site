@@ -2,41 +2,52 @@
 /**
  * Home, seção 5. Job: mostrar amplitude sem sobrecarregar.
  *
- * Layout base (celular, reduced motion, sem JS): imagem estática da maca e as
+ * Fundo: foto desfocada de clínica sob um véu creme (só atmosfera, o conteúdo em destaque).
+ *
+ * Layout base (celular, reduced motion, sem JS): título, imagem estática da maca e as
  * categorias empilhadas, tudo legível.
- * Desktop com movimento (lib/motion/tratamentos.ts adiciona .trat--animado):
- * a seção fixa na tela, uma categoria por vez alternando os lados, e a maca 3D
- * gira e desliza de leve a cada troca.
+ * Desktop com movimento (lib/motion/tratamentos.ts adiciona .trat--animado): a seção
+ * inteira fixa na tela (título, maca e categorias juntos), uma categoria por vez
+ * alternando os lados, e a maca 3D gira e desliza a cada troca.
  */
 import { Picture } from 'astro:assets';
-import Section from '@/components/ui/Section.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
 import poster from '@/assets/3d/maca.png';
+import fundo from '@/assets/espaco/fundo-tratamentos.jpg';
 import type { Categoria } from '@/data/categorias';
 import type { Procedimento } from '@/lib/conteudo';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
-  intro: string;
   grupos: { categoria: Categoria; procedimentos: Procedimento[] }[];
 }
 
-const { eyebrow, titulo, intro, grupos } = Astro.props;
+const { titulo, grupos } = Astro.props;
 const total = String(grupos.length).padStart(2, '0');
 ---
 
-<Section labelledby="tratamentos-titulo" id="tratamentos">
-  <SectionHeader id="tratamentos-titulo" eyebrow={eyebrow} titulo={titulo} intro={intro} />
+<section id="tratamentos" class="trat" aria-labelledby="tratamentos-titulo" data-tratamentos>
+  <Picture
+    src={fundo}
+    alt=""
+    class="trat__fundo"
+    widths={[960, 1500]}
+    sizes="100vw"
+    formats={['avif', 'webp']}
+    loading="lazy"
+  />
 
-  <div class="trat" data-tratamentos>
+  <div class="container trat__conteudo">
+    <h2 id="tratamentos-titulo" class="t-h2 trat__titulo">
+      {titulo}
+    </h2>
+
     <div class="trat__palco" data-trat-palco>
       <Picture
         src={poster}
         alt=""
         class="trat__poster"
         widths={[480, 800, 1200]}
-        sizes="(min-width: 48rem) 40rem, 100vw"
+        sizes="(min-width: 48rem) 36rem, 100vw"
         formats={['avif', 'webp']}
         loading="lazy"
       />
@@ -59,19 +70,50 @@ const total = String(grupos.length).padStart(2, '0');
       ))}
     </ol>
   </div>
-</Section>
+</section>
 
 <style>
-  /* ---------- Layout base: estático ---------- */
+  /* ---------- Fundo ---------- */
   .trat {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--space-section);
+    background-color: var(--color-bg-default);
+  }
+
+  .trat__fundo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Véu creme: a foto vira só ambiente; texto vinho mantém contraste AAA. */
+  .trat::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--color-bg-default) 88%, transparent);
+  }
+
+  /* ---------- Layout base: estático ---------- */
+  .trat__conteudo {
     display: grid;
     gap: var(--space-7);
+  }
+
+  .trat__titulo {
+    text-align: center;
   }
 
   .trat__palco {
     position: relative;
     width: 100%;
-    max-width: 40rem;
+    max-width: 36rem;
     margin-inline: auto;
   }
 
@@ -99,17 +141,34 @@ const total = String(grupos.length).padStart(2, '0');
     gap: var(--space-2);
   }
 
-  /* ---------- Desktop animado (classe aplicada pelo JS) ---------- */
+  /* ---------- Desktop animado (classe aplicada pelo JS) ----------
+   * A seção inteira fica fixa: título no alto, maca e categorias na área abaixo dele.
+   */
   .trat.trat--animado {
-    position: relative;
-    display: block;
+    --area-titulo: clamp(7rem, 22vh, 11rem);
     height: 100vh;
     height: 100svh;
+    padding-block: 0;
+  }
+
+  .trat--animado .trat__conteudo {
+    position: relative;
+    display: block;
+    height: 100%;
+  }
+
+  .trat--animado .trat__titulo {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    height: var(--area-titulo);
+    display: grid;
+    align-content: end;
   }
 
   .trat--animado .trat__palco {
     position: absolute;
-    inset: 0;
+    inset: var(--area-titulo) 0 0;
     max-width: none;
   }
 
@@ -133,7 +192,7 @@ const total = String(grupos.length).padStart(2, '0');
 
   .trat--animado .trat__categorias {
     position: absolute;
-    inset: 0;
+    inset: var(--area-titulo) 0 0;
     display: block;
     pointer-events: none;
   }

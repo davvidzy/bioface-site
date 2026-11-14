@@ -107,7 +107,7 @@ Total: 121 marcadores.
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
 - [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:42](src/data/textos.ts#L42)
-- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:75](src/data/textos.ts#L75)
+- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:73](src/data/textos.ts#L73)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)
@@ -136,7 +136,7 @@ Total: 121 marcadores.
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
 - [ ] promessa central do h1. [src/data/textos.ts:27](src/data/textos.ts#L27)
 - [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:32](src/data/textos.ts#L32)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:56](src/data/textos.ts#L56)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:54](src/data/textos.ts#L54)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)
