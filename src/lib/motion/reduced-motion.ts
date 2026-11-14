@@ -7,10 +7,14 @@
 export const MQ_REDUCE = '(prefers-reduced-motion: reduce)';
 export const MQ_NO_PREFERENCE = '(prefers-reduced-motion: no-preference)';
 
+/** Desktop: onde a linha do tempo do Método vira rolagem horizontal fixa na tela. */
+export const MQ_DESKTOP = '(min-width: 64rem)';
+
 /** Condições para gsap.matchMedia(). */
 export const MOTION_CONDITIONS = {
   reduce: MQ_REDUCE,
   full: MQ_NO_PREFERENCE,
+  desktop: MQ_DESKTOP,
 } as const;
 
 export function prefersReducedMotion(): boolean {

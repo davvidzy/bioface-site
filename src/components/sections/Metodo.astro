@@ -1,25 +1,37 @@
 ---
 /**
  * Home. Job: diferenciar pelo método e reduzir a ansiedade de quem nunca fez.
- * Junta a antiga "Filosofia" e o "Como funciona": uma frase sobre como a Maria trabalha
- * e os três passos ligados por um fio, com numerais grandes em serifa.
- * Tema escuro (vinho): começo do "entardecer" da página.
+ * "Como trabalhamos": linha do tempo com as 3 etapas do atendimento.
+ *
+ * Desktop com movimento (html[data-js], ≥ 64rem, sem reduced motion): a seção fica presa na
+ * tela (position: sticky dentro de uma seção alta) e o trilho desliza na horizontal com o
+ * scroll; a linha central se desenha e cada etapa acende ao chegar (lib/motion/linha-do-tempo.ts).
+ * Celular, sem JS ou reduced motion: tudo em coluna, legível, sem nada escondido.
+ * Recriado a partir da referência Timeline (Hyperiux Vault), adaptado ao projeto (Astro, CSS e GSAP).
+ *
+ * TODO(conteudo): foto do atendimento (à esquerda do trilho); por enquanto, placeholder.
  */
-import Section from '@/components/ui/Section.astro';
-import SectionHeader from '@/components/ui/SectionHeader.astro';
-import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 
 interface Props {
   titulo: string;
-  intro: string;
+  etapas: string;
   passos: { titulo: string; texto: string }[];
 }
 
-const { titulo, intro, passos } = Astro.props;
+const { titulo, etapas, passos } = Astro.props;
+// Etapas alternam acima e abaixo da linha, como na referência.
+const lados = ['cima', 'baixo', 'cima'] as const;
+const posicoes = ['24%', '50%', '76%'];
 ---
 
-<Section labelledby="metodo-titulo" id="metodo" tema="escuro" class="metodo com-marca-dagua">
+<section
+  id="metodo"
+  class="metodo com-marca-dagua"
+  data-theme="escuro"
+  aria-labelledby="metodo-titulo"
+  data-linha-do-tempo
+>
   <MarcaDagua
     lado="direita"
     topo="8%"
@@ -28,105 +40,308 @@ const { titulo, intro, passos } = Astro.props;
     opacidade={0.08}
     giro={6}
   />
-  <div class="metodo__cabeca">
-    <SectionHeader id="metodo-titulo" titulo={titulo} estilo="t-display-l" />
-    <p class="metodo__intro" data-reveal="fade">
-      {intro}
-    </p>
-    <p class="rascunho">Rascunho para aprovação</p>
+  <div class="metodo__palco">
+    <div class="metodo__trilho" data-ldt-trilho>
+      <div class="placeholder-media metodo__foto" aria-hidden="true">
+        <span>Foto · atendimento</span>
+      </div>
+
+      <div class="metodo__tempo">
+        <div class="metodo__eixo" aria-hidden="true">
+          <span class="metodo__ponta"></span>
+          <span class="metodo__linha" data-ldt-linha></span>
+          <span class="metodo__ponta"></span>
+        </div>
+
+        <h2 id="metodo-titulo" class="metodo__titulo">
+          {titulo}
+        </h2>
+        <p class="metodo__etapas">{etapas}</p>
+
+        <ol class="list-reset metodo__lista" role="list">
+          {passos.map((passo, i) => (
+            <li
+              class:list={['etapa', `etapa--${lados[i % lados.length]}`]}
+              style={`--pos: ${posicoes[i] ?? '50%'}`}
+              data-ldt-etapa
+              data-lado={lados[i % lados.length]}
+            >
+              <span class="etapa__fio" aria-hidden="true" data-ldt-fio></span>
+              <span class="etapa__ponto" aria-hidden="true" data-ldt-ponto></span>
+              <div class="etapa__texto">
+                <h3 class="etapa__titulo">
+                  <span class="etapa__mascara" data-ldt-texto>
+                    <span class="etapa__numero">{String(i + 1).padStart(2, '0')}</span>
+                    {passo.titulo}
+                  </span>
+                </h3>
+                <p class="etapa__descricao">
+                  <span class="etapa__mascara" data-ldt-texto>
+                    {passo.texto}
+                  </span>
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
   </div>
-  <ol class="list-reset passos" role="list" data-reveal="stagger">
-    {passos.map((passo, i) => (
-      <li class="passo">
-        <span class="passo__numero" aria-hidden="true">
-          {String(i + 1).padStart(2, '0')}
-        </span>
-        <h3 class="t-h3">{passo.titulo}</h3>
-        <p class="passo__texto">{passo.texto}</p>
-      </li>
-    ))}
-  </ol>
-  <div class="cta">
-    <WhatsAppLink origem="como-funciona" />
-  </div>
-</Section>
+</section>
 
 <style>
-  .metodo__cabeca {
+  /* ---------- Base: coluna (celular, sem JS, reduced motion) ---------- */
+  .metodo {
+    padding-block: var(--space-section);
+  }
+
+  .metodo__trilho {
     display: grid;
-    gap: var(--space-4);
-    margin-block-end: var(--space-9);
+    gap: var(--space-8);
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
   }
 
-  .metodo__cabeca :global(.section-header) {
-    margin-block-end: 0;
+  .metodo__foto {
+    --ratio: 3 / 2;
   }
 
-  .metodo__intro {
-    max-width: 38rem;
+  .metodo__tempo {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .metodo__eixo {
+    display: none;
+  }
+
+  .metodo__titulo {
     font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-display-l);
+    line-height: 1.04;
+  }
+
+  .metodo__etapas {
+    font-size: var(--text-body-m);
+    color: var(--color-text-secondary);
+    margin-block-end: var(--space-6);
+  }
+
+  .metodo__lista {
+    display: grid;
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 40%, transparent);
+  }
+
+  .etapa {
+    position: relative;
+    padding-block: var(--space-6);
+    padding-inline-start: var(--space-6);
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 40%, transparent);
+  }
+
+  .etapa__fio {
+    display: none;
+  }
+
+  .etapa__ponto {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: calc(var(--space-6) + 0.75rem);
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background-color: var(--color-text-accent);
+  }
+
+  .etapa__texto {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .etapa__titulo {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
     font-size: var(--text-h3);
     line-height: var(--leading-h3);
-    color: var(--color-text-secondary);
   }
 
-  .passo__texto {
+  .etapa__numero {
+    margin-inline-end: var(--space-3);
+    font-family: var(--font-body);
+    font-size: var(--text-body-s);
+    letter-spacing: 0.08em;
+    color: var(--color-text-accent);
+    vertical-align: middle;
+  }
+
+  /* Máscara: o texto sobe de dentro do próprio bloco (movimento no desktop). */
+  .etapa__titulo,
+  .etapa__descricao {
+    overflow: hidden;
+  }
+
+  .etapa__mascara {
+    display: block;
+  }
+
+  .etapa__descricao {
+    max-width: 30rem;
     font-size: var(--text-body-m);
     color: var(--color-text-secondary);
   }
 
-  .passos {
-    position: relative;
-    display: grid;
-    gap: var(--space-7);
-  }
-
-  .passo {
-    position: relative;
-    display: grid;
-    gap: var(--space-3);
-    align-content: start;
-  }
-
-  .passo__numero {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: var(--text-display-l);
-    line-height: 1;
-    color: var(--color-text-accent);
-  }
-
-  /* Fio que liga os passos (horizontal no desktop). */
-  @media (min-width: 56rem) {
-    .passos {
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-8);
+  /* ---------- Desktop com movimento: linha do tempo horizontal ---------- */
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    :global(html[data-js]) .metodo {
+      height: 300vh;
+      padding-block: 0;
     }
 
-    .passos::before {
-      content: '';
+    :global(html[data-js]) .metodo__palco {
+      position: sticky;
+      inset-block-start: 0;
+      display: flex;
+      align-items: center;
+      height: 100vh;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    :global(html[data-js]) .metodo__trilho {
+      display: flex;
+      align-items: center;
+      gap: 5vw;
+      width: max-content;
+      max-width: none;
+      height: min(32vw, 68vh);
+      margin: 0;
+      /* Sobra no fim: a última etapa chega ao meio da tela antes de a seção soltar. */
+      padding-inline: 5vw 30vw;
+      will-change: transform;
+    }
+
+    :global(html[data-js]) .metodo__foto {
+      height: 100%;
+      aspect-ratio: 1 / 1;
+    }
+
+    :global(html[data-js]) .metodo__tempo {
+      position: relative;
+      display: block;
+      width: 130vw;
+      height: 100%;
+    }
+
+    /* Linha central: ponto, fio que se desenha, ponto. */
+    :global(html[data-js]) .metodo__eixo {
       position: absolute;
       inset-inline: 0;
-      inset-block-start: calc(var(--text-display-l) / 2);
+      inset-block-start: 50%;
+      display: flex;
+      align-items: center;
+      translate: 0 -50%;
+    }
+
+    .metodo__ponta {
+      flex: none;
+      width: 0.7vw;
+      height: 0.7vw;
+      border-radius: 50%;
+      background-color: var(--color-text-accent);
+    }
+
+    .metodo__linha {
+      flex: 1;
       height: 1px;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        var(--color-accent-decorative) 15%,
-        var(--color-accent-decorative) 85%,
-        transparent
-      );
+      background-color: var(--color-text-accent);
     }
 
-    .passo__numero {
-      justify-self: start;
-      padding-inline-end: var(--space-4);
-      background-color: var(--color-bg-default);
-      position: relative;
+    :global(html[data-js]) .metodo__titulo {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      max-width: 22vw;
+      font-size: clamp(2.5rem, 3.2vw, 4rem);
+      line-height: 0.98;
+      overflow-wrap: normal;
     }
-  }
 
-  .cta {
-    margin-block-start: var(--space-8);
+    :global(html[data-js]) .metodo__etapas {
+      position: absolute;
+      inset-block-start: calc(50% + 2vw);
+      inset-inline-start: 0;
+      margin: 0;
+      font-size: clamp(1rem, 1.3vw, 1.375rem);
+    }
+
+    :global(html[data-js]) .metodo__lista {
+      position: absolute;
+      inset: 0;
+      display: block;
+      border: 0;
+    }
+
+    :global(html[data-js]) .etapa {
+      position: absolute;
+      inset-inline-start: var(--pos);
+      width: 24vw;
+      padding: 0 0 0 2.4vw;
+      border: 0;
+    }
+
+    :global(html[data-js]) .etapa--cima {
+      inset-block: 0 50%;
+    }
+
+    :global(html[data-js]) .etapa--baixo {
+      inset-block: 50% 0;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    /* Fio vertical entre a linha central e o ponto da etapa. */
+    :global(html[data-js]) .etapa__fio {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      display: block;
+      width: 1px;
+      background-color: var(--color-text-accent);
+    }
+
+    :global(html[data-js]) .etapa__ponto {
+      width: 0.9vw;
+      height: 0.9vw;
+      translate: -50% -50%;
+    }
+
+    :global(html[data-js]) .etapa--cima .etapa__ponto {
+      inset-block-start: 0;
+    }
+
+    :global(html[data-js]) .etapa--baixo .etapa__ponto {
+      inset-block: auto 0;
+      translate: -50% 50%;
+    }
+
+    :global(html[data-js]) .etapa--cima .etapa__texto {
+      margin-block-start: -0.6vw;
+    }
+
+    :global(html[data-js]) .etapa__titulo {
+      font-size: clamp(1.75rem, 2.3vw, 2.75rem);
+      line-height: 1.05;
+    }
+
+    :global(html[data-js]) .etapa__descricao {
+      width: 90%;
+      font-size: clamp(1rem, 1.25vw, 1.375rem);
+      line-height: 1.35;
+    }
   }
 </style>

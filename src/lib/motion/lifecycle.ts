@@ -17,6 +17,7 @@ import {
   getLenis,
 } from './index';
 import { criarReveals } from './reveal';
+import { criarLinhaDoTempo } from './linha-do-tempo';
 import { MOTION_CONDITIONS, MQ_REDUCE } from './reduced-motion';
 
 let mm: gsap.MatchMedia | null = null;
@@ -47,10 +48,12 @@ function montarPagina(): void {
   mm?.revert();
   mm = gsap.matchMedia();
   mm.add(MOTION_CONDITIONS, (ctx) => {
-    const { full } = ctx.conditions as { full: boolean };
+    const { full, desktop } = ctx.conditions as { full: boolean; desktop: boolean };
     if (full) {
       iniciarLenis();
       criarReveals(document, { ignorarVisiveis: primeiraMontagem });
+      // Linha do tempo horizontal do Método: só no desktop (no celular, lista vertical).
+      if (desktop) criarLinhaDoTempo(document);
     } else {
       // Reduced motion: sem Lenis, sem reveals. Conteúdo já está visível.
       destruirLenis();

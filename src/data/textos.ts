@@ -52,10 +52,9 @@ export const home = {
     titulo: 'Antes e depois',
   },
   metodo: {
-    titulo: 'Como a Maria trabalha',
-    // TODO(validar-cliente): rascunho para aprovação.
-    intro:
-      'Antes de qualquer procedimento, uma conversa. A Maria olha o seu rosto inteiro, entende o que incomoda você e indica só o que faz sentido para o seu caso.',
+    titulo: 'Como trabalhamos',
+    /** Legenda sob o título, abaixo da linha do tempo. */
+    etapas: '1–3 etapas',
     // TODO(validar-cliente): confirmar o fluxo de atendimento.
     passos: [
       {
