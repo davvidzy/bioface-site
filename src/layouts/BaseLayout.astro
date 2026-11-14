@@ -111,8 +111,9 @@ const robots = noindex || !INDEXAR;
       // Suspenso, a barra passa para o tema escuro (vinho); no topo, fica no tema claro.
       // Sobre uma seção escura, inverte de novo para o claro (contraste com o vinho atrás).
       const sobreSecaoEscura = (barra: HTMLElement): boolean => {
-        const r = barra.getBoundingClientRect();
-        const y = r.top + r.height / 2;
+        // Posição de repouso da barra (offsetTop ignora o translate): mesmo escondida acima
+        // da tela, a checagem olha onde ela vai reaparecer, e o tema já volta certo.
+        const y = barra.offsetTop + barra.offsetHeight / 2;
         const atras = document
           .elementsFromPoint(window.innerWidth / 2, y)
           .find((el) => !barra.contains(el) && !el.closest('[data-header]'));
