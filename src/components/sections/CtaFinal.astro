@@ -1,11 +1,15 @@
 ---
 /**
- * CTA final de cada página. Job: última chance de conversão, sem atrito.
+ * CTA final. Job: última chance de conversão, sem atrito.
+ * Um cartão arredondado em vinho dentro da página clara (não é faixa de seção),
+ * com o monograma da marca como detalhe. Localização logo abaixo, no fundo claro.
  * Marcado com data-cta-principal: o botão flutuante some quando ele está na tela.
  */
 import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
+import Monograma from '@/assets/brand/monograma-mono.svg';
 import Localizacao from './Localizacao.astro';
+import { enfase } from '@/lib/texto';
 import type { OrigemWhatsApp } from '@/lib/whatsapp';
 
 interface Props {
@@ -19,13 +23,14 @@ interface Props {
 const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.props;
 ---
 
-<Section labelledby="cta-final-titulo" id="contato" tema="escuro" data-cta-principal>
-  <div class="cta">
-    <h2 id="cta-final-titulo" class="t-h2" data-reveal="fade">
-      {titulo}
-    </h2>
-    {texto && <p class="t-body-l text-secondary">{texto}</p>}
-    <WhatsAppLink origem={origem} procedimento={procedimento} />
+<Section labelledby="cta-final-titulo" id="contato" data-cta-principal>
+  <div class="cta" data-theme="escuro">
+    <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
+    <div class="cta__conteudo">
+      <h2 id="cta-final-titulo" class="t-display-l" data-reveal="fade" set:html={enfase(titulo)} />
+      {texto && <p class="t-body-l text-secondary">{texto}</p>}
+      <WhatsAppLink origem={origem} procedimento={procedimento} />
+    </div>
   </div>
   {comLocalizacao && (
     <div class="cta__localizacao">
@@ -36,15 +41,32 @@ const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.pr
 
 <style>
   .cta {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: calc(var(--radius-l) * 1.6);
+    padding: clamp(var(--space-7), 6vw, var(--space-10)) clamp(var(--space-5), 6vw, var(--space-9));
+  }
+
+  .cta__monograma {
+    position: absolute;
+    inset-block-end: -12%;
+    inset-inline-end: -4%;
+    z-index: -1;
+    width: clamp(12rem, 34vw, 26rem);
+    height: auto;
+    color: var(--color-accent-decorative);
+    opacity: 0.18;
+  }
+
+  .cta__conteudo {
     display: grid;
     gap: var(--space-5);
     justify-items: start;
-    max-width: var(--measure);
+    max-width: 36rem;
   }
 
   .cta__localizacao {
     margin-block-start: var(--space-8);
-    padding-block-start: var(--space-6);
-    border-block-start: var(--border-width) solid var(--color-border-default);
   }
 </style>

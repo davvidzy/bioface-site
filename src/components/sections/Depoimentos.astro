@@ -1,6 +1,6 @@
 ---
 /**
- * Home, seção 9. Job: prova social de terceiros.
+ * Home. Job: prova social de terceiros.
  * Sem depoimento real, a seção não existe em produção. Em dev, aparece como placeholder.
  */
 import Section from '@/components/ui/Section.astro';
@@ -9,18 +9,17 @@ import Pendente from '@/components/ui/Pendente.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
   depoimentos: CollectionEntry<'depoimentos'>[];
 }
 
-const { eyebrow, titulo, depoimentos } = Astro.props;
+const { titulo, depoimentos } = Astro.props;
 const origemRotulo = { google: 'Google', instagram: 'Instagram' } as const;
 ---
 
 {depoimentos.length > 0 && (
   <Section labelledby="depoimentos-titulo">
-    <SectionHeader id="depoimentos-titulo" eyebrow={eyebrow} titulo={titulo} />
+    <SectionHeader id="depoimentos-titulo" titulo={titulo} estilo="t-display-l" />
     <ul class="list-reset grid" role="list">
       {depoimentos.map((d) =>
         d.data.pendente ? (

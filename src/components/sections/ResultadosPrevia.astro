@@ -1,23 +1,22 @@
 ---
-/** Home, seção 6. Job: prova visual. Mostra todos os pares com consentimento. */
+/** Home. Job: prova visual. Mostra todos os pares com consentimento. */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import ResultadosGrade from './ResultadosGrade.astro';
 import type { Resultado } from '@/lib/conteudo';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
   aviso: string;
   itens: { resultado: Resultado; procedimento?: string | undefined }[];
 }
 
-const { eyebrow, titulo, aviso, itens } = Astro.props;
+const { titulo, aviso, itens } = Astro.props;
 ---
 
 {itens.length > 0 && (
-  <Section labelledby="resultados-titulo" id="resultados" tema="escuro">
-    <SectionHeader id="resultados-titulo" eyebrow={eyebrow} titulo={titulo} />
+  <Section labelledby="resultados-titulo" id="resultados">
+    <SectionHeader id="resultados-titulo" titulo={titulo} estilo="t-display-l" />
     <ResultadosGrade itens={itens} aviso={aviso} />
   </Section>
 )}

@@ -32,25 +32,21 @@ export const home = {
     // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
   },
-  credenciais: {
-    titulo: 'Credenciais',
-  },
   filosofia: {
-    eyebrow: 'Filosofia',
-    titulo: 'O que natural significa aqui',
+    titulo: 'O que *natural* significa aqui',
     texto:
       'TODO(conteudo): em 2 ou 3 frases, como a Maria define um resultado natural no método dela.',
+    // TODO(conteudo): 3 fotos verticais (3:4) para a filosofia: detalhe de procedimento, mãos, espaço.
+    imagens: 3,
   },
   tratamentos: {
-    titulo: 'Tratamentos que fazemos',
+    titulo: 'Tratamentos que *fazemos*',
   },
   resultados: {
-    eyebrow: 'Resultados',
-    titulo: 'Antes e depois',
+    titulo: 'Antes e *depois*',
   },
   comoFunciona: {
-    eyebrow: 'Como funciona',
-    titulo: 'Do primeiro contato ao seu plano',
+    titulo: 'Do primeiro contato ao *seu plano*',
     // TODO(validar-cliente): confirmar o fluxo de atendimento.
     passos: [
       {
@@ -68,25 +64,22 @@ export const home = {
     ],
   },
   sobre: {
-    eyebrow: 'Quem cuida de você',
-    titulo: site.responsavel.nome,
+    titulo: `${site.responsavel.nome.split(' ')[0]} *${site.responsavel.nome.split(' ').slice(1).join(' ')}*`,
+    subtitulo: `${site.responsavel.titulo}, ${site.anosAtuacao} anos de atuação`,
     texto: 'TODO(conteudo): trajetória resumida da Maria em 2 ou 3 frases.',
   },
   depoimentos: {
-    eyebrow: 'Depoimentos',
-    titulo: 'O que dizem as pacientes',
+    titulo: 'O que dizem as *pacientes*',
   },
   espaco: {
-    eyebrow: 'O espaço',
-    titulo: 'Um ambiente pensado para você',
+    titulo: 'Um ambiente pensado *para você*',
     fotos: 3,
   },
   faq: {
-    eyebrow: 'Dúvidas',
-    titulo: 'Perguntas frequentes',
+    titulo: 'Perguntas *frequentes*',
   },
   ctaFinal: {
-    titulo: 'Agende sua avaliação',
+    titulo: 'Agende sua *avaliação*',
     texto: 'A avaliação é o primeiro passo para um plano feito para você.',
   },
 };

@@ -14,6 +14,7 @@ import { Picture } from 'astro:assets';
 import poster from '@/assets/3d/maca.png';
 import fundo from '@/assets/espaco/fundo-tratamentos.jpg';
 import type { Categoria } from '@/data/categorias';
+import { enfase } from '@/lib/texto';
 import type { Procedimento } from '@/lib/conteudo';
 
 interface Props {
@@ -22,7 +23,6 @@ interface Props {
 }
 
 const { titulo, grupos } = Astro.props;
-const total = String(grupos.length).padStart(2, '0');
 ---
 
 <section id="tratamentos" class="trat" aria-labelledby="tratamentos-titulo" data-tratamentos>
@@ -37,9 +37,7 @@ const total = String(grupos.length).padStart(2, '0');
   />
 
   <div class="container trat__conteudo">
-    <h2 id="tratamentos-titulo" class="t-h2 trat__titulo">
-      {titulo}
-    </h2>
+    <h2 id="tratamentos-titulo" class="t-display-l trat__titulo" set:html={enfase(titulo)} />
 
     <div class="trat__palco" data-trat-palco>
       <Picture
@@ -54,11 +52,8 @@ const total = String(grupos.length).padStart(2, '0');
     </div>
 
     <ol class="trat__categorias list-reset" role="list">
-      {grupos.map(({ categoria, procedimentos }, i) => (
+      {grupos.map(({ categoria, procedimentos }) => (
         <li class="trat__cat" data-trat-cat>
-          <p class="t-eyebrow eyebrow" aria-hidden="true">
-            {String(i + 1).padStart(2, '0')} / {total}
-          </p>
           <h3 class="t-h3">{categoria.rotulo}</h3>
           <p class="text-secondary">{categoria.descricao}</p>
           <ul class="list-reset trat__lista" role="list">
@@ -97,7 +92,16 @@ const total = String(grupos.length).padStart(2, '0');
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: color-mix(in srgb, var(--color-bg-default) 88%, transparent);
+    /* Topo e base se dissolvem no fundo da página: sem corte de seção. */
+    background:
+      linear-gradient(
+        180deg,
+        var(--color-bg-default),
+        transparent 18%,
+        transparent 82%,
+        var(--color-bg-default)
+      ),
+      color-mix(in srgb, var(--color-bg-default) 88%, transparent);
   }
 
   /* ---------- Layout base: estático ---------- */

@@ -1,12 +1,14 @@
 ---
-/** Home, seção 11. Job: responder objeções antes do direct. */
+/**
+ * Home. Job: responder objeções antes do direct.
+ * Duas colunas no desktop: título fixo à esquerda enquanto as perguntas rolam.
+ */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Accordion from '@/components/ui/Accordion.astro';
 import Pendente from '@/components/ui/Pendente.astro';
 
 interface Props {
-  eyebrow?: string;
   titulo: string;
   itens: { pergunta: string; resposta: string }[];
   id?: string;
@@ -16,18 +18,34 @@ interface Props {
   pendente?: string;
 }
 
-const { eyebrow, titulo, itens, id = 'faq-titulo', ancora, pendente } = Astro.props;
+const { titulo, itens, id = 'faq-titulo', ancora, pendente } = Astro.props;
 ---
 
 <Section labelledby={id} id={ancora}>
   <div class="faq">
-    <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+    <div class="faq__titulo">
+      <SectionHeader id={id} titulo={titulo} estilo="t-display-l" />
+    </div>
     {itens.length > 0 ? <Accordion itens={itens} /> : <Pendente texto={pendente ?? ''} />}
   </div>
 </Section>
 
 <style>
   .faq {
-    max-width: 48rem;
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 56rem) {
+    .faq {
+      grid-template-columns: 2fr 3fr;
+      gap: var(--space-9);
+      align-items: start;
+    }
+
+    .faq__titulo {
+      position: sticky;
+      inset-block-start: var(--space-10);
+    }
   }
 </style>

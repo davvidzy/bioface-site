@@ -1,27 +1,51 @@
 ---
-/** Home, seção 10. Job: ambiente premium como parte do serviço. */
+/** Home. Job: ambiente premium como parte do serviço. Composição assimétrica. */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 
 interface Props {
-  eyebrow?: string;
   titulo: string;
   /** Quantas fotos o layout prevê. Enquanto não houver fotos, viram placeholders. */
   fotos: number;
   id?: string;
 }
 
-const { eyebrow, titulo, fotos, id = 'espaco-titulo' } = Astro.props;
+const { titulo, fotos, id = 'espaco-titulo' } = Astro.props;
 ---
 
 <Section labelledby={id}>
-  <SectionHeader id={id} titulo={titulo} {...(eyebrow ? { eyebrow } : {})} />
+  <SectionHeader id={id} titulo={titulo} estilo="t-display-l" />
   {/* TODO(conteudo): fotos profissionais do espaço. */}
-  <ul class="list-reset grid" role="list" style="--grid-min: 14rem">
+  <ul class="list-reset espaco" role="list">
     {Array.from({ length: fotos }, (_, i) => (
-      <li class="placeholder-media" style="--ratio: 4 / 3">
-        <span>Foto do espaço {i + 1} (pendente)</span>
+      <li class="placeholder-media espaco__foto" data-reveal="fade">
+        <span>Foto do espaço {i + 1}</span>
       </li>
     ))}
   </ul>
 </Section>
+
+<style>
+  .espaco {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .espaco__foto {
+    --ratio: 4 / 3;
+  }
+
+  /* Uma foto grande e duas menores empilhadas: quebra a grade de três iguais. */
+  @media (min-width: 48rem) {
+    .espaco {
+      grid-template-columns: 3fr 2fr;
+      grid-template-rows: auto auto;
+    }
+
+    .espaco__foto:first-child {
+      grid-row: span 2;
+      --ratio: auto;
+      height: 100%;
+    }
+  }
+</style>

@@ -1,28 +1,30 @@
 ---
-/** Home, seção 7. Job: reduzir a ansiedade de quem nunca fez. */
+/**
+ * Home. Job: reduzir a ansiedade de quem nunca fez.
+ * Três passos ligados por um fio, com numerais grandes em serifa.
+ */
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
   passos: { titulo: string; texto: string }[];
 }
 
-const { eyebrow, titulo, passos } = Astro.props;
+const { titulo, passos } = Astro.props;
 ---
 
 <Section labelledby="como-funciona-titulo">
-  <SectionHeader id="como-funciona-titulo" eyebrow={eyebrow} titulo={titulo} />
+  <SectionHeader id="como-funciona-titulo" titulo={titulo} estilo="t-display-l" />
   <ol class="list-reset passos" role="list">
     {passos.map((passo, i) => (
       <li class="passo">
-        <span class="t-eyebrow eyebrow" aria-hidden="true">
+        <span class="passo__numero" aria-hidden="true">
           {String(i + 1).padStart(2, '0')}
         </span>
         <h3 class="t-h3">{passo.titulo}</h3>
-        <p>{passo.texto}</p>
+        <p class="text-secondary">{passo.texto}</p>
       </li>
     ))}
   </ol>
@@ -33,18 +35,57 @@ const { eyebrow, titulo, passos } = Astro.props;
 
 <style>
   .passos {
+    position: relative;
     display: grid;
-    gap: var(--space-6);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--space-7);
   }
 
   .passo {
+    position: relative;
     display: grid;
     gap: var(--space-3);
     align-content: start;
   }
 
+  .passo__numero {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-display-l);
+    line-height: 1;
+    color: var(--color-text-accent);
+  }
+
+  /* Fio que liga os passos (horizontal no desktop). */
+  @media (min-width: 56rem) {
+    .passos {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    .passos::before {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      inset-block-start: calc(var(--text-display-l) / 2);
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--color-accent-decorative) 15%,
+        var(--color-accent-decorative) 85%,
+        transparent
+      );
+    }
+
+    .passo__numero {
+      justify-self: start;
+      padding-inline-end: var(--space-4);
+      background-color: var(--color-bg-default);
+      position: relative;
+    }
+  }
+
   .cta {
-    margin-block-start: var(--space-7);
+    margin-block-start: var(--space-8);
   }
 </style>

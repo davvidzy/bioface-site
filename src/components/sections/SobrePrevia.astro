@@ -1,26 +1,40 @@
 ---
-/** Home, seção 8. Job: autoridade e vínculo humano. */
+/**
+ * Home. Job: autoridade e vínculo humano.
+ * Foto da Maria em destaque, com uma moldura fina deslocada (detalhe de marca).
+ */
+import { Picture } from 'astro:assets';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Texto from '@/components/ui/Texto.astro';
+import foto from '@/assets/pessoas/hero-mobile.jpg';
 
 interface Props {
-  eyebrow: string;
   titulo: string;
+  subtitulo: string;
   texto: string;
+  alt: string;
 }
 
-const { eyebrow, titulo, texto } = Astro.props;
+const { titulo, subtitulo, texto, alt } = Astro.props;
 ---
 
-<Section labelledby="sobre-titulo" id="sobre" sutil>
+<Section labelledby="sobre-titulo" id="sobre">
   <div class="sobre">
-    {/* TODO(conteudo): fotos profissionais da Maria (as do Instagram não têm qualidade para hero). */}
-    <div class="placeholder-media" style="--ratio: 3 / 4">
-      <span>Foto profissional da Maria (pendente)</span>
-    </div>
+    <figure class="sobre__foto">
+      <Picture
+        src={foto}
+        alt={alt}
+        widths={[400, 640, 900]}
+        sizes="(min-width: 56rem) 34vw, 90vw"
+        formats={['avif', 'webp']}
+        loading="lazy"
+        data-reveal="fade"
+      />
+    </figure>
     <div class="sobre__texto">
-      <SectionHeader id="sobre-titulo" eyebrow={eyebrow} titulo={titulo} />
+      <SectionHeader id="sobre-titulo" titulo={titulo} estilo="t-display-l" />
+      <p class="t-body-l text-secondary">{subtitulo}</p>
       <Texto texto={texto} class="t-body-l" />
     </div>
   </div>
@@ -29,18 +43,44 @@ const { eyebrow, titulo, texto } = Astro.props;
 <style>
   .sobre {
     display: grid;
-    gap: var(--space-7);
+    gap: var(--space-8);
     align-items: center;
+  }
+
+  .sobre__foto {
+    position: relative;
+    isolation: isolate;
+    max-width: 26rem;
+    width: 85%;
+  }
+
+  /* Moldura fina deslocada atrás da foto. */
+  .sobre__foto::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-5) calc(-1 * var(--space-5)) calc(-1 * var(--space-5)) var(--space-5);
+    border: 1px solid var(--color-accent-decorative);
+    border-radius: var(--radius-l);
+    z-index: -1;
+  }
+
+  .sobre__foto :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: 60% 20%;
+    border-radius: var(--radius-l);
   }
 
   .sobre__texto {
     display: grid;
     gap: var(--space-4);
+    max-width: 34rem;
   }
 
   @media (min-width: 56rem) {
     .sobre {
-      grid-template-columns: 2fr 3fr;
+      grid-template-columns: 5fr 6fr;
     }
   }
 </style>

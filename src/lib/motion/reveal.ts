@@ -4,6 +4,7 @@
  *
  *   data-reveal="fade"    fade + leve deslocamento (único reveal ativo na Fase 0)
  *   data-reveal="lines"   linhas com SplitText (acessível: aria do plugin)
+ *   data-reveal="linha"   fio que se desenha de cima para baixo (conectores)
  *   data-parallax="0.2"   deslocamento proporcional ao scroll
  *
  * Princípio: o CSS nunca esconde nada. O estado inicial oculto é aplicado aqui,
@@ -52,9 +53,21 @@ function parallax(el: HTMLElement): void {
   });
 }
 
+/** Fio que se desenha de cima para baixo (conectores entre seções). */
+function revealLinha(el: HTMLElement): void {
+  gsap.from(el, {
+    scaleY: 0,
+    transformOrigin: '50% 0%',
+    duration: DURATION.slow * 1.5,
+    ease: EASE.inOutSoft,
+    scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
+  });
+}
+
 const REVEALS: Record<string, (el: HTMLElement) => void> = {
   fade: revealFade,
   lines: revealLines,
+  linha: revealLinha,
 };
 
 interface OpcoesReveal {

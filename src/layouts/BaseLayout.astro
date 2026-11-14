@@ -108,6 +108,17 @@ const robots = noindex || !INDEXAR;
       initTracking();
       initAncoras();
 
+      // Header suspenso: depois de rolar um pouco, a barra vira pílula flutuante.
+      const LIMITE_HEADER = 80;
+      const atualizarHeader = () => {
+        document
+          .querySelector('[data-header]')
+          ?.toggleAttribute('data-flutuante', window.scrollY > LIMITE_HEADER);
+      };
+      window.addEventListener('scroll', atualizarHeader, { passive: true });
+      document.addEventListener('astro:page-load', atualizarHeader);
+      atualizarHeader();
+
       // O ClientRouter troca os atributos do <html> na navegação; a marca precisa voltar.
       document.addEventListener('astro:after-swap', () => {
         document.documentElement.dataset['js'] = '';

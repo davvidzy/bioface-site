@@ -6,7 +6,6 @@
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
-import Credenciais, { type Credencial } from '@/components/sections/Credenciais.astro';
 import Filosofia from '@/components/sections/Filosofia.astro';
 import TratamentosCategorias from '@/components/sections/TratamentosCategorias.astro';
 import ResultadosPrevia from '@/components/sections/ResultadosPrevia.astro';
@@ -16,9 +15,9 @@ import Depoimentos from '@/components/sections/Depoimentos.astro';
 import Espaco from '@/components/sections/Espaco.astro';
 import Faq from '@/components/sections/Faq.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
+import Conector from '@/components/ui/Conector.astro';
 
 import { home, AVISO_RESULTADOS } from '@/data/textos';
-import { site, faltando } from '@/data/site';
 import {
   getProcedimentosPorCategoria,
   resultadosPublicaveis,
@@ -40,15 +39,6 @@ const resultadosItens = await Promise.all(
 const depoimentos = await getDepoimentos();
 const faq = (await getFaqGeral()).map((f) => f.data);
 const preloads = await preloadsHero();
-
-// Só fatos com fonte. Nota do Google e número de procedimentos entram quando a cliente informar.
-const credenciais: Credencial[] = [
-  { valor: `${site.anosAtuacao} anos`, rotulo: 'de atuação em estética facial' },
-  { valor: site.responsavel.titulo, rotulo: site.responsavel.nome },
-  faltando(site.responsavel.registro)
-    ? { valor: '', rotulo: 'número do CRBM', pendente: true }
-    : { valor: site.responsavel.registro, rotulo: 'Registro profissional' },
-];
 
 const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   (ld): ld is Record<string, unknown> => ld !== null,
@@ -77,14 +67,19 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   </Fragment>
 
   <Hero {...home.hero} />
-  <Credenciais titulo={home.credenciais.titulo} itens={credenciais} />
   <Filosofia {...home.filosofia} />
+  <Conector />
   <TratamentosCategorias {...home.tratamentos} grupos={grupos} />
+  <Conector />
   <ResultadosPrevia {...home.resultados} aviso={AVISO_RESULTADOS} itens={resultadosItens} />
+  <Conector />
   <ComoFunciona {...home.comoFunciona} />
-  <SobrePrevia {...home.sobre} />
+  <Conector />
+  <SobrePrevia {...home.sobre} alt={home.hero.alt} />
   <Depoimentos {...home.depoimentos} depoimentos={depoimentos} />
+  <Conector />
   <Espaco {...home.espaco} />
+  <Conector />
   <Faq {...home.faq} ancora="duvidas" itens={faq} />
   <CtaFinal {...home.ctaFinal} origem="cta-final" comLocalizacao />
 </BaseLayout>

@@ -104,6 +104,11 @@ const inicial = 50;
     order: -1;
   }
 
+  .ba__camada {
+    overflow: hidden;
+    border-radius: var(--radius-l);
+  }
+
   .ba__camada :global(img) {
     width: 100%;
     height: 100%;
@@ -137,6 +142,7 @@ const inicial = 50;
 
   /* ---------- Com JS: comparador por sobreposição ---------- */
   :global(html[data-js]) .ba .ba__palco {
+    border-radius: var(--radius-l);
     display: block;
     position: relative;
     aspect-ratio: var(--ratio);

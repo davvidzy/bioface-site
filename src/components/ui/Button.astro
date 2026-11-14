@@ -1,26 +1,41 @@
 ---
 /**
- * Botão ou link com aparência de botão.
+ * Botão ou link com aparência de botão, em pílula.
  * Com href vira <a>; sem href vira <button>. Alvo de toque mínimo de 44px.
+ * O primário leva uma seta num círculo (decorativa).
  */
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
   variante?: 'primario' | 'secundario';
   href?: string | undefined;
+  /** Mostra a seta no círculo. Padrão: só no primário. */
+  seta?: boolean;
 };
 
-const { variante = 'primario', href, class: className, ...rest } = Astro.props;
-const classes = ['btn', `btn--${variante}`, 't-label', className];
+const { variante = 'primario', href, seta, class: className, ...rest } = Astro.props;
+const comSeta = seta ?? variante === 'primario';
+const classes = ['btn', `btn--${variante}`, { 'btn--seta': comSeta }, 't-label', className];
 ---
 
 {href ? (
   <a href={href} class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
-    <slot />
+    <span class="btn__texto">
+      <slot />
+    </span>
+    {comSeta && (
+      <span class="btn__seta" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </span>
+    )}
   </a>
 ) : (
   <button type="button" class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
-    <slot />
+    <span class="btn__texto">
+      <slot />
+    </span>
   </button>
 )}
 
@@ -29,14 +44,20 @@ const classes = ['btn', `btn--${variante}`, 't-label', className];
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
+    gap: var(--space-4);
     min-height: var(--tap-min);
-    min-width: var(--tap-min);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-3) var(--space-6);
     border: var(--border-width) solid var(--color-action-primary-bg);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-pill);
     text-decoration: none;
     text-align: center;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .btn--seta {
+    padding-inline-end: var(--space-2);
   }
 
   .btn--primario {
@@ -50,8 +71,30 @@ const classes = ['btn', `btn--${variante}`, 't-label', className];
     border-color: var(--color-text-primary);
   }
 
-  .btn:hover {
+  .btn__seta {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background-color: var(--color-action-primary-text);
+    color: var(--color-action-primary-bg);
+    transition: transform var(--duration-base) var(--ease-out-soft);
+  }
+
+  .btn--secundario .btn__seta {
+    background-color: var(--color-text-primary);
+    color: var(--color-bg-default);
+  }
+
+  .btn:hover .btn__texto {
     text-decoration: underline;
     text-underline-offset: 0.2em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn:hover .btn__seta {
+      transform: translateX(3px);
+    }
   }
 </style>

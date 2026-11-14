@@ -7,8 +7,7 @@ Total: 121 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
-- [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:19](src/components/sections/Espaco.astro#L19)
-- [ ] fotos profissionais da Maria (as do Instagram não têm qualidade para hero). [src/components/sections/SobrePrevia.astro:18](src/components/sections/SobrePrevia.astro#L18)
+- [ ] fotos profissionais do espaço. [src/components/sections/Espaco.astro:18](src/components/sections/Espaco.astro#L18)
 - [ ] substituir por reviews reais do Google, com nome e inicial da autora. [src/content/depoimentos/exemplo-pendente.json:2](src/content/depoimentos/exemplo-pendente.json#L2)
 - [ ] nome e inicial. [src/content/depoimentos/exemplo-pendente.json:3](src/content/depoimentos/exemplo-pendente.json#L3)
 - [ ] texto do review real, copiado do Google. [src/content/depoimentos/exemplo-pendente.json:4](src/content/depoimentos/exemplo-pendente.json#L4)
@@ -106,8 +105,9 @@ Total: 121 marcadores.
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
-- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:42](src/data/textos.ts#L42)
-- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:73](src/data/textos.ts#L73)
+- [ ] em 2 ou 3 frases, como a Maria define um resultado natural no método dela. [src/data/textos.ts:38](src/data/textos.ts#L38)
+- [ ] 3 fotos verticais (3:4) para a filosofia: detalhe de procedimento, mãos, espaço. [src/data/textos.ts:39](src/data/textos.ts#L39)
+- [ ] trajetória resumida da Maria em 2 ou 3 frases. [src/data/textos.ts:69](src/data/textos.ts#L69)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
 
 ## Decisões para validar com a cliente (`TODO(validar-cliente)`)
@@ -136,7 +136,7 @@ Total: 121 marcadores.
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
 - [ ] promessa central do h1. [src/data/textos.ts:27](src/data/textos.ts#L27)
 - [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:32](src/data/textos.ts#L32)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:54](src/data/textos.ts#L54)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:50](src/data/textos.ts#L50)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

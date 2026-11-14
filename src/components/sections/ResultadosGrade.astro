@@ -33,10 +33,29 @@ const { itens, aviso, prioritarias = 0 } = Astro.props;
     margin-block-end: var(--space-5);
   }
 
+  /* Flex com última linha centralizada: sem buraco quando sobram menos de três. */
   .grade {
-    display: grid;
-    gap: var(--space-7);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    --colunas: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-6);
+  }
+
+  .grade > li {
+    flex: 0 0 calc((100% - (var(--colunas) - 1) * var(--space-6)) / var(--colunas));
+  }
+
+  @media (min-width: 40rem) {
+    .grade {
+      --colunas: 2;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grade {
+      --colunas: 3;
+    }
   }
 
   .grade > [hidden] {

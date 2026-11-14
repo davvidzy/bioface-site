@@ -2,8 +2,11 @@
 /**
  * Header: navegar e converter de qualquer ponto.
  * Landing page única: os links são âncoras das seções da Home.
- * `sobreposto`: fica por cima do hero, sem fundo (a Home usa assim).
- * Sem menu hambúrguer: no mobile os links descem para uma segunda linha, sem JS.
+ *
+ * Começa no fluxo (na Home, `sobreposto` ao hero, sem fundo). Ao rolar, a barra vira
+ * uma pílula suspensa e arredondada (data-flutuante, aplicado em BaseLayout).
+ * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
+ * No mobile a navegação sai: a landing é rolagem contínua e o CTA fica visível.
  */
 import Wordmark from '@/assets/brand/wordmark-mono.svg';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
@@ -17,8 +20,8 @@ interface Props {
 const { sobreposto = false } = Astro.props;
 ---
 
-<header class:list={['site-header', { 'site-header--sobreposto': sobreposto }]}>
-  <div class="container site-header__inner">
+<header class:list={['site-header', { 'site-header--sobreposto': sobreposto }]} data-header>
+  <div class="site-header__barra">
     <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
       <Wordmark aria-hidden="true" focusable="false" class="site-header__wordmark" />
     </a>
@@ -44,8 +47,8 @@ const { sobreposto = false } = Astro.props;
 
 <style>
   .site-header {
-    border-block-end: var(--border-width) solid var(--color-border-default);
-    background-color: var(--color-bg-default);
+    --altura: 5.5rem;
+    min-height: var(--altura);
   }
 
   .site-header--sobreposto {
@@ -53,17 +56,48 @@ const { sobreposto = false } = Astro.props;
     inset-block-start: 0;
     inset-inline: 0;
     z-index: var(--z-header);
-    border-block-end: 0;
-    background-color: transparent;
   }
 
-  .site-header__inner {
+  .site-header__barra {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3) var(--space-6);
-    padding-block: var(--space-4);
+    width: 100%;
+    max-width: var(--container-max);
+    min-height: var(--altura);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* ---------- Suspensa ao rolar ---------- */
+  .site-header[data-flutuante] .site-header__barra {
+    position: fixed;
+    inset-block-start: var(--space-3);
+    inset-inline: var(--space-3);
+    z-index: var(--z-header);
+    width: auto;
+    max-width: min(var(--container-max), calc(100% - 2 * var(--space-3)));
+    min-height: 0;
+    margin-inline: auto;
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
+    border-radius: var(--radius-pill);
+    background-color: color-mix(in srgb, var(--color-bg-default) 92%, transparent);
+    box-shadow: var(--shadow-flutuante);
+    backdrop-filter: blur(12px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header[data-flutuante] .site-header__barra {
+      animation: header-desce var(--duration-base) var(--ease-out-soft);
+    }
+  }
+
+  @keyframes header-desce {
+    from {
+      opacity: 0;
+      transform: translateY(-120%);
+    }
   }
 
   .site-header__marca {
@@ -78,10 +112,14 @@ const { sobreposto = false } = Astro.props;
     height: auto;
   }
 
+  .site-header[data-flutuante] .site-header__wordmark {
+    width: 7.5rem;
+  }
+
   .site-header__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 var(--space-5);
+    gap: 0 var(--space-6);
   }
 
   .site-header__links a {
@@ -95,14 +133,12 @@ const { sobreposto = false } = Astro.props;
     text-decoration: underline;
   }
 
-  /* No mobile a navegação sai: a landing é rolagem contínua e o CTA fica visível.
-     Um menu próprio entra na fase de design, se fizer falta. */
   @media (max-width: 48rem) {
     nav {
       display: none;
     }
 
-    .site-header__inner {
+    .site-header__barra {
       column-gap: var(--space-3);
     }
 
@@ -110,8 +146,8 @@ const { sobreposto = false } = Astro.props;
       width: 7.5rem;
     }
 
-    .site-header__inner :global(.site-header__cta) {
-      padding-inline: var(--space-4);
+    .site-header[data-flutuante] .site-header__barra {
+      padding-inline-start: var(--space-4);
     }
   }
 </style>

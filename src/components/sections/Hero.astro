@@ -73,7 +73,7 @@ const { paisagem, retrato } = await imagensHero();
     min-height: 100vh;
     min-height: 100svh;
     overflow: hidden;
-    background-color: var(--color-bg-subtle);
+    background-color: var(--color-bg-default);
   }
 
   /* ---------- Imagem ---------- */
@@ -110,6 +110,8 @@ const { paisagem, retrato } = await imagensHero();
         color-mix(in srgb, var(--color-bg-default) 70%, transparent) 0%,
         transparent 9rem
       ),
+      /* Base: a foto se dissolve no fundo da página, sem corte de seção. */
+      linear-gradient(0deg, var(--color-bg-default) 0%, transparent 32%),
       linear-gradient(
         90deg,
         color-mix(in srgb, var(--color-bg-default) 88%, transparent) 0%,
@@ -168,7 +170,7 @@ const { paisagem, retrato } = await imagensHero();
       padding-block: var(--fade) var(--space-8);
       background: linear-gradient(
         0deg,
-        color-mix(in srgb, var(--color-bg-default) 94%, transparent) 0%,
+        var(--color-bg-default) 0%,
         color-mix(in srgb, var(--color-bg-default) 86%, transparent) calc(100% - var(--fade)),
         transparent 100%
       );
