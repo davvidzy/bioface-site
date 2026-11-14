@@ -16,8 +16,6 @@ export const navegacao = [
   { ancora: 'duvidas', rotulo: 'Dúvidas' },
 ] as const;
 
-export const AVISO_RESULTADOS = 'Resultados variam de pessoa para pessoa.';
-
 /*
  * Itálico (*palavra*) só em dois lugares da página: o hero e o CTA final.
  * Os demais títulos são retos: quando tudo é destaque, nada é.
@@ -33,13 +31,7 @@ export const home = {
   hero: {
     // TODO(validar-cliente): frase-manifesto do h1 (o medo central é ficar artificial).
     titulo: 'Natural é quando o resultado *parece seu*.',
-    /** Linha de identidade logo abaixo do título: quem, o quê, há quanto tempo, onde. */
-    identidade: [
-      site.responsavel.nome,
-      site.responsavel.titulo,
-      `${site.anosAtuacao} anos`,
-      site.endereco.bairro,
-    ],
+    descricao: `Realçar, nunca transformar. Há ${site.anosAtuacao} anos cuidando de rostos no ${site.endereco.bairro}.`,
     // Imagem fictícia da Maria para a prévia (confirmado pela equipe em 2026-11-13).
     // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
@@ -54,7 +46,6 @@ export const home = {
   ],
   tratamentos: {
     titulo: 'Tratamentos',
-    intro: 'Organizados pelo que você quer cuidar. Toque em um para conversar sobre ele.',
   },
   resultados: {
     titulo: 'Antes e depois',

@@ -9,17 +9,17 @@ export const CATEGORIAS = [
   {
     slug: 'pele',
     rotulo: 'Saúde e qualidade da pele',
-    descricao: 'Para manchas, acne, textura e viço.',
+    descricao: 'Para manchas, acne e textura.',
   },
   {
     slug: 'rejuvenescimento',
     rotulo: 'Firmeza e rejuvenescimento',
-    descricao: 'Para flacidez, perda de colágeno e sinais do tempo.',
+    descricao: 'Para flacidez e sinais do tempo.',
   },
   {
     slug: 'contorno',
     rotulo: 'Expressão e contorno',
-    descricao: 'Para linhas de expressão, volume e definição.',
+    descricao: 'Para rugas, volume e contorno.',
   },
 ] as const;
 

@@ -4,8 +4,7 @@ categoria: contorno
 ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Perda de volume nos lábios, nas maçãs do rosto e no contorno.'
+problema: 'Lábios finos e perda de volume.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

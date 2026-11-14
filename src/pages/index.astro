@@ -17,7 +17,7 @@ import Faq from '@/components/sections/Faq.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
 import Transicao from '@/components/ui/Transicao.astro';
 
-import { home, AVISO_RESULTADOS } from '@/data/textos';
+import { home } from '@/data/textos';
 import {
   getProcedimentosPorCategoria,
   resultadosPublicaveis,
@@ -26,7 +26,7 @@ import {
   getFaqGeral,
 } from '@/lib/conteudo';
 import { jsonLdLocalBusiness, jsonLdFaq } from '@/lib/seo';
-import { preloadsHero, SIZES_HERO } from '@/lib/hero';
+import { preloadsHero } from '@/lib/hero';
 
 const grupos = await getProcedimentosPorCategoria();
 const resultados = await resultadosPublicaveis();
@@ -76,7 +76,7 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
         type="image/avif"
         media={p.media}
         imagesrcset={p.srcset}
-        imagesizes={SIZES_HERO}
+        imagesizes="100vw"
         fetchpriority="high"
       />
     ))}
@@ -87,7 +87,7 @@ const jsonLd = [jsonLdLocalBusiness(Astro.site), jsonLdFaq(faq)].filter(
   <Credenciais itens={credenciais} />
   <TratamentosCategorias {...home.tratamentos} grupos={grupos} />
   <Transicao de="var(--cream-50)" para="var(--cream-100)" />
-  <ResultadosPrevia {...home.resultados} aviso={AVISO_RESULTADOS} itens={resultadosItens} />
+  <ResultadosPrevia {...home.resultados} itens={resultadosItens} />
   <Transicao de="var(--cream-100)" para="var(--wine-900)" altura="clamp(8rem, 20vw, 18rem)" />
   <Metodo {...home.metodo} />
   <SobrePrevia {...home.sobre} alt={home.hero.alt} />

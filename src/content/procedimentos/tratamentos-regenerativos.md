@@ -1,11 +1,10 @@
 ---
-nome: 'Tratamentos regenerativos'
+nome: 'Terapia regenerativa'
 categoria: rejuvenescimento
 ordem: 4
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Pele cansada, que precisa recuperar qualidade.'
+problema: 'Pele cansada e sem vitalidade.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

@@ -1,11 +1,10 @@
 ---
-nome: 'Peelings químicos'
+nome: 'Peeling químico'
 categoria: pele
 ordem: 4
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Textura irregular, manchas leves e pele opaca.'
+problema: 'Textura áspera e pele sem viço.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

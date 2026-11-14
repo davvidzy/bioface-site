@@ -1,11 +1,10 @@
 ---
-nome: 'Tratamento para acne'
+nome: 'Controle da acne'
 categoria: pele
 ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Espinhas que inflamam e deixam marcas.'
+problema: 'Espinhas ativas e oleosidade.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

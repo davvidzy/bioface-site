@@ -2,13 +2,12 @@
 # TODO(validar-cliente): nome do procedimento. No Figma original era "Blefaroplastia sem corte";
 # blefaroplastia é nome de cirurgia e pode gerar problema com o conselho profissional.
 
-nome: 'Rejuvenescimento das pálpebras com jato de plasma'
+nome: 'Jato de plasma'
 categoria: rejuvenescimento
 ordem: 5
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Excesso de pele nas pálpebras e olhar cansado.'
+problema: 'Pálpebras caídas e olhar cansado.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

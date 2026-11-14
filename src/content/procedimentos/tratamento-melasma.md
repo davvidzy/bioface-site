@@ -1,11 +1,10 @@
 ---
-nome: 'Tratamento para melasma'
+nome: 'Controle do melasma'
 categoria: pele
 ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Manchas escuras que voltam com o sol.'
+problema: 'Manchas escuras e tom irregular.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

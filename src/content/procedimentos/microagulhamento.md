@@ -4,8 +4,7 @@ categoria: pele
 ordem: 5
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Marcas de acne, poros dilatados e linhas finas.'
+problema: 'Marcas de acne e poros dilatados.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

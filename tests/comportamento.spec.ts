@@ -16,7 +16,7 @@ test.describe('WhatsApp', () => {
 });
 
 test.describe('Hero', () => {
-  test('altura, título, identidade e CTA', async ({ page, isMobile }) => {
+  test('altura, título, descrição e CTA', async ({ page, isMobile }) => {
     await page.goto('/');
     const hero = page.locator('.hero');
     const altura = await hero.evaluate((h) => h.getBoundingClientRect().height);
@@ -25,18 +25,23 @@ test.describe('Hero', () => {
     if (isMobile) expect(altura).toBeGreaterThan(tela);
     else expect(Math.round(altura)).toBe(tela);
     await expect(hero.locator('h1')).toHaveCount(1);
-    await expect(hero.locator('.hero__identidade')).toContainText('Maria Guedes');
-    await expect(hero.locator('.hero__identidade')).toContainText('Biomédica esteta');
+    await expect(hero.locator('.hero__descricao')).toBeVisible();
     await expect(hero.locator('a[data-origem="hero"]')).toBeVisible();
   });
 
-  test('desktop: foto ocupa a metade direita até a borda', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'layout em duas metades só no desktop');
+  test('foto certa por orientação', async ({ page, isMobile }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
-    const r = await page.locator('.hero img').evaluate((i) => i.getBoundingClientRect().toJSON());
-    const largura = page.viewportSize()!.width;
-    expect(Math.round(r.right)).toBe(largura);
-    expect(Math.round(r.left)).toBe(largura / 2);
+    const src = await page.locator('.hero img').evaluate((i) => (i as HTMLImageElement).currentSrc);
+    expect(src).toContain(isMobile ? 'hero-mobile' : 'hero-desktop');
+  });
+
+  test('descrição em no máximo 2 linhas', async ({ page }) => {
+    await page.goto('/');
+    const linhas = await page.locator('.hero__descricao').evaluate((p) => {
+      const lh = parseFloat(getComputedStyle(p).lineHeight);
+      return Math.round(p.getBoundingClientRect().height / lh);
+    });
+    expect(linhas).toBeLessThanOrEqual(2);
   });
 });
 

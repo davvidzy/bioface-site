@@ -16,11 +16,10 @@ import { isPendente, type Procedimento } from '@/lib/conteudo';
 
 interface Props {
   titulo: string;
-  intro: string;
   grupos: { categoria: Categoria; procedimentos: Procedimento[] }[];
 }
 
-const { titulo, intro, grupos } = Astro.props;
+const { titulo, grupos } = Astro.props;
 let n = 0;
 const linhas = grupos.map(({ categoria, procedimentos }) => ({
   categoria,
@@ -39,8 +38,6 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
       <h2 id="tratamentos-titulo" class="t-display-l" data-reveal="fade">
         {titulo}
       </h2>
-      <p class="trat__intro">{intro}</p>
-      <p class="rascunho">Frases de cada tratamento: rascunho para aprovação</p>
     </header>
 
     <div class="trat__indice" data-trat-indice>
@@ -103,12 +100,6 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
     margin-block-end: var(--space-9);
   }
 
-  .trat__intro {
-    max-width: 40rem;
-    font-size: var(--text-body-l);
-    color: var(--color-text-secondary);
-  }
-
   .trat__indice {
     position: relative;
     display: grid;
@@ -123,18 +114,25 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
 
   .grupo__cabeca {
     display: grid;
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 
+  /*
+   * Hierarquia em quatro degraus, do maior para o menor:
+   * título da seção (Display/L) > objetivo (serifa, entre H2 e H3) >
+   * nome do tratamento (serifa, H3) > dor (Inter, Body/M, cor secundária).
+   */
   .grupo__titulo {
-    font-family: var(--font-body);
-    font-size: var(--text-body-m);
-    font-weight: var(--weight-medium);
-    letter-spacing: 0.02em;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.5rem + 1.6vw, 3rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.08;
+    letter-spacing: -0.005em;
+    max-width: 14ch;
   }
 
   .grupo__descricao {
-    font-size: var(--text-body-m);
+    font-size: var(--text-body-l);
     color: var(--color-text-secondary);
   }
 
@@ -188,9 +186,9 @@ const linhas = grupos.map(({ categoria, procedimentos }) => ({
 
   .linha__nome {
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
+    font-size: var(--text-h3);
     font-weight: var(--weight-medium);
-    line-height: 1.1;
+    line-height: var(--leading-h3);
   }
 
   .linha__problema {

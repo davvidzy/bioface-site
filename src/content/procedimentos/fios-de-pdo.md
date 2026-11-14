@@ -4,8 +4,7 @@ categoria: rejuvenescimento
 ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Contorno do rosto menos definido.'
+problema: 'Flacidez e contorno indefinido.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

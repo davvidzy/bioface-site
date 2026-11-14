@@ -1,13 +1,12 @@
 ---
 # TODO(validar-cliente): se a cliente quiser uma página por tecnologia, este item vira categoria própria.
 
-nome: 'Tecnologias: laser, ultrassom microfocado e outras'
+nome: 'Laser e ultrassom'
 categoria: rejuvenescimento
 ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Flacidez e textura da pele, tratadas com aparelhos.'
+problema: 'Flacidez e textura irregular.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

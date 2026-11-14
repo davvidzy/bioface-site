@@ -171,10 +171,10 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 | # | Seção | Job | Conteúdo | Tema | CTA |
 |---|---|---|---|---|---|
 | 1 | Header | Navegar e converter de qualquer ponto | Wordmark nas cores originais (âmbar), âncoras com a seção atual marcada, botão "Agendar avaliação" | sobre o hero, depois pílula suspensa | WhatsApp |
-| 2 | Hero | Em 3 segundos: quem, o quê, onde | `h1` frase-manifesto em Display/XL, alinhado à esquerda; linha "Maria Guedes · Biomédica esteta · 18 anos · Lago Sul"; foto da Maria na metade direita, até a borda, sem esfumado | claro (`bg/default`) | WhatsApp (vinho) |
+| 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto, descrição "Realçar, nunca transformar…" e CTA dourado, centralizados na coluna da esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp (dourado) |
 | 3 | Credenciais | Transformar promessa em fato | Faixa de fatos confirmados (anos, formação, nº de tratamentos, bairro). CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
-| 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos; número, nome em serifa grande, a dor numa frase, seta. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
-| 5 | Resultados | Prova visual | Título primeiro; comparador largo; caso atual (contador e região); miniaturas com o nome da região; aviso "resultados variam" | `bg/subtle` | nenhum |
+| 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | Índice editorial: 12 linhas em 3 objetivos (nomes curtos aprovados em 2026-11-14, ex.: "Controle do melasma", "Laser e ultrassom"); número, nome em serifa, a dor numa frase, seta. Hierarquia: título da seção > objetivo > nome > dor. Cada linha abre o WhatsApp com o nome do tratamento. Desktop: selo "Conversar" segue o cursor | claro | WhatsApp por linha |
+| 5 | Resultados | Prova visual | Comparador em moldura 3:4 à esquerda; à direita título, caso atual (contador e região) e miniaturas meio antes/meio depois. Sem o aviso "resultados variam" (removido a pedido; validar com a cliente) | `bg/subtle` | nenhum |
 | 6 | Método | Diferenciar e reduzir ansiedade | "Como a Maria trabalha": frase de método + 3 passos | escuro (wine/900) | WhatsApp |
 | 7 | Maria | Autoridade e vínculo humano | Foto grande, nome em Display/XL, citação dela, trajetória | escuro | nenhum |
 | 8 | Depoimentos | Prova social de terceiros | Só com reviews reais; sem material, a seção não aparece | escuro | nenhum |
@@ -189,7 +189,7 @@ Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
 
 - **Narrativa de luz:** a página começa no creme e escurece aos poucos até o vinho (creme → `bg/subtle` → wine/900 → wine/950), como o dia indo para o entardecer. As passagens entre fundos são faixas de degradê decorativas (`components/ui/Transicao.astro`), fora das seções, para nenhum texto ficar sobre a transição.
 - **Itálico só em dois lugares:** no `h1` do hero e no título do CTA final. Os outros títulos são retos.
-- **Botão principal = `primario`, sem seta.** Segue o tema: vinho no claro, dourado no escuro. Não existe mais variante dourada no tema claro.
+- **Botão principal = `primario`, sem seta.** Segue o tema: vinho no claro, dourado no escuro. Exceção: o CTA do hero usa a variante `destaque` (dourado sobre o claro).
 - **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
 - **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.
 - **Sem linhas de conexão entre seções.** O espaço em branco e a mudança de fundo separam.

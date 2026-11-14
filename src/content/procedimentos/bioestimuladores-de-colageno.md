@@ -1,11 +1,10 @@
 ---
-nome: 'Bioestimuladores de colágeno'
+nome: 'Bioestimuladores'
 categoria: rejuvenescimento
 ordem: 1
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-# TODO(validar-cliente): rascunho para aprovação da frase de problema.
-problema: 'Pele perdendo firmeza com o passar dos anos.'
+problema: 'Perda de firmeza e de colágeno.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
