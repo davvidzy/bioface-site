@@ -106,7 +106,8 @@ export async function criarMaca3D(palco: HTMLElement, estado: EstadoMaca): Promi
     pivo.rotation.y = estado.ry + Math.sin(tempo * velocidade) * rotacao + mouse.x * giro;
     pivo.rotation.x = mouse.y * inclinacao;
     pivo.position.x = estado.x;
-    pivo.position.y = estado.y + Math.sin(tempo * velocidade * 1.3) * altura;
+    pivo.position.y = Math.sin(tempo * velocidade * 1.3) * altura;
+    pivo.position.z = estado.z;
     renderer.render(cena, camera);
   };
   gsap.ticker.add(quadro);

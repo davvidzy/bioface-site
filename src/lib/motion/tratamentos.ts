@@ -16,7 +16,7 @@ import type { Maca3D } from './maca3d';
 
 /** Quanto de rolagem cada troca de categoria consome, em alturas de tela. */
 const ROLAGEM_POR_TROCA = 0.9;
-const DESLOCAMENTO = 32;
+const DESLOCAMENTO = 48;
 
 export function criarTratamentos(raiz: ParentNode = document): (() => void) | undefined {
   const bloco = raiz.querySelector<HTMLElement>('[data-tratamentos]');
@@ -26,9 +26,24 @@ export function criarTratamentos(raiz: ParentNode = document): (() => void) | un
   if (categorias.length < 2) return undefined;
 
   bloco.classList.add('trat--animado');
-  const pose0 = MACA.poses[0] ?? { ry: 0, x: 0 };
-  const estado: EstadoMaca = { ...pose0, y: 0 };
-  gsap.set(categorias.slice(1), { opacity: 0, y: DESLOCAMENTO });
+  const pose0 = MACA.poses[0] ?? { ry: 0, x: 0, z: 0 };
+  const estado: EstadoMaca = { ...pose0 };
+  const VOLTA = Math.PI * 2;
+
+  // Entrada: enquanto a seção chega, a maca vem lá de trás, girando, até a 1ª pose.
+  gsap.fromTo(
+    estado,
+    { z: MACA.entrada.z, ry: pose0.ry + MACA.entrada.voltas * VOLTA },
+    {
+      z: pose0.z,
+      ry: pose0.ry,
+      ease: 'none',
+      scrollTrigger: { trigger: bloco, start: 'top bottom', end: 'top top', scrub: 0.8 },
+    },
+  );
+  // Texto entra e sai pelo próprio lado (eixo x): ímpares à esquerda, pares à direita.
+  const lado = (i: number) => (i % 2 === 0 ? -1 : 1);
+  categorias.forEach((c, i) => i > 0 && gsap.set(c, { opacity: 0, x: lado(i) * DESLOCAMENTO }));
 
   const tl = gsap.timeline({
     defaults: { ease: EASE.inOutSoft },
@@ -54,18 +69,29 @@ export function criarTratamentos(raiz: ParentNode = document): (() => void) | un
     if (i === 0) return;
     const anterior = categorias[i - 1]!;
     const pose = MACA.poses[i] ?? pose0;
+    const anteriorPose = MACA.poses[i - 1] ?? pose0;
     tl.to({}, { duration: 0.3 }); // repouso na categoria atual
     // Posições absolutas (t): rótulos extras virariam pontos de snap.
     const t = tl.duration();
-    tl.to(anterior, { opacity: 0, y: -DESLOCAMENTO, duration: 0.45 }, t)
-      .to(estado, { ry: pose.ry, x: pose.x, duration: 1 }, t)
-      // Sobe um pouco no meio da troca e assenta: dá peso ao movimento.
-      .to(estado, { y: MACA.elevacao, duration: 0.5, ease: 'sine.out' }, t)
-      .to(estado, { y: 0, duration: 0.5, ease: 'sine.in' }, t + 0.5)
+    tl.to(anterior, { opacity: 0, x: lado(i - 1) * DESLOCAMENTO, duration: 0.45 }, t)
+      // Continua chegando (z só aumenta), gira no próprio eixo e desliza para o lado livre.
+      // fromTo explícito: a entrada também anima o estado, então o início não é lido dele.
+      .fromTo(
+        estado,
+        { ry: anteriorPose.ry, x: anteriorPose.x, z: anteriorPose.z },
+        {
+          ry: pose.ry - MACA.voltasPorTroca * VOLTA,
+          x: pose.x,
+          z: pose.z,
+          duration: 1,
+          immediateRender: false,
+        },
+        t,
+      )
       .fromTo(
         categoria,
-        { opacity: 0, y: DESLOCAMENTO },
-        { opacity: 1, y: 0, duration: 0.45 },
+        { opacity: 0, x: lado(i) * DESLOCAMENTO },
+        { opacity: 1, x: 0, duration: 0.45 },
         t + 0.55,
       )
       .addLabel(`categoria-${i + 1}`);
