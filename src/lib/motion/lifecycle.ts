@@ -17,7 +17,6 @@ import {
   getLenis,
 } from './index';
 import { criarReveals } from './reveal';
-import { criarTratamentos } from './tratamentos';
 import { MOTION_CONDITIONS, MQ_REDUCE } from './reduced-motion';
 
 let mm: gsap.MatchMedia | null = null;
@@ -48,13 +47,10 @@ function montarPagina(): void {
   mm?.revert();
   mm = gsap.matchMedia();
   mm.add(MOTION_CONDITIONS, (ctx) => {
-    const { full, desktop } = ctx.conditions as { full: boolean; desktop: boolean };
+    const { full } = ctx.conditions as { full: boolean };
     if (full) {
       iniciarLenis();
       criarReveals(document, { ignorarVisiveis: primeiraMontagem });
-      // Cena 3D com pin só no desktop; a limpeza volta ao layout estático.
-      const limparTratamentos = desktop ? criarTratamentos(document) : undefined;
-      if (limparTratamentos) return limparTratamentos;
     } else {
       // Reduced motion: sem Lenis, sem reveals. Conteúdo já está visível.
       destruirLenis();

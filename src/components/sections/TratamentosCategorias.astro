@@ -2,17 +2,13 @@
 /**
  * Home, seção 5. Job: mostrar amplitude sem sobrecarregar.
  *
- * Fundo: foto desfocada de clínica sob um véu creme (só atmosfera, o conteúdo em destaque).
- *
- * Layout base (celular, reduced motion, sem JS): título, imagem estática da maca e as
- * categorias empilhadas, tudo legível.
- * Desktop com movimento (lib/motion/tratamentos.ts adiciona .trat--animado): a seção
- * inteira fixa na tela (título, maca e categorias juntos), uma categoria por vez
- * alternando os lados, e a maca 3D gira e desliza a cada troca.
+ * Três cards, um por categoria: foto e nome. No desktop (com mouse), o card sob o cursor
+ * ou com foco cresce em largura (e a foto, em altura) enquanto os outros cedem espaço, e
+ * abre a lista de tratamentos da categoria. Tudo em CSS, sem JS.
+ * Celular, toque, sem JS ou reduced motion: os cards já vêm abertos, empilhados.
+ * A lista fica sempre no DOM: leitor de tela lê tudo, aberto ou não.
  */
-import { Picture } from 'astro:assets';
-import poster from '@/assets/3d/maca.png';
-import fundo from '@/assets/espaco/fundo-tratamentos.jpg';
+import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import type { Categoria } from '@/data/categorias';
 import { enfase } from '@/lib/texto';
 import type { Procedimento } from '@/lib/conteudo';
@@ -26,199 +22,224 @@ const { titulo, grupos } = Astro.props;
 ---
 
 <section id="tratamentos" class="trat" aria-labelledby="tratamentos-titulo" data-tratamentos>
-  <Picture
-    src={fundo}
-    alt=""
-    class="trat__fundo"
-    widths={[960, 1500]}
-    sizes="100vw"
-    formats={['avif', 'webp']}
-    loading="lazy"
-  />
+  <div class="container">
+    <h2
+      id="tratamentos-titulo"
+      class="t-display-l trat__titulo"
+      data-reveal="fade"
+      set:html={enfase(titulo)}
+    />
+  </div>
 
-  <div class="container trat__conteudo">
-    <h2 id="tratamentos-titulo" class="t-display-l trat__titulo" set:html={enfase(titulo)} />
-
-    <div class="trat__palco" data-trat-palco>
-      <Picture
-        src={poster}
-        alt=""
-        class="trat__poster"
-        widths={[480, 800, 1200]}
-        sizes="(min-width: 48rem) 36rem, 100vw"
-        formats={['avif', 'webp']}
-        loading="lazy"
-      />
-    </div>
-
-    <ol class="trat__categorias list-reset" role="list">
+  <div class="trat__largo">
+    <ul class="trat__cards list-reset" role="list">
       {grupos.map(({ categoria, procedimentos }) => (
-        <li class="trat__cat" data-trat-cat>
-          <h3 class="t-h3">{categoria.rotulo}</h3>
-          <p class="text-secondary">{categoria.descricao}</p>
-          <ul class="list-reset trat__lista" role="list">
-            {procedimentos.map((p) => (
-              <li>{p.data.nome}</li>
-            ))}
-          </ul>
+        <li class="cat" data-trat-cat>
+          {/* TODO(conteudo): foto 5:4 de cada categoria (procedimento ou detalhe de pele). */}
+          <div class="placeholder-media cat__foto">
+            <span>Foto · {categoria.rotulo}</span>
+          </div>
+
+          <div class="cat__cabeca">
+            <h3 class="cat__nome">{categoria.rotulo}</h3>
+            <span class="cat__qtd">{procedimentos.length} tratamentos</span>
+          </div>
+
+          <div class="cat__detalhe">
+            <div class="cat__detalhe-interno">
+              <p class="cat__descricao">{categoria.descricao}</p>
+              <ul class="list-reset cat__lista" role="list">
+                {procedimentos.map((p) => (
+                  <li>{p.data.nome}</li>
+                ))}
+              </ul>
+              <WhatsAppLink
+                origem="tratamentos"
+                procedimento={categoria.rotulo.toLowerCase()}
+                rotulo="Agendar avaliação"
+                complementoOculto={`para ${categoria.rotulo.toLowerCase()} pelo WhatsApp`}
+                variante="texto"
+                class="cat__cta"
+              />
+            </div>
+          </div>
         </li>
       ))}
-    </ol>
+    </ul>
   </div>
 </section>
 
 <style>
-  /* ---------- Fundo ---------- */
   .trat {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
+    --abrir: 0.75s var(--ease-out-soft);
     padding-block: var(--space-section);
-    background-color: var(--color-bg-default);
-  }
-
-  .trat__fundo {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Véu creme: a foto vira só ambiente; texto vinho mantém contraste AAA. */
-  .trat::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    /* Topo e base se dissolvem no fundo da página: sem corte de seção. */
-    background:
-      linear-gradient(
-        180deg,
-        var(--color-bg-default),
-        transparent 18%,
-        transparent 82%,
-        var(--color-bg-default)
-      ),
-      color-mix(in srgb, var(--color-bg-default) 88%, transparent);
-  }
-
-  /* ---------- Layout base: estático ---------- */
-  .trat__conteudo {
-    display: grid;
-    gap: var(--space-7);
   }
 
   .trat__titulo {
     text-align: center;
+    margin-block-end: var(--space-9);
   }
 
-  .trat__palco {
-    position: relative;
-    width: 100%;
-    max-width: 36rem;
+  /* ---------- Base: cards empilhados e abertos (celular, toque, sem JS) ---------- */
+  /* Os cards saem do container: ocupam a largura toda, travados em 1440px. */
+  .trat__largo {
+    width: min(90rem, 100% - 2 * var(--gutter));
     margin-inline: auto;
   }
 
-  .trat__poster {
-    width: 100%;
-    height: auto;
+  .trat__cards {
+    display: grid;
+    gap: var(--space-9);
   }
 
-  .trat__categorias {
+  .cat {
     display: grid;
-    gap: var(--space-7);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  }
-
-  .trat__cat {
-    display: grid;
-    gap: var(--space-3);
     align-content: start;
-    padding-block-start: var(--space-4);
-    border-block-start: var(--border-width) solid var(--color-border-default);
   }
 
-  .trat__lista {
-    display: grid;
-    gap: var(--space-2);
-  }
-
-  /* ---------- Desktop animado (classe aplicada pelo JS) ----------
-   * A seção inteira fica fixa: título no alto, maca e categorias na área abaixo dele.
-   */
-  .trat.trat--animado {
-    --area-titulo: clamp(7rem, 22vh, 11rem);
-    height: 100vh;
-    height: 100svh;
-    padding-block: 0;
-  }
-
-  .trat--animado .trat__conteudo {
-    position: relative;
-    display: block;
-    height: 100%;
-  }
-
-  .trat--animado .trat__titulo {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-start: 0;
-    height: var(--area-titulo);
-    display: grid;
-    align-content: end;
-  }
-
-  .trat--animado .trat__palco {
-    position: absolute;
-    inset: var(--area-titulo) 0 0;
-    max-width: none;
-  }
-
-  /* No modo animado o poster sai; a maca 3D entra com fade quando carregar. */
-  .trat--animado .trat__poster {
-    display: none;
-  }
-
-  .trat__palco :global(.trat__canvas) {
-    position: absolute;
-    inset: 0;
+  .cat__foto {
+    --ratio: 3 / 2;
     width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity var(--duration-slow) var(--ease-out-soft);
   }
 
-  .trat__palco:global(.trat__palco--3d) :global(.trat__canvas) {
-    opacity: 1;
+  .cat__cabeca {
+    display: grid;
+    gap: var(--space-1);
+    padding-block-start: var(--space-4);
   }
 
-  .trat--animado .trat__categorias {
-    position: absolute;
-    inset: var(--area-titulo) 0 0;
-    display: block;
-    pointer-events: none;
+  .cat__nome {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-h3);
   }
 
-  .trat--animado .trat__cat {
-    /* Centralizado na vertical sem transform: o GSAP anima o y por transform. */
-    position: absolute;
-    inset-block: 0;
-    margin-block: auto;
-    height: fit-content;
-    width: min(24rem, 30%);
-    border-block-start: 0;
-    padding-block-start: 0;
+  .cat__qtd {
+    font-size: var(--text-caption);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
   }
 
-  /* Uma categoria para cada lado: 1ª e 3ª à esquerda, 2ª à direita. */
-  .trat--animado .trat__cat:nth-child(odd) {
-    inset-inline-start: 0;
+  /* Abre com grid-template-rows 0fr → 1fr: altura real animada, sem medir nada em JS. */
+  .cat__detalhe {
+    display: grid;
+    grid-template-rows: 1fr;
   }
 
-  .trat--animado .trat__cat:nth-child(even) {
-    inset-inline-end: 0;
-    text-align: end;
+  .cat__detalhe-interno {
+    display: grid;
+    gap: var(--space-4);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* O respiro fica dentro da área recortada: fechado, o detalhe tem altura zero. */
+  .cat__descricao {
+    margin-block-start: var(--space-3);
+    color: var(--color-text-secondary);
+  }
+
+  .cat__lista {
+    display: grid;
+  }
+
+  .cat__lista li {
+    padding-block: var(--space-2);
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 25%, transparent);
+  }
+
+  .cat__lista li:first-child {
+    border-block-start: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 25%, transparent);
+  }
+
+  .cat :global(.cat__cta) {
+    justify-self: start;
+    font-weight: var(--weight-medium);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+  }
+
+  /* ---------- Desktop com mouse: cards lado a lado que crescem no hover ---------- */
+  @media (hover: hover) and (pointer: fine) and (min-width: 48rem) {
+    .trat__cards {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      /* Sem buraco entre os cards: o cursor passa de um para o outro sem fechar tudo. */
+    }
+
+    .trat__cards > .cat:first-child {
+      padding-inline-start: 0;
+    }
+
+    .trat__cards > .cat:last-child {
+      padding-inline-end: 0;
+    }
+
+    .cat {
+      flex: 1 1 0;
+      min-width: 0;
+      padding-inline: var(--space-3);
+      transition: flex-grow var(--abrir);
+    }
+
+    .cat:hover,
+    .cat:focus-within {
+      flex-grow: 1.45;
+    }
+
+    .cat__foto {
+      --ratio: 5 / 4;
+    }
+
+    .cat__detalhe {
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--abrir);
+    }
+
+    .cat__detalhe-interno {
+      opacity: 0;
+      transform: translateY(0.75rem);
+      transition:
+        opacity 0.35s var(--ease-standard),
+        transform var(--abrir);
+    }
+
+    .cat:hover .cat__detalhe,
+    .cat:focus-within .cat__detalhe {
+      grid-template-rows: 1fr;
+    }
+
+    /* O texto entra um pouco depois do card começar a crescer, como no movimento de referência. */
+    .cat:hover .cat__detalhe-interno,
+    .cat:focus-within .cat__detalhe-interno {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.5s var(--ease-standard) 0.15s,
+        transform var(--abrir) 0.1s;
+    }
+
+    /* Os cards que cedem espaço ficam um pouco mais discretos. */
+    .trat__cards:has(.cat:hover, .cat:focus-within) .cat:not(:hover, :focus-within) .cat__foto {
+      opacity: 0.75;
+    }
+
+    .cat__foto {
+      transition: opacity var(--abrir);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cat,
+    .cat__foto,
+    .cat__detalhe,
+    .cat__detalhe-interno {
+      transition: none !important;
+    }
   }
 </style>

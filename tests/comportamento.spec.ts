@@ -104,63 +104,33 @@ test.describe('Conteúdo e SEO', () => {
 });
 
 test.describe('Tratamentos', () => {
-  test('desktop: seção fixa, uma categoria por vez e maca 3D', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'cena 3D só no desktop');
-    test.setTimeout(90_000);
-    const erros: string[] = [];
-    page.on('pageerror', (e) => erros.push(e.message));
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await page.mouse.move(200, 200); // primeira interação carrega o movimento
-    const bloco = page.locator('[data-tratamentos]');
-    await expect(bloco).toHaveClass(/trat--animado/);
-
-    const opacidades = () =>
-      page
-        .locator('[data-trat-cat]')
-        .evaluateAll((cs) => cs.map((c) => Number(getComputedStyle(c).opacity)));
-    const topo = await bloco.evaluate((b) => b.getBoundingClientRect().top + scrollY);
-    await page.evaluate((y) => window.scrollTo(0, y), topo);
-    await expect(page.locator('.trat__palco--3d canvas')).toBeAttached({ timeout: 30_000 });
-    await expect.poll(opacidades).toEqual([1, 0, 0]);
-
-    // Rola com a roda do mouse, como uma pessoa: a seção fica presa e as categorias
-    // aparecem uma por vez, em ordem (o snap sempre assenta numa categoria inteira).
-    const vistas: number[] = [0];
-    let presa = false;
-    for (let passo = 0; passo < 20 && vistas.at(-1) !== 2; passo++) {
-      await page.mouse.wheel(0, 220);
-      // Espera a rolagem assentar (snap concluído) antes de ler, como quem para para ler.
-      let anterior = -1;
-      for (let t = 0; t < 30; t++) {
-        await page.waitForTimeout(250);
-        const y = await page.evaluate(() => Math.round(scrollY));
-        if (y === anterior) break;
-        anterior = y;
-      }
-      const o = await opacidades();
-      const atual = o.indexOf(1);
-      if (o.filter((v) => v === 1).length === 1 && atual !== vistas.at(-1)) vistas.push(atual);
-      if (Math.round(await bloco.evaluate((b) => b.getBoundingClientRect().top)) === 0)
-        presa = true;
-    }
-    expect(vistas).toEqual([0, 1, 2]);
-    expect(presa).toBe(true);
-    expect(erros).toEqual([]);
+  test('desktop: card cresce e abre a lista no hover', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'hover só no desktop');
+    await page.goto('/');
+    const cards = page.locator('[data-trat-cat]');
+    await expect(cards).toHaveCount(3);
+    await cards.first().scrollIntoViewIfNeeded();
+    const larguraAntes = await cards.nth(1).evaluate((c) => c.getBoundingClientRect().width);
+    const detalhe = cards.nth(1).locator('.cat__detalhe-interno');
+    await expect.poll(() => detalhe.evaluate((d) => d.getBoundingClientRect().height)).toBeLessThan(2);
+    await cards.nth(1).hover();
+    await expect
+      .poll(() => cards.nth(1).evaluate((c) => c.getBoundingClientRect().width))
+      .toBeGreaterThan(larguraAntes * 1.2);
+    await expect(detalhe).toHaveCSS('opacity', '1');
+    await expect(cards.nth(1).getByText('Fios de PDO')).toBeVisible();
   });
 
-  test('mobile: layout estático com imagem, sem baixar o 3D', async ({ page, isMobile }) => {
+  test('mobile: cards já abertos, com todos os tratamentos', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'regra do mobile');
-    const pedidos3d: string[] = [];
-    page.on('request', (r) => {
-      if (/maca\.glb|maca3d/.test(r.url())) pedidos3d.push(r.url());
-    });
-    await page.goto('/', { waitUntil: 'networkidle' });
-    await page.locator('#tratamentos').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(1000);
-    await expect(page.locator('[data-tratamentos]')).not.toHaveClass(/trat--animado/);
-    await expect(page.locator('img.trat__poster')).toBeVisible();
-    await expect(page.locator('[data-trat-cat]')).toHaveCount(3);
-    expect(pedidos3d).toEqual([]);
+    await page.goto('/');
+    const cards = page.locator('[data-trat-cat]');
+    await expect(cards).toHaveCount(3);
+    for (const nome of ['Limpeza de pele', 'Fios de PDO', 'Toxina botulínica']) {
+      const item = page.locator('#tratamentos').getByText(nome, { exact: true });
+      await item.scrollIntoViewIfNeeded();
+      await expect(item).toBeVisible();
+    }
   });
 });
 
