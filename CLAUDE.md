@@ -179,7 +179,7 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 | 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | 3 cards, um por objetivo (número, quantidade, nome, nomes dos tratamentos), cada um levando a `/tratamentos/[categoria]`. Na página da categoria: hero quase em tela cheia, degradê para a lista, cards dos tratamentos (foto 3:4, nome, a dor numa frase), cada um abrindo o WhatsApp com o nome do tratamento, e as perguntas frequentes de cada tratamento (campo `faq` do .md, com JSON-LD FAQPage) | claro | página da categoria; WhatsApp por tratamento |
 | 5 | Resultados | Prova visual | Comparador em moldura 3:4 à esquerda; à direita título, caso atual (contador e região) e miniaturas meio antes/meio depois. Sem o aviso "resultados variam" (removido a pedido; validar com a cliente) | `bg/subtle` | nenhum |
 | 6 | Método | Diferenciar e reduzir ansiedade | "Como trabalhamos": linha do tempo com as 3 etapas (Contato, Avaliação presencial, Plano personalizado) e a legenda "1–3 etapas". Desktop: seção presa na tela, trilho horizontal com scroll, linha e etapas que se desenham (`lib/motion/linha-do-tempo.ts`); celular: lista vertical. Foto à esquerda ainda placeholder | escuro (wine/900) | nenhum |
-| 7 | Maria | Autoridade e vínculo humano | Foto grande, nome em Display/XL, citação dela, trajetória | escuro | nenhum |
+| 7 | Maria | Autoridade e vínculo humano | Layout do Figma (node 18:5): foto alta à esquerda, nome, formação e citação em itálico com fio dourado; bloco centralizado | escuro | nenhum |
 | 8 | Depoimentos | Prova social de terceiros | Só com reviews reais; sem material, a seção não aparece | escuro | nenhum |
 | 9 | Espaço | Ambiente premium | Só com fotos reais da clínica; sem material, não aparece | escuro | nenhum |
 | 10 | FAQ | Responder objeções | 12 perguntas gerais (`src/content/faq.json`). As marcadas `pendente: true` aparecem na prévia mas ficam fora do JSON-LD até a Maria confirmar | escuro | nenhum |
@@ -196,7 +196,7 @@ Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
 - **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
 - **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.
 - **Sem linhas de conexão entre seções.** O espaço em branco e a mudança de fundo separam.
-- **Pendências na prévia:** lacunas pequenas aparecem como "A confirmar: …" em itálico discreto. Textos de apresentação escritos para a prévia (frase do método, citação e trajetória da Maria, frase de dor de cada tratamento) levam a marca "Rascunho para aprovação" e `TODO(validar-cliente)` no código. Isso não vale para conteúdo clínico, números, preços ou depoimentos: esses continuam sem invenção.
+- **Pendências na prévia:** lacunas pequenas aparecem como "A confirmar: …" em itálico discreto. Textos de apresentação escritos para a prévia (frase do método, citação da Maria, frase de dor de cada tratamento) levam só `TODO(validar-cliente)` no código, sem selo visível (marca "Rascunho para aprovação" removida a pedido em 2026-11-14). Isso não vale para conteúdo clínico, números, preços ou depoimentos: esses continuam sem invenção.
 
 **Fica fora de propósito:** tabela de preços, blog, newsletter, "missão, visão e valores", contador animado de números sem fonte, carrossel automático.
 

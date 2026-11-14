@@ -21,7 +21,8 @@ export const navegacao = [
  * Os demais títulos são retos: quando tudo é destaque, nada é.
  *
  * Textos marcados como rascunho: escritos para a prévia a partir do brief, sem conteúdo
- * clínico nem números novos. Aparecem com a marca discreta "Rascunho para aprovação".
+ * clínico nem números novos. Ficam marcados só no código (TODO(validar-cliente)), sem
+ * selo visível na página.
  */
 export const home = {
   seo: {

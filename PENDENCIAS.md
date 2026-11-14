@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 109 marcadores.
+Total: 110 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -71,7 +71,7 @@ Total: 109 marcadores.
 - [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
 - [ ] número de agendamento, só dígitos, com DDI 55. [src/data/site.ts:49](src/data/site.ts#L49)
 - [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
-- [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:46](src/data/textos.ts#L46)
+- [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:47](src/data/textos.ts#L47)
 - [ ] seção "O espaço" volta quando houver fotos da clínica. [src/pages/index.astro:97](src/pages/index.astro#L97)
 - [ ] fotos do hero (2) e de cada tratamento; por enquanto, placeholders. [src/pages/tratamentos/[categoria].astro:11](src/pages/tratamentos/[categoria].astro#L11)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)
@@ -119,10 +119,11 @@ Total: 109 marcadores.
   - [src/content/resultados/par-3.json:2](src/content/resultados/par-3.json#L2)
   - [src/content/resultados/par-4.json:2](src/content/resultados/par-4.json#L2)
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
-- [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:32](src/data/textos.ts#L32)
-- [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:36](src/data/textos.ts#L36)
-- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:58](src/data/textos.ts#L58)
-- [ ] rascunho para aprovação; trocar pela frase dela. [src/data/textos.ts:77](src/data/textos.ts#L77)
+- [ ] ), sem. [src/data/textos.ts:24](src/data/textos.ts#L24)
+- [ ] frase-manifesto do h1 (o medo central é ficar artificial). [src/data/textos.ts:33](src/data/textos.ts#L33)
+- [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:37](src/data/textos.ts#L37)
+- [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:59](src/data/textos.ts#L59)
+- [ ] rascunho para aprovação; trocar pela frase dela. [src/data/textos.ts:78](src/data/textos.ts#L78)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
 - [ ] apresentar à cliente a nova paleta (a partir do logo) e a Cormorant Garamond. [src/styles/tokens.css:4](src/styles/tokens.css#L4)

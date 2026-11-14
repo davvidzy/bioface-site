@@ -57,7 +57,6 @@ const { titulo, subtitulo, citacao, alt } = Astro.props;
           <p>“{citacao}”</p>
         </blockquote>
       )}
-      <p class="rascunho">Frase: rascunho para aprovação</p>
     </div>
   </div>
 </Section>
@@ -126,22 +125,19 @@ const { titulo, subtitulo, citacao, alt } = Astro.props;
   }
 
   @media (min-width: 56rem) {
-    /* Mais larga que o container, como no Figma: 24px de margem em cada lado da tela, foto centrada na coluna. */
+    /* Foto e texto formam um bloco único, centralizado na tela. Pode passar um pouco da
+       largura do container (até 4rem da borda) para a frase caber em 2 linhas. */
     .sobre {
-      margin-inline: min(0px, (100% - (100vw - 3rem)) / 2);
-      grid-template-columns: minmax(0, 543fr) minmax(0, 825fr);
-      gap: var(--space-5);
+      margin-inline: min(0px, (100% - (100vw - 8rem)) / 2);
+      grid-template-columns: auto minmax(0, max-content);
+      justify-content: center;
+      column-gap: clamp(var(--space-8), 6vw, 6.5rem);
       align-items: center;
     }
 
     /* A foto ocupa quase a altura da tela, sem passar dela. */
     .sobre__foto {
-      width: min(100%, calc(88svh * 469 / 723));
-      justify-self: center;
-    }
-
-    .sobre__texto {
-      padding-inline: var(--space-5);
+      width: min(34vw, calc(88svh * 469 / 723));
     }
 
     .sobre__citacao p {
