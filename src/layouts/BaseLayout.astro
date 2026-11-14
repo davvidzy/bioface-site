@@ -109,16 +109,35 @@ const robots = noindex || !INDEXAR;
       // Header suspenso: depois de rolar um pouco, a barra vira pílula flutuante.
       const LIMITE_HEADER = 80;
       // Suspenso, a barra passa para o tema escuro (vinho); no topo, fica no tema claro.
-      const atualizarHeader = () => {
-        const suspenso = window.scrollY > LIMITE_HEADER;
-        document.querySelector('[data-header]')?.toggleAttribute('data-flutuante', suspenso);
-        const barra = document.querySelector<HTMLElement>('[data-header-barra]');
-        if (barra) {
-          if (suspenso) barra.dataset['theme'] = 'escuro';
-          else delete barra.dataset['theme'];
-        }
+      // Sobre uma seção escura, inverte de novo para o claro (contraste com o vinho atrás).
+      const sobreSecaoEscura = (barra: HTMLElement): boolean => {
+        const r = barra.getBoundingClientRect();
+        const y = r.top + r.height / 2;
+        const atras = document
+          .elementsFromPoint(window.innerWidth / 2, y)
+          .find((el) => !barra.contains(el) && !el.closest('[data-header]'));
+        return Boolean(atras?.closest('[data-theme="escuro"]'));
       };
-      window.addEventListener('scroll', atualizarHeader, { passive: true });
+      const atualizarHeader = () => {
+        const header = document.querySelector<HTMLElement>('[data-header]');
+        const barra = document.querySelector<HTMLElement>('[data-header-barra]');
+        if (!header || !barra) return;
+        const suspenso = window.scrollY > LIMITE_HEADER;
+        const escuroAtras = suspenso && sobreSecaoEscura(barra);
+        header.toggleAttribute('data-flutuante', suspenso);
+        header.toggleAttribute('data-sobre-escuro', escuroAtras);
+        if (suspenso && !escuroAtras) barra.dataset['theme'] = 'escuro';
+        else delete barra.dataset['theme'];
+      };
+      let quadroHeader = 0;
+      const agendarHeader = () => {
+        if (quadroHeader) return;
+        quadroHeader = requestAnimationFrame(() => {
+          quadroHeader = 0;
+          atualizarHeader();
+        });
+      };
+      window.addEventListener('scroll', agendarHeader, { passive: true });
       document.addEventListener('astro:page-load', atualizarHeader);
       atualizarHeader();
 

@@ -173,7 +173,7 @@ Cada seção tem um **job**. Se uma seção não cumpre o job, ela sai. A ordem 
 
 | # | Seção | Job | Conteúdo | Tema | CTA |
 |---|---|---|---|---|---|
-| 1 | Header | Navegar e converter de qualquer ponto | Logo do Figma (monograma + wordmark), âncoras com a seção atual marcada, botão "Agendar avaliação" | topo: sem fundo, tema claro, logo vinho menor e mais respiro; ao rolar: pílula vinho (tema escuro) com o logo âmbar | WhatsApp |
+| 1 | Header | Navegar e converter de qualquer ponto | Logo do Figma (monograma + wordmark), âncoras com a seção atual marcada, botão "Agendar avaliação" | topo: sem fundo, tema claro, logo vinho menor e mais respiro; ao rolar: pílula vinho (tema escuro) com o logo âmbar; sobre seção escura, a pílula inverte para creme com logo vinho | WhatsApp |
 | 2 | Hero | Em 3 segundos: quem, o quê, onde | Foto em tela cheia com degradê; frase-manifesto sem itálico (2 linhas no desktop, 3 no celular), descrição curta em Body (2 linhas) e CTA, alinhados à esquerda (versão mantida a pedido em 2026-11-14) | claro (`bg/default`) | WhatsApp |
 | 3 | Credenciais | Transformar promessa em fato | Faixa muito discreta: uma linha curta por fato, de tamanhos parecidos, separadas por ponto dourado (anos, formação, nº de tratamentos, bairro). CRBM e nota do Google entram quando a cliente informar | claro | nenhum |
 | 4 | Tratamentos | Mostrar amplitude sem sobrecarregar | 3 cards, um por objetivo (número, quantidade, nome, nomes dos tratamentos), cada um levando a `/tratamentos/[categoria]`. Na página da categoria: cards dos tratamentos (número contínuo 01 a 12, nome, a dor numa frase), cada um abrindo o WhatsApp com o nome do tratamento | claro | página da categoria; WhatsApp por tratamento |

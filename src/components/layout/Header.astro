@@ -7,7 +7,9 @@
  * - topo: sem fundo, tema claro, logo em vinho (versão mono), menor e com mais respiro;
  * - ao rolar (data-flutuante, aplicado em BaseLayout): pílula suspensa em tema escuro
  *   (vinho), com o logo nas cores originais (âmbar) e links creme.
- * O BaseLayout troca também o data-theme da barra junto com o data-flutuante.
+ * - suspenso sobre uma seção escura (data-sobre-escuro): a pílula inverte para creme, com
+ *   logo e links em vinho, para manter o contraste com o fundo vinho que passa atrás.
+ * O BaseLayout troca o data-theme da barra junto com esses estados.
  * O <header> mantém a altura no lugar para a página não pular. Sem JS: fica estático.
  * No celular: logo + menu hambúrguer (<details>, funciona sem JS); o painel traz os
  * links em serifa grande e o CTA. Fecha ao tocar num link, com Esc ou tocando fora.
@@ -205,6 +207,12 @@ const { sobreposto = false } = Astro.props;
     backdrop-filter: blur(12px);
   }
 
+  /* Sobre seção escura: pílula creme (tema claro), para destacar do vinho. */
+  .site-header[data-flutuante][data-sobre-escuro] .site-header__barra {
+    background-color: color-mix(in srgb, var(--cream-50) 94%, transparent);
+    box-shadow: 0 16px 40px -20px rgb(0 0 0 / 0.45);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .site-header__barra,
     .site-header__logo,
@@ -241,11 +249,11 @@ const { sobreposto = false } = Astro.props;
     opacity: 0;
   }
 
-  .site-header[data-flutuante] .site-header__logo--mono {
+  .site-header[data-flutuante]:not([data-sobre-escuro]) .site-header__logo--mono {
     opacity: 0;
   }
 
-  .site-header[data-flutuante] .site-header__logo--cor {
+  .site-header[data-flutuante]:not([data-sobre-escuro]) .site-header__logo--cor {
     opacity: 1;
   }
 
