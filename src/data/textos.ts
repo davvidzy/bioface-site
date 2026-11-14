@@ -28,8 +28,8 @@ export const home = {
     titulo: 'Você,',
     destaque: 'ainda mais você.',
     descricao: `Estética facial com ${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()} há ${site.anosAtuacao} anos no ${site.endereco.bairro}.`,
-    // TODO(validar-cliente): confirmar que as fotos do hero são da Maria e ajustar o jaleco
-    // ("Dra." e "Medicina Estética" não cabem para biomédica).
+    // Imagem fictícia da Maria para a prévia (confirmado pela equipe em 2026-11-13).
+    // TODO(validar-cliente): jaleco com "Dra." e "Medicina Estética" não cabe para biomédica.
     alt: `${site.responsavel.nome}, ${site.responsavel.titulo.toLowerCase()}, de jaleco, sorrindo.`,
   },
   credenciais: {

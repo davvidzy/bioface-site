@@ -135,7 +135,7 @@ Total: 121 marcadores.
   - [src/content/resultados/par-5.json:2](src/content/resultados/par-5.json#L2)
 - [ ] o agrupamento é proposta. Validar com a Maria antes de publicar. [src/data/categorias.ts:5](src/data/categorias.ts#L5)
 - [ ] promessa central do h1. [src/data/textos.ts:27](src/data/textos.ts#L27)
-- [ ] confirmar que as fotos do hero são da Maria e ajustar o jaleco. [src/data/textos.ts:31](src/data/textos.ts#L31)
+- [ ] jaleco com "Dra." e "Medicina Estética" não cabe para biomédica. [src/data/textos.ts:32](src/data/textos.ts#L32)
 - [ ] confirmar o fluxo de atendimento. [src/data/textos.ts:56](src/data/textos.ts#L56)
 - [ ] escolher a ferramenta. Se usar cookies, entra banner de consentimento (LGPD). [src/lib/analytics.ts:3](src/lib/analytics.ts#L3)
 - [ ] revisão jurídica e dados do controlador. [src/pages/privacidade.astro:5](src/pages/privacidade.astro#L5)
