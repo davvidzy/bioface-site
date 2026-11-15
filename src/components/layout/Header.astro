@@ -250,7 +250,9 @@ const { sobreposto = false } = Astro.props;
   .site-header {
     --altura: 6.75rem;
     --altura-flutuante: 3.75rem;
-    --morph: var(--motion-fluido);
+    /* Mesma duração do site, mas com aceleração e desaceleração suaves: com o ease-out
+       padrão a troca topo → pílula acontecia quase toda nos primeiros 100ms (brusca). */
+    --morph: var(--duration-fluida) var(--ease-in-out-soft);
     min-height: var(--altura);
   }
 
@@ -449,7 +451,10 @@ const { sobreposto = false } = Astro.props;
     cursor: pointer;
     background-color: var(--color-action-primary-bg);
     color: var(--color-action-primary-text);
-    transition: background-color var(--motion-fluido);
+    /* Fundo e ícone trocam juntos, no mesmo ritmo da barra (o ícone mudava de uma vez). */
+    transition:
+      background-color var(--morph),
+      color var(--morph);
   }
 
   .menu-movel__icone {

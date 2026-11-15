@@ -119,11 +119,17 @@ const robots = noindex || !INDEXAR;
           .find((el) => !barra.contains(el) && !el.closest('[data-header]'));
         return Boolean(atras?.closest('[data-theme="escuro"]'));
       };
+      // Histerese: vira pílula depois de 80px e só volta ao topo abaixo de 32px. Sem isso,
+      // a inércia do iPhone perto do limite fazia a barra trocar de forma várias vezes.
+      const LIMITE_VOLTA = 32;
+      let suspensoAntes = false;
       const atualizarHeader = () => {
         const header = document.querySelector<HTMLElement>('[data-header]');
         const barra = document.querySelector<HTMLElement>('[data-header-barra]');
         if (!header || !barra) return;
-        const suspenso = window.scrollY > LIMITE_HEADER;
+        const y = window.scrollY;
+        const suspenso = suspensoAntes ? y > LIMITE_VOLTA : y > LIMITE_HEADER;
+        suspensoAntes = suspenso;
         const escuroAtras = suspenso && sobreSecaoEscura(barra);
         header.toggleAttribute('data-flutuante', suspenso);
         header.toggleAttribute('data-sobre-escuro', escuroAtras);
@@ -132,9 +138,11 @@ const robots = noindex || !INDEXAR;
         atualizarOcultacao(header);
       };
 
-      // Some ao rolar para baixo e volta ao rolar para cima, na página inteira (só no topo,
-      // antes de virar pílula, ele fica sempre visível).
-      // Não some com o menu do celular aberto nem com o foco dentro do header.
+      // Desktop: some ao rolar para baixo e volta ao rolar para cima, na página inteira (só
+      // no topo, antes de virar pílula, ele fica sempre visível). Não some com o foco
+      // dentro do header. Celular (mesmo limite do menu hambúrguer): sempre fixo na tela,
+      // só troca de forma e de cor.
+      const CELULAR = window.matchMedia('(max-width: 48rem)');
       let ultimoY = window.scrollY;
       const DELTA = 6;
       const atualizarOcultacao = (header: HTMLElement) => {
@@ -144,7 +152,8 @@ const robots = noindex || !INDEXAR;
         ultimoY = y;
         const menuAberto = Boolean(document.querySelector('[data-menu-movel]:popover-open'));
         const focoNoHeader = header.contains(document.activeElement);
-        const ocultar = diferenca > 0 && y > LIMITE_HEADER && !menuAberto && !focoNoHeader;
+        const ocultar =
+          !CELULAR.matches && diferenca > 0 && y > LIMITE_HEADER && !menuAberto && !focoNoHeader;
         header.toggleAttribute('data-oculto', ocultar);
       };
       let quadroHeader = 0;
