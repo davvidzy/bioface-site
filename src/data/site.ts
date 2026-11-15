@@ -30,6 +30,8 @@ export interface Site {
   fechado: string;
   /** URL de incorporação do mapa (Google Maps > Compartilhar > Incorporar). */
   mapaEmbed: string;
+  /** Ficha da clínica no Google Maps (Perfil da Empresa), pelo CID do embed. */
+  googleMaps: string;
   instagram: string;
   linktree: string;
 }
@@ -60,6 +62,7 @@ export const site: Site = {
     },
   ],
   fechado: 'Sábado e domingo',
+  googleMaps: 'https://maps.google.com/?cid=2675938867319635107',
   mapaEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3837.980648107704!2d-47.8315178!3d-15.8576144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a23553af0ee35%3A0x2522d838db3f7ca3!2sBioface%20Est%C3%A9tica%20Avan%C3%A7ada!5e0!3m2!1spt-BR!2sbr!4v1794713457210!5m2!1spt-BR!2sbr',
   instagram: 'https://www.instagram.com/bioface_/',
@@ -78,8 +81,9 @@ export function enderecoCompleto(): string | null {
   return `${logradouro}, ${bairro}, ${cidade}/${uf}${cepTexto}`;
 }
 
-/** Link de busca no Google Maps: funciona mesmo sem coordenadas. */
+/** Link da ficha da clínica no Google Maps; sem ela, uma busca pelo endereço. */
 export function linkGoogleMaps(): string {
+  if (!faltando(site.googleMaps)) return site.googleMaps;
   // Busca pelo nome + endereço: abre a ficha da clínica no Maps (com fotos e rotas).
   const endereco = enderecoCompleto();
   const consulta = endereco

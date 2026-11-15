@@ -45,6 +45,11 @@ Use o MCP do Figma (`get_design_context`, `get_screenshot`, `get_metadata`) para
 
 **Não adicione dependências fora desta lista sem justificar no PR/commit.** Candidatos futuros, só se o design pedir: `ogl` ou `three` para efeito WebGL em imagem, Keystatic ou Sanity como CMS.
 
+### Deploy atual (2026-11-15)
+- **Hostinger**, build pelo GitHub (`main`): `npm run build`, saída `dist`, Node 22.x.
+- `public/.htaccess` serve as páginas sem `.html` (`/tratamentos/pele` → `pele.html`), redireciona `.html` e barra final para o endereço limpo, usa o `404.html` próprio e define cache.
+- Variáveis: `SITE_URL` (domínio, com ou sem https; vazia cai no padrão) e `INDEXAR=true` **só no domínio definitivo** (sem ela, todas as páginas têm `noindex` e o robots.txt bloqueia tudo).
+
 ### Versões
 Fixe versões exatas no `package.json`. Rode `npm view <pacote> version` antes de instalar para pegar a estável atual.
 

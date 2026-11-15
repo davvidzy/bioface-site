@@ -155,9 +155,15 @@ const { paisagem, retrato } = await imagensHero();
   }
 
   /* Aura: duas manchas desfocadas (dourado e rosé), atrás do texto. */
+  /* Halo com tamanho fixo (em relação à tela, não ao bloco de texto): quando a fonte
+     chega e o texto muda de altura, ele não se move (era a única mudança de layout, CLS). */
   .hero__aura {
     position: absolute;
-    inset: -20% -25%;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    width: min(150%, 60rem);
+    height: min(90vh, 42rem);
+    transform: translate(-50%, -50%); /* transform, não translate: a entrada anima o translate */
     z-index: -1;
     pointer-events: none;
     background:

@@ -19,11 +19,10 @@ import Transicao from '@/components/ui/Transicao.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import CtaFinal from '@/components/sections/CtaFinal.astro';
 import Accordion from '@/components/ui/Accordion.astro';
-import { jsonLdFaq } from '@/lib/seo';
+import { jsonLdFaq, jsonLdBreadcrumb, jsonLdServicos } from '@/lib/seo';
 import { CATEGORIAS } from '@/data/categorias';
 import { getProcedimentosPorCategoria, isPendente } from '@/lib/conteudo';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
-import { site } from '@/data/site';
 import { home } from '@/data/textos';
 
 export function getStaticPaths() {
@@ -48,12 +47,26 @@ const fotoProcedimento = (slug: string) =>
 const fotosHero = [fotoCategoria(1), fotoCategoria(2)];
 
 const comFaq = procedimentos.filter((p) => p.data.faq.length > 0);
-const jsonLd = [jsonLdFaq(comFaq.flatMap((p) => p.data.faq))].filter(
-  (ld): ld is Record<string, unknown> => ld !== null,
-);
+const pagina = `/tratamentos/${categoria.slug}`;
+const jsonLd = [
+  jsonLdBreadcrumb(
+    [
+      { nome: 'Início', path: '/' },
+      { nome: 'Tratamentos', path: '/#tratamentos' },
+      { nome: categoria.rotulo, path: pagina },
+    ],
+    Astro.site,
+  ),
+  jsonLdServicos(
+    procedimentos.map((p) => ({ nome: p.data.nome, descricao: p.data.resumo, ancora: p.id })),
+    pagina,
+    Astro.site,
+  ),
+  jsonLdFaq(comFaq.flatMap((p) => p.data.faq)),
+].filter((ld): ld is Record<string, unknown> => ld !== null);
 
-const titulo = `${categoria.rotulo} | ${site.marca}`;
-const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome).join(', ')}. Avaliação individual com ${site.responsavel.nome} no ${site.endereco.bairro}, ${site.endereco.cidade}.`;
+const titulo = categoria.seo.title;
+const descricao = categoria.seo.description;
 ---
 
 <BaseLayout

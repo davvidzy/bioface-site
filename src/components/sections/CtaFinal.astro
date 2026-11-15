@@ -6,7 +6,7 @@
  */
 import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
-import Monograma from '@/assets/brand/monograma-mono.svg';
+import Marca from '@/components/ui/Marca.astro';
 import Localizacao from './Localizacao.astro';
 import type { OrigemWhatsApp } from '@/lib/whatsapp';
 
@@ -23,7 +23,7 @@ const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.pr
 
 <Section labelledby="cta-final-titulo" id="contato" tema="escuro" class="cta-final">
   <div class="cta">
-    <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
+    <Marca tipo="monograma" class="cta__monograma" />
     <div class="cta__conteudo">
       <h2 id="cta-final-titulo" class="t-display-xl" data-reveal="lines">
         {titulo}

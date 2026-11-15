@@ -187,15 +187,17 @@ html.lenis body {
   }
 }
 
+/* Começa em 0,01 e não em 0: o Chrome ignora elementos com opacidade zero para o LCP,
+   e o título e a foto do hero (o LCP da página) ficavam sem medição. Visualmente é igual. */
 @keyframes entrada {
   from {
-    opacity: 0;
+    opacity: 0.01;
     translate: 0 18px;
   }
 }
 
 @keyframes entrada-foto {
   from {
-    opacity: 0;
+    opacity: 0.01;
   }
 }

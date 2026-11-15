@@ -26,7 +26,7 @@ export const navegacao = [
  */
 export const home = {
   seo: {
-    title: 'BioFace Estética Avançada | Maria Guedes, biomédica esteta no Lago Sul',
+    title: 'Estética facial no Lago Sul, Brasília | BioFace Estética Avançada',
     description: `Estética facial com resultados naturais. ${site.responsavel.nome}, biomédica esteta há ${site.anosAtuacao} anos no Lago Sul, Brasília. Agende sua avaliação pelo WhatsApp.`,
   },
   hero: {

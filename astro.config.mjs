@@ -33,6 +33,8 @@ export default defineConfig({
   trailingSlash: 'never',
   build: {
     format: 'file',
+    // CSS do site é pequeno (~10 KB): inline no HTML, sem pedidos que bloqueiam a pintura.
+    inlineStylesheets: 'always',
   },
   integrations: [
     sitemap({

@@ -16,10 +16,7 @@
  * a direita com fade; logo de um lado, X discreto do outro, links em serifa grande e o CTA
  * embaixo. Fecha no X, com Esc (o foco volta ao botão) ou ao tocar num link.
  */
-import Wordmark from '@/assets/brand/wordmark.svg';
-import Monograma from '@/assets/brand/monograma.svg';
-import WordmarkMono from '@/assets/brand/wordmark-mono.svg';
-import MonogramaMono from '@/assets/brand/monograma-mono.svg';
+import Marca from '@/components/ui/Marca.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import MarcaDagua from '@/components/ui/MarcaDagua.astro';
 import { site } from '@/data/site';
@@ -36,12 +33,12 @@ const { sobreposto = false } = Astro.props;
   <div class="site-header__barra" data-header-barra>
     <a href="/" class="site-header__marca" aria-label={`${site.marca}, página inicial`}>
       <span class="site-header__logo site-header__logo--mono" aria-hidden="true">
-        <MonogramaMono focusable="false" class="site-header__icone" />
-        <WordmarkMono focusable="false" class="site-header__wordmark" />
+        <Marca tipo="monograma" class="site-header__icone" />
+        <Marca tipo="wordmark" class="site-header__wordmark" />
       </span>
       <span class="site-header__logo site-header__logo--cor" aria-hidden="true">
-        <Monograma focusable="false" class="site-header__icone" />
-        <Wordmark focusable="false" class="site-header__wordmark" />
+        <Marca tipo="monograma" cor="cor" class="site-header__icone" />
+        <Marca tipo="wordmark" cor="cor" class="site-header__wordmark" />
       </span>
     </a>
     <nav aria-label="Principal">
@@ -101,8 +98,8 @@ const { sobreposto = false } = Astro.props;
           aria-label={`${site.marca}, página inicial`}
           data-menu-link
         >
-          <Monograma focusable="false" class="menu-movel__icone-marca" aria-hidden="true" />
-          <Wordmark focusable="false" class="menu-movel__wordmark" aria-hidden="true" />
+          <Marca tipo="monograma" cor="cor" class="menu-movel__icone-marca" />
+          <Marca tipo="wordmark" cor="cor" class="menu-movel__wordmark" />
         </a>
         <button
           type="button"
@@ -325,7 +322,7 @@ const { sobreposto = false } = Astro.props;
   @media (prefers-reduced-motion: reduce) {
     .site-header__barra,
     .site-header__logo,
-    .site-header__logo > :global(svg) {
+    .site-header__logo > :global(.marca) {
       transition: none;
     }
   }

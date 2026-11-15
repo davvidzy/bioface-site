@@ -44,7 +44,11 @@ export function absoluteUrl(path: string, base: URL | string | undefined): strin
  * Campos ainda não informados (endereço, geo, telefone, horários) são omitidos,
  * nunca preenchidos com valor falso.
  */
-export function jsonLdLocalBusiness(base: URL | string | undefined): Record<string, unknown> {
+export function jsonLdLocalBusiness(
+  base: URL | string | undefined,
+  /** Tratamentos por categoria: viram o catálogo de serviços da clínica. */
+  catalogo: { nome: string; itens: string[] }[] = [],
+): Record<string, unknown> {
   const { endereco, responsavel } = site;
   const ld: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -53,8 +57,13 @@ export function jsonLdLocalBusiness(base: URL | string | undefined): Record<stri
     name: site.marca,
     url: absoluteUrl('/', base),
     image: absoluteUrl(DEFAULT_OG_IMAGE, base),
+    logo: absoluteUrl('/favicon.svg', base),
     hasMap: linkGoogleMaps(),
-    sameAs: [site.instagram, site.linktree],
+    sameAs: [site.instagram, site.linktree, site.googleMaps].filter((u) => !faltando(u)),
+    areaServed: [
+      { '@type': 'Place', name: `${endereco.bairro}, ${endereco.cidade}` },
+      { '@type': 'City', name: endereco.cidade },
+    ],
     founder: {
       '@type': 'Person',
       name: responsavel.nome,
@@ -87,7 +96,63 @@ export function jsonLdLocalBusiness(base: URL | string | undefined): Record<stri
       closes: h.fecha,
     }));
   }
+  if (catalogo.length > 0) {
+    ld['hasOfferCatalog'] = {
+      '@type': 'OfferCatalog',
+      name: 'Tratamentos faciais',
+      itemListElement: catalogo.map((c) => ({
+        '@type': 'OfferCatalog',
+        name: c.nome,
+        itemListElement: c.itens.map((nome) => ({
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: nome },
+        })),
+      })),
+    };
+  }
   return ld;
+}
+
+/** BreadcrumbList: o caminho da página nos resultados do Google. */
+export function jsonLdBreadcrumb(
+  itens: { nome: string; path: string }[],
+  base: URL | string | undefined,
+): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: itens.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.nome,
+      item: absoluteUrl(item.path, base),
+    })),
+  };
+}
+
+/** Tratamentos de uma categoria como serviços da clínica (ligados ao LocalBusiness da Home). */
+export function jsonLdServicos(
+  servicos: { nome: string; descricao: string; ancora: string }[],
+  pagina: string,
+  base: URL | string | undefined,
+): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: servicos.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Service',
+        '@id': absoluteUrl(`${pagina}#${s.ancora}`, base),
+        name: s.nome,
+        description: s.descricao,
+        url: absoluteUrl(`${pagina}#${s.ancora}`, base),
+        areaServed: `${site.endereco.bairro}, ${site.endereco.cidade}`,
+        provider: { '@id': absoluteUrl('/#negocio', base) },
+      },
+    })),
+  };
 }
 
 /** FAQPage só com perguntas respondidas (pendentes ficam de fora). */

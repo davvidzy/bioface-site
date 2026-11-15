@@ -2,7 +2,11 @@
  * Fontes self-hosted (WOFF2 variáveis, subsets Latin e Latin Extended), licença SIL OFL.
  * Display: Newsreader (eixos de peso e de tamanho óptico; font-optical-sizing: auto ajusta
  * os traços ao tamanho do texto). Texto: Instrument Sans.
- * Arquivos em public/fonts. Preload só da Newsreader latin (BaseLayout) e do itálico (Home).
+ * Arquivos em public/fonts. Preload só da Newsreader latin (BaseLayout).
+ *
+ * Newsreader recortada com fontTools (varLib.instancer) para o que o site usa: peso 400 a 500
+ * (itálico só 400, na citação da Maria) e tamanho óptico de 16 a 72. Cerca de 40% menor.
+ * Comando: python -m fontTools.varLib.instancer <arquivo> wght=400:500 opsz=16:72
  */
 
 /* ---------- Newsreader ---------- */
@@ -30,7 +34,7 @@
 @font-face {
   font-family: 'Newsreader';
   font-style: italic;
-  font-weight: 400 500;
+  font-weight: 400;
   font-display: swap;
   src: url('/fonts/newsreader-italic-latin.woff2') format('woff2');
   unicode-range:
@@ -40,7 +44,7 @@
 @font-face {
   font-family: 'Newsreader';
   font-style: italic;
-  font-weight: 400 500;
+  font-weight: 400;
   font-display: swap;
   src: url('/fonts/newsreader-italic-latin-ext.woff2') format('woff2');
   unicode-range:

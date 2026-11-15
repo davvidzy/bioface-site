@@ -8,7 +8,7 @@
  */
 import { site, faltando } from '@/data/site';
 import Pendente from '@/components/ui/Pendente.astro';
-import Wordmark from '@/assets/brand/wordmark-mono.svg';
+import Marca from '@/components/ui/Marca.astro';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 
 const whatsapp = buildWhatsAppLink({ origem: 'rodape' });
@@ -82,7 +82,7 @@ const ano = new Date().getFullYear();
     </section>
   </div>
   <div class="container site-footer__marca" aria-hidden="true">
-    <Wordmark focusable="false" />
+    <Marca tipo="wordmark" />
   </div>
   <div class="container">
     <p class="t-caption site-footer__copy">
@@ -102,7 +102,7 @@ const ano = new Date().getFullYear();
     color: var(--color-accent-decorative);
   }
 
-  .site-footer__marca :global(svg) {
+  .site-footer__marca :global(.marca) {
     width: 100%;
     height: auto;
   }

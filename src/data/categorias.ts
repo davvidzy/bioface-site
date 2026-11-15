@@ -14,6 +14,12 @@ export const CATEGORIAS = [
     rotulo: 'Saúde e qualidade da pele',
     /** Uma palavra, para o card da Home. */
     curto: 'Pele',
+    /** Título e descrição para o Google: termos que a paciente busca + bairro. */
+    seo: {
+      title: 'Limpeza de pele, acne e melasma no Lago Sul, Brasília | BioFace',
+      description:
+        'Limpeza de pele, controle da acne e do melasma, peeling químico e microagulhamento no Lago Sul, Brasília. Avaliação individual pelo WhatsApp.',
+    },
     resumo: 'Para manchas, acne e textura.',
     descricao:
       'Cuidam da base: limpeza, controle de acne e manchas e renovação da textura. É por aqui que a pele ganha saúde e viço.',
@@ -22,6 +28,11 @@ export const CATEGORIAS = [
     slug: 'rejuvenescimento',
     rotulo: 'Firmeza e rejuvenescimento',
     curto: 'Rejuvenescer',
+    seo: {
+      title: 'Bioestimuladores, fios de PDO e laser no Lago Sul | BioFace',
+      description:
+        'Bioestimuladores, fios de PDO, laser e ultrassom, terapia regenerativa e jato de plasma no Lago Sul, Brasília. Firmeza com resultado natural.',
+    },
     resumo: 'Para flacidez e sinais do tempo.',
     descricao:
       'Estimulam o colágeno e devolvem sustentação à pele. Os resultados aparecem aos poucos e de forma natural.',
@@ -30,6 +41,11 @@ export const CATEGORIAS = [
     slug: 'contorno',
     rotulo: 'Expressão e contorno',
     curto: 'Expressões',
+    seo: {
+      title: 'Toxina botulínica e preenchimento no Lago Sul, Brasília | BioFace',
+      description:
+        'Toxina botulínica e preenchimento facial com ácido hialurônico no Lago Sul, Brasília. Suaviza rugas e repõe volume sem perder a naturalidade.',
+    },
     resumo: 'Para rugas, volume e contorno.',
     descricao:
       'Suavizam linhas de expressão e repõem o volume perdido. A proposta é realçar seus traços, sem mudar quem você é.',

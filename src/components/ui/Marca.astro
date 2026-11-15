@@ -1,0 +1,70 @@
+---
+/**
+ * Monograma ou wordmark da marca, sem SVG inline.
+ *
+ * Os SVGs do logo têm de 6 a 15 KB cada e aparecem até 20 vezes na Home: inline, somavam
+ * ~150 KB no HTML e pesavam no estilo e layout do celular. Aqui cada arquivo é baixado uma
+ * vez (cache) e reaproveitado:
+ * - cor="mono": máscara CSS com a cor do texto (currentColor), para seguir o tema;
+ * - cor="cor": <img> com as cores originais (degradês do arquivo).
+ * Sempre decorativo (aria-hidden): o nome acessível fica no link que envolve o logo.
+ */
+import monogramaMono from '@/assets/brand/monograma-mono.svg?url';
+import monogramaCor from '@/assets/brand/monograma.svg?url';
+import wordmarkMono from '@/assets/brand/wordmark-mono.svg?url';
+import wordmarkCor from '@/assets/brand/wordmark.svg?url';
+
+interface Props {
+  tipo: 'monograma' | 'wordmark';
+  cor?: 'mono' | 'cor';
+  class?: string | undefined;
+  /** Repassa atributos como o data-astro-cid-* do componente pai (estilos escopados). */
+  [key: `data-${string}`]: string | boolean | undefined;
+}
+
+const { tipo, cor = 'mono', class: className, ...resto } = Astro.props;
+
+const ARQUIVOS = {
+  monograma: { mono: monogramaMono, cor: monogramaCor, largura: 230, altura: 203 },
+  wordmark: { mono: wordmarkMono, cor: wordmarkCor, largura: 606, altura: 127 },
+} as const;
+
+const arquivo = ARQUIVOS[tipo];
+const src = arquivo[cor];
+---
+
+{
+  cor === 'cor' ? (
+    <img
+      class:list={['marca', className]}
+      src={src}
+      alt=""
+      aria-hidden="true"
+      width={arquivo.largura}
+      height={arquivo.altura}
+      decoding="async"
+      {...resto}
+    />
+  ) : (
+    <span
+      class:list={['marca', 'marca--mono', className]}
+      style={`--marca-url: url("${src}"); --marca-proporcao: ${arquivo.largura} / ${arquivo.altura}`}
+      aria-hidden="true"
+      {...resto}
+    />
+  )
+}
+
+<style>
+  .marca {
+    display: block;
+    height: auto;
+  }
+
+  .marca--mono {
+    aspect-ratio: var(--marca-proporcao);
+    background-color: currentColor;
+    -webkit-mask: var(--marca-url) center / contain no-repeat;
+    mask: var(--marca-url) center / contain no-repeat;
+  }
+</style>

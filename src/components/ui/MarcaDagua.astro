@@ -5,7 +5,7 @@
  * lateral da tela ("cortado"): a seção que o recebe usa overflow-x: clip.
  * Quem usa precisa ter position: relative (a classe .com-marca-dagua já faz isso).
  */
-import Monograma from '@/assets/brand/monograma-mono.svg';
+import Marca from '@/components/ui/Marca.astro';
 
 interface Props {
   /** Lado da tela onde o monograma encosta (e é cortado). */
@@ -58,7 +58,7 @@ const estilo = [
   data-parallax={parallax ? '0.25' : undefined}
   {...extras}
 >
-  <Monograma focusable="false" />
+  <Marca tipo="monograma" />
 </span>
 
 <style>
@@ -72,7 +72,7 @@ const estilo = [
     rotate: var(--giro);
   }
 
-  .marca-dagua :global(svg) {
+  .marca-dagua :global(.marca) {
     display: block;
     width: 100%;
     height: auto;
