@@ -60,15 +60,15 @@ export const home = {
     passos: [
       {
         titulo: 'Contato',
-        texto: 'Você manda uma mensagem pelo WhatsApp e combinamos o dia da sua avaliação.',
+        texto: 'Você manda uma mensagem no WhatsApp e marcamos a sua avaliação.',
       },
       {
         titulo: 'Avaliação presencial',
-        texto: 'A Maria conversa com você, avalia sua pele e entende o que você deseja.',
+        texto: 'A Maria conversa com você, avalia sua pele e entende o que deseja.',
       },
       {
         titulo: 'Plano personalizado',
-        texto: 'Você recebe um plano individual, com os tratamentos indicados para o seu caso.',
+        texto: 'Você recebe um plano só seu, com os tratamentos ideais para você.',
       },
     ],
   },
