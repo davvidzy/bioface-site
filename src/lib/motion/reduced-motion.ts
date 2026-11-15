@@ -10,6 +10,9 @@ export const MQ_NO_PREFERENCE = '(prefers-reduced-motion: no-preference)';
 /** Desktop: onde a linha do tempo do Método vira rolagem horizontal fixa na tela. */
 export const MQ_DESKTOP = '(min-width: 64rem)';
 
+/** Telas de toque sem mouse (celular, tablet). */
+export const MQ_TOQUE = '(hover: none) and (pointer: coarse)';
+
 /** Condições para gsap.matchMedia(). */
 export const MOTION_CONDITIONS = {
   reduce: MQ_REDUCE,

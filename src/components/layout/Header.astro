@@ -267,7 +267,10 @@ const { sobreposto = false } = Astro.props;
   .site-header__barra {
     position: fixed;
     inset-block-start: 0;
-    inset-inline-start: 50%;
+    /* Centrada por margens automáticas (e não left 50% + transform): no Safari, o transform
+       somado à largura animada fazia a barra e o texto tremerem durante a transição. */
+    inset-inline: 0;
+    margin-inline: auto;
     z-index: var(--z-header);
     display: flex;
     align-items: center;
@@ -282,7 +285,6 @@ const { sobreposto = false } = Astro.props;
     box-shadow:
       0 0 0 rgb(43 20 32 / 0),
       0 0 0 rgb(43 20 32 / 0);
-    transform: translateX(-50%);
     translate: 0 0;
     transition:
       translate var(--morph),
@@ -292,8 +294,7 @@ const { sobreposto = false } = Astro.props;
       padding var(--morph),
       border-radius var(--morph),
       background-color var(--morph),
-      box-shadow var(--morph),
-      backdrop-filter var(--morph);
+      box-shadow var(--morph);
   }
 
   /* ---------- Oculto: sobe para fora da tela ao rolar para baixo ---------- */
@@ -310,6 +311,8 @@ const { sobreposto = false } = Astro.props;
     border-radius: 2.5rem;
     background-color: color-mix(in srgb, var(--wine-900) 94%, transparent);
     box-shadow: var(--shadow-flutuante);
+    /* Sem transição no desfoque: no Safari, animar backdrop-filter pisca a barra. */
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
   }
 

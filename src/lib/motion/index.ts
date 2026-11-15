@@ -11,7 +11,7 @@ import { SplitText } from 'gsap/SplitText';
 import { CustomEase } from 'gsap/CustomEase';
 import Lenis from 'lenis';
 import { EASE, EASE_BEZIER, type EaseName } from './tokens';
-import { MQ_REDUCE } from './reduced-motion';
+import { MQ_REDUCE, MQ_TOQUE } from './reduced-motion';
 import { definirLenis, getLenis } from './instancia';
 
 let registrado = false;
@@ -24,6 +24,9 @@ export function registrarPlugins(): void {
   if (registrado) return;
   registrado = true;
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
+  // Celular: a barra de endereço aparece e some ao rolar e muda a altura da tela. Sem isso,
+  // cada mudança dispara um refresh que reposiciona a rolagem (a página "pula").
+  ScrollTrigger.config({ ignoreMobileResize: true });
   (Object.keys(EASE_BEZIER) as EaseName[]).forEach((nome) => {
     CustomEase.create(EASE[nome], bezierParaPath(EASE_BEZIER[nome]));
   });
@@ -37,6 +40,9 @@ export function registrarPlugins(): void {
 export function iniciarLenis(): Lenis | null {
   const atual = getLenis();
   if (atual || window.matchMedia(MQ_REDUCE).matches) return atual;
+  // Toque: a rolagem nativa já é suave e o Lenis não suaviza o toque. Ligado, ele só
+  // disputa a posição com a inércia do iOS (saltos na rolagem). Fica só no mouse/trackpad.
+  if (window.matchMedia(MQ_TOQUE).matches) return null;
 
   // anchors: false porque âncoras são tratadas por lib/ancoras.ts (foco + rolagem).
   const lenis = new Lenis({ autoRaf: false, anchors: false });

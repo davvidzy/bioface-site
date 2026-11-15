@@ -1,0 +1,51 @@
+# Hospedagem Hostinger (LiteSpeed/Apache). O build gera páginas como arquivos .html
+# (build.format: 'file'), e os links do site não têm extensão nem barra no fim:
+# /tratamentos/pele -> tratamentos/pele.html
+
+Options -MultiViews
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # HTTPS: use a opção "Forçar HTTPS" do painel da Hostinger (a CDN fica na frente;
+  # redirecionar aqui pode entrar em laço).
+
+  # /pagina.html -> /pagina (um endereço só por página, sem conteúdo duplicado no Google).
+  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+  RewriteCond %1 !^(index|404)$
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # /pagina/ -> /pagina (trailingSlash: 'never').
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # /pagina -> pagina.html (sem mudar o endereço).
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+)$ $1.html [L]
+</IfModule>
+
+# Cache: arquivos com hash no nome (_astro) e fontes nunca mudam; HTML sempre revalida.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+  # js, css e imagens otimizadas saem do build com hash no nome (/_astro): cache longo.
+  <FilesMatch "\.(js|css|avif|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # Fontes, favicon e imagem de compartilhamento não têm hash: cache de 30 dias.
+  <FilesMatch "\.(woff2|svg|jpg|jpeg|png)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType font/woff2 .woff2
+</IfModule>

@@ -89,12 +89,21 @@ function desmontarPagina(): void {
   ScrollTrigger.getAll().forEach((t) => t.kill());
 }
 
-/** Refresh depois de fontes e imagens: os reveals dependem de posições corretas. */
+/**
+ * Refresh depois de fontes e imagens: os reveals dependem de posições corretas.
+ * Agrupado (um refresh só, um pouco depois da última carga): as fotos lazy chegam
+ * enquanto a pessoa rola, e um refresh no meio da inércia do celular faz a página pular.
+ */
+let esperaRefresh = 0;
+function pedirRefresh(): void {
+  window.clearTimeout(esperaRefresh);
+  esperaRefresh = window.setTimeout(() => ScrollTrigger.refresh(), 250);
+}
+
 function agendarRefresh(): void {
-  const refresh = () => ScrollTrigger.refresh();
-  document.fonts?.ready.then(refresh);
+  document.fonts?.ready.then(pedirRefresh);
   document.querySelectorAll<HTMLImageElement>('main img').forEach((img) => {
-    if (!img.complete) img.addEventListener('load', refresh, { once: true });
+    if (!img.complete) img.addEventListener('load', pedirRefresh, { once: true });
   });
 }
 
