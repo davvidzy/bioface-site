@@ -17,7 +17,7 @@ export const navegacao = [
 ] as const;
 
 /*
- * Itálico (*palavra*) só em dois lugares da página: o hero e o CTA final.
+ * Títulos sem itálico (inclusive hero e CTA final); o itálico fica só na citação da Maria.
  * Os demais títulos são retos: quando tudo é destaque, nada é.
  *
  * Textos marcados como rascunho: escritos para a prévia a partir do brief, sem conteúdo
@@ -90,7 +90,7 @@ export const home = {
     titulo: 'Perguntas frequentes',
   },
   ctaFinal: {
-    titulo: 'Agende sua *avaliação*',
+    titulo: 'Agende sua avaliação',
     texto: 'Na avaliação, a Maria entende o seu rosto e monta um plano só seu.',
   },
 };

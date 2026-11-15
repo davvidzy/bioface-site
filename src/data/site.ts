@@ -26,6 +26,10 @@ export interface Site {
   };
   whatsapp: string;
   horarios: Horario[];
+  /** Dias sem atendimento, em texto (ex.: "Sábado e domingo"). */
+  fechado: string;
+  /** URL de incorporação do mapa (Google Maps > Compartilhar > Incorporar). */
+  mapaEmbed: string;
   instagram: string;
   linktree: string;
 }
@@ -39,15 +43,25 @@ export const site: Site = {
   },
   anosAtuacao: 18,
   endereco: {
-    logradouro: 'TODO', // TODO(conteudo): endereço completo
+    logradouro: 'St. de Mansões Dom Bosco, Conj. 12, CL ST, Bloco E, sala 105',
     bairro: 'Lago Sul',
     cidade: 'Brasília',
     uf: 'DF',
-    cep: 'TODO', // TODO(conteudo): CEP
-    geo: { lat: null, lng: null }, // TODO(conteudo): coordenadas
+    cep: '71680-120',
+    geo: { lat: -15.8576144, lng: -47.8315178 }, // do embed do Google Maps
   },
   whatsapp: '556182521783', // agendamento da clínica, só dígitos, com DDI 55
-  horarios: [], // TODO(conteudo): horários de atendimento
+  horarios: [
+    {
+      dias: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      rotulo: 'Segunda a sexta',
+      abre: '09:00',
+      fecha: '18:00',
+    },
+  ],
+  fechado: 'Sábado e domingo',
+  mapaEmbed:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3837.980648107704!2d-47.8315178!3d-15.8576144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a23553af0ee35%3A0x2522d838db3f7ca3!2sBioface%20Est%C3%A9tica%20Avan%C3%A7ada!5e0!3m2!1spt-BR!2sbr!4v1794713457210!5m2!1spt-BR!2sbr',
   instagram: 'https://www.instagram.com/bioface_/',
   linktree: 'https://linktr.ee/bioface_',
 };
@@ -66,10 +80,10 @@ export function enderecoCompleto(): string | null {
 
 /** Link de busca no Google Maps: funciona mesmo sem coordenadas. */
 export function linkGoogleMaps(): string {
-  const { lat, lng } = site.endereco.geo;
-  const consulta =
-    lat !== null && lng !== null
-      ? `${lat},${lng}`
-      : (enderecoCompleto() ?? `${site.marca}, ${site.endereco.bairro}, ${site.endereco.cidade}`);
+  // Busca pelo nome + endereço: abre a ficha da clínica no Maps (com fotos e rotas).
+  const endereco = enderecoCompleto();
+  const consulta = endereco
+    ? `${site.marca}, ${endereco}`
+    : `${site.marca}, ${site.endereco.bairro}, ${site.endereco.cidade}`;
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(consulta)}`;
 }

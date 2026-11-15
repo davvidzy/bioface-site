@@ -104,7 +104,10 @@ const fotos: Record<Categoria['slug'], ImageMetadata> = {
       gap: var(--space-4);
       margin-inline: calc(-1 * var(--gutter));
       padding-inline: var(--gutter);
-      padding-block-end: var(--space-5);
+      /* O carrossel corta o que passa da sua caixa: espaço para a sombra e para o card
+         subir no toque. A seção desconta esse espaço embaixo, para o ritmo não mudar. */
+      padding-block: var(--space-3) var(--space-8);
+      margin-block-end: calc(var(--space-5) - var(--space-8));
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scroll-padding-inline: var(--gutter);

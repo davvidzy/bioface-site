@@ -8,7 +8,6 @@ import Section from '@/components/ui/Section.astro';
 import WhatsAppLink from '@/components/ui/WhatsAppLink.astro';
 import Monograma from '@/assets/brand/monograma-mono.svg';
 import Localizacao from './Localizacao.astro';
-import { enfase } from '@/lib/texto';
 import type { OrigemWhatsApp } from '@/lib/whatsapp';
 
 interface Props {
@@ -26,12 +25,9 @@ const { titulo, texto, origem, procedimento, comLocalizacao = false } = Astro.pr
   <div class="cta">
     <Monograma class="cta__monograma" aria-hidden="true" focusable="false" />
     <div class="cta__conteudo">
-      <h2
-        id="cta-final-titulo"
-        class="t-display-xl"
-        data-reveal="lines"
-        set:html={enfase(titulo)}
-      />
+      <h2 id="cta-final-titulo" class="t-display-xl" data-reveal="lines">
+        {titulo}
+      </h2>
       {texto && (
         <p class="cta__texto" data-reveal="fade">
           {texto}

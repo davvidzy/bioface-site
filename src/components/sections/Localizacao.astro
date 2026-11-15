@@ -1,8 +1,10 @@
 ---
 /**
- * Endereço, horários e mapa carregado sob demanda.
- * Fallback sem JS: endereço em texto e link para o Google Maps.
- * O iframe só é criado quando a pessoa pede, para não pesar no carregamento.
+ * Endereço, horários e mapa da clínica.
+ * Desktop: endereço e horários à esquerda, mapa à direita. Celular: tudo em coluna.
+ * O mapa é o embed oficial do Google Maps (ficha da clínica), com loading="lazy": só
+ * carrega quando chega perto da tela. O link "Ver no Google Maps" continua como
+ * alternativa em texto.
  */
 import Pendente from '@/components/ui/Pendente.astro';
 import { site, enderecoCompleto, linkGoogleMaps } from '@/data/site';
@@ -16,61 +18,82 @@ interface Props {
 const { nivel: Tag = 'h3' } = Astro.props;
 const endereco = enderecoCompleto();
 const mapsLink = linkGoogleMaps();
-const consultaMapa =
-  endereco ?? `${site.marca}, ${site.endereco.bairro}, ${site.endereco.cidade} ${site.endereco.uf}`;
-const embedSrc = `https://www.google.com/maps?q=${encodeURIComponent(consultaMapa)}&output=embed`;
+const hora = (h: string) => h.replace(/^0/, '').replace(':00', 'h').replace(':', 'h');
 ---
 
 <div class="localizacao">
-  <div>
-    <Tag class="t-eyebrow localizacao__titulo">{t.endereco}</Tag>
-    {endereco ? (
-      <address>{endereco}</address>
-    ) : (
-      <>
-        <p>
+  <div class="localizacao__info">
+    <div>
+      <Tag class="t-eyebrow localizacao__titulo">{t.endereco}</Tag>
+      {endereco ? (
+        <address>
+          {site.endereco.logradouro}
+          <br />
           {site.endereco.bairro}, {site.endereco.cidade}/{site.endereco.uf}
-        </p>
-        <Pendente texto="endereço completo e CEP" />
-      </>
-    )}
-    <p>
-      <a href={mapsLink} target="_blank" rel="noopener noreferrer" class="localizacao__link">
-        {t.mapa} <span class="visually-hidden">(abre em nova aba)</span>
-      </a>
-    </p>
+          <br />
+          CEP {site.endereco.cep}
+        </address>
+      ) : (
+        <>
+          <p>
+            {site.endereco.bairro}, {site.endereco.cidade}/{site.endereco.uf}
+          </p>
+          <Pendente texto="endereço completo e CEP" />
+        </>
+      )}
+      <p>
+        <a href={mapsLink} target="_blank" rel="noopener noreferrer" class="localizacao__link">
+          {t.mapa} <span aria-hidden="true">→</span>
+          <span class="visually-hidden">(abre em nova aba)</span>
+        </a>
+      </p>
+    </div>
+
+    <div>
+      <Tag class="t-eyebrow localizacao__titulo">{t.horarios}</Tag>
+      {site.horarios.length > 0 ? (
+        <dl class="horarios">
+          {site.horarios.map((h) => (
+            <div>
+              <dt>{h.rotulo}</dt>
+              <dd>
+                {hora(h.abre)} às {hora(h.fecha)}
+              </dd>
+            </div>
+          ))}
+          {site.fechado && (
+            <div>
+              <dt>{site.fechado}</dt>
+              <dd>Fechado</dd>
+            </div>
+          )}
+        </dl>
+      ) : (
+        <Pendente texto="horários de atendimento" />
+      )}
+    </div>
   </div>
 
-  <div>
-    <Tag class="t-eyebrow localizacao__titulo">{t.horarios}</Tag>
-    {site.horarios.length > 0 ? (
-      <dl class="horarios">
-        {site.horarios.map((h) => (
-          <div>
-            <dt>{h.rotulo}</dt>
-            <dd>
-              {h.abre} às {h.fecha}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    ) : (
-      <Pendente texto="horários de atendimento" />
-    )}
-  </div>
-
-  <div class="localizacao__mapa" data-mapa data-src={embedSrc} data-titulo={t.tituloMapa}>
-    <button type="button" class="t-label localizacao__botao" data-mapa-botao hidden>
-      {t.carregarMapa}
-    </button>
+  <div class="localizacao__mapa">
+    <iframe
+      src={site.mapaEmbed}
+      title={t.tituloMapa}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
   </div>
 </div>
 
 <style>
   .localizacao {
     display: grid;
-    gap: var(--space-6);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--space-8);
+  }
+
+  .localizacao__info {
+    display: grid;
+    gap: var(--space-7);
+    align-content: start;
   }
 
   .localizacao__titulo {
@@ -82,58 +105,69 @@ const embedSrc = `https://www.google.com/maps?q=${encodeURIComponent(consultaMap
 
   address {
     font-style: normal;
+    font-size: var(--text-body-m);
+    line-height: 1.6;
   }
 
   .localizacao__link {
     display: inline-flex;
     align-items: center;
+    gap: var(--space-2);
     min-height: var(--tap-min);
+    margin-block-start: var(--space-2);
+    font-size: var(--text-body-s);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
   }
 
+  .horarios {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 22rem;
+    font-size: var(--text-body-m);
+  }
+
+  .horarios div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-block-end: var(--space-2);
+    border-block-end: var(--border-width) solid
+      color-mix(in srgb, var(--color-border-default) 25%, transparent);
+  }
+
+  .horarios dd {
+    color: var(--color-text-secondary);
+  }
+
+  /* Mapa em moldura arredondada, no mesmo padrão das fotos. */
   .localizacao__mapa {
-    grid-column: 1 / -1;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-l);
+    background-color: var(--color-bg-default);
   }
 
-  .localizacao__botao {
-    min-height: var(--tap-min);
-    padding: var(--space-3) var(--space-5);
-    border: var(--border-width) solid currentColor;
-    border-radius: var(--radius-m);
-    background: transparent;
-  }
-
-  .localizacao__mapa :global(iframe) {
-    display: block;
+  .localizacao__mapa iframe {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 100%;
     border: 0;
   }
 
-  dl div {
-    display: flex;
-    gap: var(--space-2);
+  @media (min-width: 56rem) {
+    .localizacao {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: var(--space-10);
+      align-items: start;
+    }
+
+    .localizacao__mapa {
+      aspect-ratio: 16 / 10;
+    }
   }
 </style>
-
-<script>
-  function montarMapas() {
-    document.querySelectorAll<HTMLElement>('[data-mapa]').forEach((caixa) => {
-      const botao = caixa.querySelector<HTMLButtonElement>('[data-mapa-botao]');
-      if (!botao || botao.dataset['pronto']) return;
-      botao.dataset['pronto'] = 'true';
-      botao.hidden = false;
-      botao.addEventListener('click', () => {
-        const iframe = document.createElement('iframe');
-        iframe.src = caixa.dataset['src'] ?? '';
-        iframe.title = caixa.dataset['titulo'] ?? '';
-        iframe.loading = 'lazy';
-        iframe.referrerPolicy = 'no-referrer-when-downgrade';
-        iframe.tabIndex = 0;
-        caixa.replaceChildren(iframe);
-        iframe.focus();
-      });
-    });
-  }
-
-  document.addEventListener('astro:page-load', montarMapas);
-</script>

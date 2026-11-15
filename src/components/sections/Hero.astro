@@ -89,7 +89,10 @@ const { paisagem, retrato } = await imagensHero();
     align-items: center;
     min-height: 100vh;
     min-height: 100svh;
-    overflow: hidden;
+    /* Corta só nas laterais: o monograma do canto pode descer sobre a seção seguinte e
+       aparecer inteiro (z-index 1 deixa o hero pintado por cima dela). */
+    z-index: 1;
+    overflow-x: clip;
     background-color: var(--color-bg-default);
   }
 

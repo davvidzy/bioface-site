@@ -3,7 +3,7 @@
 Gerado por `npm run pendencias` a partir dos marcadores `TODO(...)` em `src/`.
 Não edite à mão: resolva no código e gere de novo.
 
-Total: 107 marcadores.
+Total: 103 marcadores.
 
 ## Conteúdo que a cliente precisa enviar (`TODO(conteudo)`)
 
@@ -64,11 +64,7 @@ Total: 107 marcadores.
   - [src/content/procedimentos/tratamento-acne.md:30](src/content/procedimentos/tratamento-acne.md#L30)
   - [src/content/procedimentos/tratamento-melasma.md:30](src/content/procedimentos/tratamento-melasma.md#L30)
   - [src/content/procedimentos/tratamentos-regenerativos.md:31](src/content/procedimentos/tratamentos-regenerativos.md#L31)
-- [ ] número do CRBM da Maria Guedes. [src/data/site.ts:38](src/data/site.ts#L38)
-- [ ] endereço completo. [src/data/site.ts:42](src/data/site.ts#L42)
-- [ ] CEP. [src/data/site.ts:46](src/data/site.ts#L46)
-- [ ] coordenadas. [src/data/site.ts:47](src/data/site.ts#L47)
-- [ ] horários de atendimento. [src/data/site.ts:50](src/data/site.ts#L50)
+- [ ] número do CRBM da Maria Guedes. [src/data/site.ts:42](src/data/site.ts#L42)
 - [ ] quando houver, entrar com o número do CRBM e a nota do Google. [src/data/textos.ts:47](src/data/textos.ts#L47)
 - [ ] seção "O espaço" volta quando houver fotos da clínica. [src/pages/index.astro:97](src/pages/index.astro#L97)
 - [ ] trocar pelo domínio definitivo quando a cliente contratar. [astro.config.mjs:5](astro.config.mjs#L5)

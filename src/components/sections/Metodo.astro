@@ -127,6 +127,17 @@ const posicoes = ['24%', '50%', '76%'];
     border-radius: var(--radius-l);
   }
 
+  /* Fio fino por dentro, como nas fotos dos tratamentos. */
+  .metodo__foto::after {
+    content: '';
+    position: absolute;
+    inset: var(--space-3);
+    z-index: 1;
+    border: 1px solid rgb(250 246 241 / 0.32);
+    border-radius: calc(var(--radius-l) - var(--space-2));
+    pointer-events: none;
+  }
+
   .metodo__foto :global(img) {
     position: absolute;
     inset: 0;
@@ -207,10 +218,12 @@ const posicoes = ['24%', '50%', '76%'];
     vertical-align: middle;
   }
 
-  /* Máscara: o texto sobe de dentro do próprio bloco (movimento no desktop). */
+  /* Máscara: o texto sobe de dentro do próprio bloco (movimento no desktop). Corta só na
+     vertical (clip), para o título em uma linha poder passar da largura da etapa. */
   .etapa__titulo,
   .etapa__descricao {
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: clip;
   }
 
   .etapa__mascara {
@@ -363,9 +376,11 @@ const posicoes = ['24%', '50%', '76%'];
       margin-block-start: -0.6vw;
     }
 
+    /* Títulos das etapas sempre em uma linha. */
     :global(html[data-js]) .etapa__titulo {
       font-size: clamp(1.75rem, 2.3vw, 2.75rem);
       line-height: 1.05;
+      white-space: nowrap;
     }
 
     :global(html[data-js]) .etapa__descricao {

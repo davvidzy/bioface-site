@@ -191,7 +191,7 @@ Sem botão flutuante de WhatsApp no mobile (removido a pedido em 2026-11-14).
 ### 6.1.1 Direção visual (decidida em 2026-11-14)
 
 - **Narrativa de luz:** a página começa no creme e escurece aos poucos até o vinho (creme → `bg/subtle` → wine/900 → wine/950), como o dia indo para o entardecer. As passagens entre fundos são faixas de degradê decorativas (`components/ui/Transicao.astro`), fora das seções, para nenhum texto ficar sobre a transição.
-- **Itálico só no título do CTA final.** O `h1` do hero e os outros títulos são retos.
+- **Títulos sempre retos (sem itálico)**, inclusive o do CTA final (removido a pedido em 2026-11-15). O itálico fica só na citação da Maria.
 - **Um único botão de CTA em todo o site** (`components/ui/Button.astro`): pílula com hover "fluido" (preenchimento em elipse que sobe de baixo, rótulo que rola para a cópia invertida, leve crescimento). Cores pelo tema: vinho no claro, dourado no escuro. Sem variantes.
 - **Ritmo único de movimento:** toda mudança de estado usa `--motion-fluido` (750ms, `--ease-out-soft`).
 - **Texto corrido com no mínimo Body/M (18px).** Legendas e rótulos curtos podem usar Body/S.
@@ -433,7 +433,7 @@ Mínimos no mobile: Display/XL 48px, Display/L 40px, H2 34px, H3 26px (aqui a Co
 Marque cada lacuna no código como `TODO(conteudo)` ou `TODO(validar-cliente)` para que um `grep` liste tudo.
 
 - [ ] Número do CRBM da Maria Guedes
-- [ ] Endereço completo, CEP, coordenadas, horários
+- [x] ~~Endereço completo, CEP, coordenadas, horários~~: informados em 2026-11-15 (site.ts), com o mapa do Google
 - [x] ~~Número de WhatsApp de agendamento~~: 55 61 8252-1783 (link oficial da clínica)
 - [ ] Fotos profissionais da Maria e do espaço (as do Instagram não têm qualidade para hero)
 - [ ] Formação e trajetória para `/sobre`
