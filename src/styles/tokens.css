@@ -94,7 +94,8 @@
   --space-8: 4rem;
   --space-9: 6rem;
   --space-10: 8rem;
-  --space-section: clamp(3rem, 2.2rem + 3.5vw, 5.5rem); /* menor: os conectores fazem a ligação */
+  /* Celular ~72px por lado (antes 48px, ficava apertado); desktop continua em 88px. */
+  --space-section: clamp(4.5rem, 4rem + 2vw, 5.5rem);
   --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
   --container-max: 80rem;
 
