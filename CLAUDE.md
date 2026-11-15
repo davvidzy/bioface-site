@@ -89,7 +89,9 @@ O Figma lista 12 tratamentos faciais. Na interface eles são agrupados **pelo ob
 - Cada categoria tem uma frase de apoio já escrita no Figma; use-a como `descricao` da categoria.
 
 ### Slugs
-`limpeza-de-pele`, `tratamento-acne`, `tratamento-melasma`, `peelings-quimicos`, `microagulhamento`, `bioestimuladores-de-colageno`, `fios-de-pdo`, `tecnologias`, `tratamentos-regenerativos`, `jato-de-plasma-palpebras`, `toxina-botulinica`, `preenchimento-facial`
+`limpeza-de-pele`, `controle-da-acne`, `controle-do-melasma`, `peeling-quimico`, `microagulhamento`, `bioestimuladores`, `fios-de-pdo`, `laser-e-ultrassom`, `terapia-regenerativa`, `jato-de-plasma`, `toxina-botulinica`, `preenchimento-facial` (renomeados em 2026-11-15, junto com os nomes e textos do documento "BioFace · Textos de tratamentos e categorias").
+
+**Textos (2026-11-15):** categoria tem `resumo` ("Para X e Y.", card da Home) e `descricao` (texto longo, topo da página da categoria). Tratamento tem `problema` (dor curta, 26 a 33 caracteres) e `resumo` (91 a 100 caracteres, mostrado no card dentro da página da categoria). Nunca `problema` e `resumo` no mesmo card. Ao reescrever, mantenha essas faixas. Cada card tem título em `h2` e âncora pelo slug (`/tratamentos/rejuvenescimento#fios-de-pdo`).
 
 São 12 itens no node `1:150`, um arquivo por item. "Tecnologias" agrupa laser e ultrassom microfocado num item só; se a cliente quiser páginas separadas para cada tecnologia, ele vira categoria própria depois.
 

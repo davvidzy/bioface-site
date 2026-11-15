@@ -5,7 +5,8 @@ ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Lábios finos e perda de volume.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+# TODO(validar-cliente): resumo do tratamento.
+resumo: 'Ácido hialurônico aplicado em pontos estratégicos para repor volume e redesenhar contornos.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.

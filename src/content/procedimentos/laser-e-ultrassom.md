@@ -7,7 +7,7 @@ ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Flacidez e textura irregular.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+resumo: 'Aparelhos que atuam em camadas específicas da pele para estimular colágeno e firmar, sem agulhas.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -22,10 +22,10 @@ faq:
   - pergunta: 'Tem tempo de recuperação?'
     resposta: 'Na maioria dos casos é mínimo, e você volta à rotina no mesmo dia. Alguns lasers pedem cuidados extras por alguns dias.'
     pendente: false
-relacionados: ['bioestimuladores-de-colageno', 'fios-de-pdo', 'tratamentos-regenerativos']
+relacionados: ['bioestimuladores', 'fios-de-pdo', 'terapia-regenerativa']
 seo:
-  title: 'Laser e ultrassom microfocado no Lago Sul, Brasília | BioFace'
-  description: 'Laser, ultrassom microfocado e outras tecnologias: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
+  title: 'Laser e ultrassom no Lago Sul, Brasília | BioFace'
+  description: 'Laser e ultrassom: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
 pendente: true
 ---
 

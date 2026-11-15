@@ -1,11 +1,13 @@
 ---
+# TODO(validar-cliente): nome do tratamento.
 nome: 'Terapia regenerativa'
 categoria: rejuvenescimento
 ordem: 4
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Pele cansada e sem vitalidade.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+# TODO(validar-cliente): resumo do tratamento.
+resumo: 'Ativos aplicados na pele que estimulam sua recuperação e devolvem qualidade, hidratação e viço.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -21,10 +23,10 @@ faq:
   - pergunta: 'Pode ser combinada com outros tratamentos?'
     resposta: 'Sim, ela costuma potencializar outros tratamentos do plano. A combinação ideal é definida para o seu caso.'
     pendente: false
-relacionados: ['bioestimuladores-de-colageno', 'fios-de-pdo', 'tecnologias']
+relacionados: ['bioestimuladores', 'fios-de-pdo', 'laser-e-ultrassom']
 seo:
-  title: 'Tratamentos regenerativos no Lago Sul, Brasília | BioFace'
-  description: 'Tratamentos regenerativos: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
+  title: 'Terapia regenerativa no Lago Sul, Brasília | BioFace'
+  description: 'Terapia regenerativa: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
 pendente: true
 ---
 

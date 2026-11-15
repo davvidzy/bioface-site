@@ -5,7 +5,7 @@
  * Três cards com foto, um por objetivo, levando à página da categoria
  * (/tratamentos/[categoria]). Foto de fundo em 2:3 (a proporção das originais, então
  * quase não há recorte e nunca há zoom), degradê vinho embaixo, fio fino por dentro,
- * nome do objetivo em uma palavra, quantidade e "Ver tratamentos".
+ * nome do objetivo em uma palavra, a frase curta da categoria (resumo) e "Ver tratamentos".
  * Hover: o card sobe um pouco, o degradê sobe junto e a seta avança. A foto não muda.
  */
 import type { ImageMetadata } from 'astro';
@@ -44,7 +44,7 @@ const fotos: Record<Categoria['slug'], ImageMetadata> = {
     </h2>
 
     <ul class="list-reset trat__cards" role="list" data-reveal="stagger">
-      {grupos.map(({ categoria, procedimentos }) => (
+      {grupos.map(({ categoria }) => (
         <li data-trat-cat>
           <a class="card" href={`/tratamentos/${categoria.slug}`}>
             <Picture
@@ -61,7 +61,7 @@ const fotos: Record<Categoria['slug'], ImageMetadata> = {
                 {categoria.curto}
                 <span class="visually-hidden">: {categoria.rotulo}</span>
               </span>
-              <span class="card__qtd">{procedimentos.length} tratamentos</span>
+              <span class="card__qtd">{categoria.resumo}</span>
               <span class="card__ver">
                 Ver tratamentos
                 <span class="card__seta" aria-hidden="true">

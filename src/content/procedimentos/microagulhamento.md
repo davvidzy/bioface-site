@@ -5,7 +5,7 @@ ordem: 5
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Marcas de acne e poros dilatados.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+resumo: 'Microperfurações controladas que estimulam colágeno e suavizam marcas de acne, poros e linhas finas.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -21,7 +21,7 @@ faq:
   - pergunta: 'Funciona para cicatriz de acne?'
     resposta: 'Sim, é um dos tratamentos mais indicados para marcas de acne. O resultado vem aos poucos, ao longo das sessões.'
     pendente: false
-relacionados: ['limpeza-de-pele', 'tratamento-acne', 'tratamento-melasma']
+relacionados: ['limpeza-de-pele', 'controle-da-acne', 'controle-do-melasma']
 seo:
   title: 'Microagulhamento no Lago Sul, Brasília | BioFace'
   description: 'Microagulhamento: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'

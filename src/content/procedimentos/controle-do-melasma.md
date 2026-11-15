@@ -5,7 +5,8 @@ ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Manchas escuras e tom irregular.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+# TODO(validar-cliente): resumo do tratamento.
+resumo: 'Protocolo com ativos clareadores e peelings suaves que clareia as manchas e as mantém sob controle.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -20,10 +21,10 @@ faq:
   - pergunta: 'Em quanto tempo vejo resultado?'
     resposta: 'O clareamento é gradual e depende da profundidade das manchas. Na avaliação você recebe uma estimativa para o seu caso.'
     pendente: false
-relacionados: ['limpeza-de-pele', 'tratamento-acne', 'peelings-quimicos']
+relacionados: ['limpeza-de-pele', 'controle-da-acne', 'peeling-quimico']
 seo:
-  title: 'Tratamento para melasma no Lago Sul, Brasília | BioFace'
-  description: 'Tratamento para melasma: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
+  title: 'Controle do melasma no Lago Sul, Brasília | BioFace'
+  description: 'Controle do melasma: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
 pendente: true
 ---
 

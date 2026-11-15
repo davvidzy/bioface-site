@@ -4,7 +4,7 @@
  *
  * 1. Hero: migalhas, nome do objetivo em display, frase de apoio, CTA e um link de texto
  *    para quem não sabe por onde começar; à direita, duas fotos em alturas diferentes.
- * 2. Cards dos tratamentos: foto, nome em serifa e a dor numa frase. Cada card abre o
+ * 2. Cards dos tratamentos (h2, âncora pelo slug): foto, nome em serifa e o resumo. Cada card abre o
  *    WhatsApp com o nome do tratamento na mensagem.
  * 3. Outros objetivos e CTA final.
  *
@@ -129,10 +129,10 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
       </h2>
       <ul class="list-reset cards" role="list" data-reveal="stagger">
         {procedimentos.map((p) => {
-          const problema = isPendente(p.data.problema) ? undefined : p.data.problema;
+          const resumo = isPendente(p.data.resumo) ? undefined : p.data.resumo;
           const foto = fotoProcedimento(p.id);
           return (
-            <li>
+            <li id={p.id} class="cards__item">
               <a
                 class="card-trat"
                 href={buildWhatsAppLink({ procedimento: p.data.nome, origem: 'tratamentos' })}
@@ -160,8 +160,8 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
                     <span>Foto · {p.data.nome}</span>
                   )}
                 </span>
-                <span class="card-trat__nome">{p.data.nome}</span>
-                {problema && <span class="card-trat__problema">{problema}</span>}
+                <h2 class="card-trat__nome">{p.data.nome}</h2>
+                {resumo && <span class="card-trat__resumo">{resumo}</span>}
                 <span class="visually-hidden">
                   : agendar avaliação pelo WhatsApp (abre o WhatsApp em nova aba)
                 </span>
@@ -379,14 +379,23 @@ const descricao = `${categoria.descricao} ${procedimentos.map((p) => p.data.nome
 
   .card-trat__nome {
     font-family: var(--font-display);
+    font-weight: var(--weight-regular);
     font-size: var(--text-h3);
     line-height: var(--leading-h3);
     transition: translate var(--motion-fluido);
   }
 
-  .card-trat__problema {
-    font-size: var(--text-body-s);
+  /* Descrição do tratamento (resumo, 91 a 100 caracteres): mesmo tamanho em todos os cards. */
+  .card-trat__resumo {
+    max-width: 34ch;
+    font-size: var(--text-body-m);
+    line-height: 1.5;
     color: var(--color-text-secondary);
+  }
+
+  /* Âncora pelo slug (#fios-de-pdo): o card não fica embaixo do header ao chegar. */
+  .cards__item {
+    scroll-margin-top: 7rem;
   }
 
   .card-trat:hover .card-trat__foto {

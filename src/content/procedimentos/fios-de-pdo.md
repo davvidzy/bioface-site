@@ -5,7 +5,7 @@ ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Flacidez e contorno indefinido.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+resumo: 'Fios absorvíveis colocados sob a pele que dão sustentação ao contorno e estimulam colágeno.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -21,7 +21,7 @@ faq:
   - pergunta: 'É um procedimento cirúrgico?'
     resposta: 'Não. Não há corte nem pontos. Os fios são inseridos com agulhas ou cânulas finas, com anestesia local.'
     pendente: true
-relacionados: ['bioestimuladores-de-colageno', 'tecnologias', 'tratamentos-regenerativos']
+relacionados: ['bioestimuladores', 'laser-e-ultrassom', 'terapia-regenerativa']
 seo:
   title: 'Fios de PDO no Lago Sul, Brasília | BioFace'
   description: 'Fios de PDO: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'

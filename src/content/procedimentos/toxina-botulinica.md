@@ -5,7 +5,7 @@ ordem: 1
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Rugas na testa e pés de galinha.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+resumo: 'Relaxa músculos específicos do rosto para suavizar rugas de expressão sem tirar a naturalidade.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.

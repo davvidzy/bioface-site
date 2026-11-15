@@ -5,7 +5,7 @@ ordem: 4
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
 problema: 'Textura áspera e pele sem viço.'
-resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
+resumo: 'Ácidos aplicados na pele que renovam as camadas superficiais e deixam textura e tom mais uniformes.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
 # TODO(conteudo): sessões, duração, recuperação, início e duração do resultado.
@@ -20,10 +20,10 @@ faq:
   - pergunta: 'Quantas sessões são necessárias?'
     resposta: 'Varia conforme o objetivo e a resposta da pele. O número de sessões é definido no seu plano, depois da avaliação.'
     pendente: false
-relacionados: ['limpeza-de-pele', 'tratamento-acne', 'tratamento-melasma']
+relacionados: ['limpeza-de-pele', 'controle-da-acne', 'controle-do-melasma']
 seo:
-  title: 'Peelings químicos no Lago Sul, Brasília | BioFace'
-  description: 'Peelings químicos: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
+  title: 'Peeling químico no Lago Sul, Brasília | BioFace'
+  description: 'Peeling químico: avaliação individual com Maria Guedes, biomédica esteta no Lago Sul, Brasília. Agende pelo WhatsApp.'
 pendente: true
 ---
 
