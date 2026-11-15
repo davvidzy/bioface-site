@@ -294,9 +294,28 @@ const { sobreposto = false } = Astro.props;
       box-shadow var(--morph);
   }
 
-  /* ---------- Oculto: sobe para fora da tela ao rolar para baixo ---------- */
+  /* ---------- Oculto: sobe para fora da tela ao rolar para baixo ----------
+   * Escondida, só o deslize anima; a forma (pílula, cor, largura) muda depois que ela já
+   * saiu da tela. Assim a primeira saída do topo é um deslize limpo (antes a barra virava
+   * pílula e subia ao mesmo tempo) e, ao voltar, ela já desce pronta, sem se transformar.
+   */
   .site-header[data-oculto] .site-header__barra {
     translate: 0 calc(-100% - var(--space-5));
+    transition:
+      translate var(--morph),
+      inset-block-start 0s var(--duration-fluida),
+      width 0s var(--duration-fluida),
+      min-height 0s var(--duration-fluida),
+      padding 0s var(--duration-fluida),
+      border-radius 0s var(--duration-fluida),
+      background-color 0s var(--duration-fluida),
+      box-shadow 0s var(--duration-fluida);
+  }
+
+  .site-header[data-oculto] .site-header__logo {
+    transition:
+      opacity 0s var(--duration-fluida),
+      gap 0s var(--duration-fluida);
   }
 
   /* ---------- Estado suspenso ---------- */

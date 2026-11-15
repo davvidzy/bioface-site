@@ -4,6 +4,7 @@
  * Com o Lenis ativo, a rolagem é pelo lenis.scrollTo; sem ele, nativa.
  */
 import { getLenis } from './motion/instancia';
+import { MQ_REDUCE, MQ_TOQUE } from './motion/reduced-motion';
 
 function tratarAncora(event: MouseEvent): void {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return;
@@ -25,9 +26,12 @@ function tratarAncora(event: MouseEvent): void {
   if (lenis) {
     lenis.scrollTo(alvo);
   } else {
-    // Sem Lenis (reduced motion, ou movimento ainda carregando): salto direto.
-    // Rolagem suave nativa aqui seria interrompida se o Lenis nascer no meio dela.
-    alvo.scrollIntoView({ block: 'start', behavior: 'instant' });
+    // Sem Lenis. Toque (celular): rolagem suave nativa, o Lenis nunca nasce ali.
+    // Reduced motion ou movimento ainda carregando no desktop: salto direto (uma rolagem
+    // suave seria interrompida se o Lenis nascer no meio dela).
+    const suave =
+      window.matchMedia(MQ_TOQUE).matches && !window.matchMedia(MQ_REDUCE).matches;
+    alvo.scrollIntoView({ block: 'start', behavior: suave ? 'smooth' : 'instant' });
   }
 }
 

@@ -25,26 +25,10 @@ let iniciado = false;
 /** Na primeira montagem o movimento chega depois da pintura: o que já está na tela fica como está. */
 let primeiraMontagem = true;
 
-/**
- * Elemento de referência da rolagem: o foco atual (ex.: destino de uma âncora) ou o que
- * estiver no meio da tela. Usado para compensar o espaço que o pin acrescenta à página.
- */
-function referenciaDeRolagem(): Element | null {
-  const foco = document.activeElement;
-  if (foco && foco !== document.body && foco !== document.documentElement) {
-    const r = foco.getBoundingClientRect();
-    if (r.bottom > 0 && r.top < window.innerHeight) return foco;
-  }
-  return document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-}
-
 function montarPagina(): void {
-  // O movimento chega depois que a pessoa já pode ter rolado (ou seguido uma âncora).
-  // O pin dos tratamentos acrescenta altura acima de quem está mais abaixo: guardamos
-  // onde a referência estava para devolvê-la ao mesmo ponto da tela.
-  const referencia = window.scrollY > 0 ? referenciaDeRolagem() : null;
-  const topoAntes = referencia?.getBoundingClientRect().top;
-
+  // Nada aqui mexe na posição da rolagem: o movimento chega na primeira interação (muitas
+  // vezes o próprio gesto de rolar no celular) e qualquer scrollTo nesse momento vira um
+  // salto. (A compensação que existia era para um pin que não existe mais.)
   mm?.revert();
   mm = gsap.matchMedia();
   mm.add(MOTION_CONDITIONS, (ctx) => {
@@ -70,15 +54,6 @@ function montarPagina(): void {
     lenis.scrollTo(window.scrollY, { immediate: true, force: true });
   }
 
-  if (referencia && topoAntes !== undefined) {
-    ScrollTrigger.refresh();
-    const desvio = referencia.getBoundingClientRect().top - topoAntes;
-    if (Math.abs(desvio) > 1) {
-      window.scrollBy({ top: desvio, behavior: 'instant' });
-      getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
-    }
-  }
-
   primeiraMontagem = false;
   agendarRefresh();
 }
@@ -97,7 +72,8 @@ function desmontarPagina(): void {
 let esperaRefresh = 0;
 function pedirRefresh(): void {
   window.clearTimeout(esperaRefresh);
-  esperaRefresh = window.setTimeout(() => ScrollTrigger.refresh(), 250);
+  // refresh(true): se a pessoa estiver rolando, espera a rolagem parar.
+  esperaRefresh = window.setTimeout(() => ScrollTrigger.refresh(true), 250);
 }
 
 function agendarRefresh(): void {

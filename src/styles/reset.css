@@ -79,8 +79,6 @@ ol[role='list'] {
   scroll-margin-block: 6rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html:focus-within {
-    scroll-behavior: smooth;
-  }
-}
+/* Sem scroll-behavior: smooth. Com ele, cada ajuste de posição que o ScrollTrigger faz
+   (refresh) vira uma rolagem animada, e no celular a página "subia sozinha". A rolagem
+   suave das âncoras é feita em lib/ancoras.ts. */
