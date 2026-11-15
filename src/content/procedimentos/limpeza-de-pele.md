@@ -4,7 +4,7 @@ categoria: pele
 ordem: 1
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'Cravos e poros obstruídos.'
+problema: 'Cravos, poros obstruídos e brilho.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

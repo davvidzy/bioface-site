@@ -7,7 +7,7 @@ categoria: rejuvenescimento
 ordem: 5
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'Pálpebras caídas e olhar cansado.'
+problema: 'Pálpebra caída e olhar cansado.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

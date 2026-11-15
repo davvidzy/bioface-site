@@ -1,13 +1,17 @@
 ---
 /**
  * Rodapé: confiança institucional e conformidade (Home, seção 13).
- * Responsável técnica com registro, Instagram e /privacidade.
+ * Responsável técnica com registro, redes sociais (WhatsApp e Instagram, botões com
+ * ícone) e /privacidade.
  * Escuro, no mesmo vinho do CTA final, fechado pelo wordmark grande (decorativo).
  * O endereço fica só no bloco de localização do CTA final, para não repetir.
  */
 import { site, faltando } from '@/data/site';
 import Pendente from '@/components/ui/Pendente.astro';
 import Wordmark from '@/assets/brand/wordmark-mono.svg';
+import { buildWhatsAppLink } from '@/lib/whatsapp';
+
+const whatsapp = buildWhatsAppLink({ origem: 'rodape' });
 
 const ano = new Date().getFullYear();
 ---
@@ -34,15 +38,48 @@ const ano = new Date().getFullYear();
       </h2>
       <ul class="list-reset site-footer__links" role="list">
         <li>
-          <a href={site.instagram} target="_blank" rel="noopener noreferrer">
-            Instagram <span class="visually-hidden">(abre em nova aba)</span>
-          </a>
-        </li>
-        <li>
           <a href="/privacidade">Política de privacidade</a>
         </li>
       </ul>
     </nav>
+
+    <section aria-labelledby="rodape-social">
+      <h2 id="rodape-social" class="t-eyebrow site-footer__titulo">
+        Redes sociais
+      </h2>
+      <ul class="list-reset site-footer__social" role="list">
+        <li>
+          <a
+            class="social"
+            href={whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="whatsapp_click"
+            data-origem="rodape"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3.6 20.4l1.25-3.9a8.6 8.6 0 1 1 3.1 3z" />
+              <path
+                transform="translate(6.6 6.6) scale(0.45)"
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                stroke-width="3.6"
+              />
+            </svg>
+            <span class="visually-hidden">WhatsApp: agendar avaliação (abre em nova aba)</span>
+          </a>
+        </li>
+        <li>
+          <a class="social" href={site.instagram} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none" />
+            </svg>
+            <span class="visually-hidden">Instagram da BioFace (abre em nova aba)</span>
+          </a>
+        </li>
+      </ul>
+    </section>
   </div>
   <div class="container site-footer__marca" aria-hidden="true">
     <Wordmark focusable="false" />
@@ -91,6 +128,48 @@ const ano = new Date().getFullYear();
     display: inline-flex;
     align-items: center;
     min-height: var(--tap-min);
+  }
+
+  /* Botões redondos com o ícone de cada rede; no hover, preenchem em dourado. */
+  .site-footer__social {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .social {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid color-mix(in srgb, var(--color-border-default) 55%, transparent);
+    border-radius: 50%;
+    color: var(--color-text-primary);
+    transition:
+      background-color var(--motion-fluido),
+      border-color var(--motion-fluido),
+      color var(--motion-fluido);
+  }
+
+  .social svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .social:hover {
+    border-color: var(--color-action-primary-bg);
+    background-color: var(--color-action-primary-bg);
+    color: var(--color-action-primary-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .social {
+      transition: none;
+    }
   }
 
   .site-footer__copy {

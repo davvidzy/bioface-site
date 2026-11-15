@@ -4,7 +4,7 @@ categoria: pele
 ordem: 2
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'Espinhas ativas e oleosidade.'
+problema: 'Espinhas ativas e pele oleosa.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []

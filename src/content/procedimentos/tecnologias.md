@@ -6,7 +6,7 @@ categoria: rejuvenescimento
 ordem: 3
 # TODO(validar-cliente): quais tratamentos ganham destaque na Home.
 destaque: false
-problema: 'Flacidez e textura irregular.'
+problema: 'Pele flácida e textura irregular.'
 resumo: 'TODO(conteudo): resumo de 1 a 2 frases para o card.'
 # TODO(conteudo): indicações validadas pela Maria.
 paraQuem: []
