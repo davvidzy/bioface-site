@@ -77,22 +77,25 @@
 }
 
 /* ---------- Fallbacks com métricas ajustadas ----------
- * Ascendente e descendente lidos dos próprios WOFF2 (hhea), para reduzir o salto no swap.
- * TODO(desempenho): calibrar size-adjust na etapa final.
+ * Calibrados com fontTools: size-adjust pela largura média de um texto do site (Newsreader
+ * contra Times New Roman, Instrument Sans contra Arial) e ascendente/descendente do hhea
+ * divididos pelo size-adjust. Assim o texto quebra nas mesmas linhas antes e depois da
+ * fonte chegar, e a página não pula (CLS).
  */
 @font-face {
   font-family: 'Newsreader Fallback';
   src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Times');
-  ascent-override: 73.5%;
-  descent-override: 26.5%;
+  size-adjust: 107.4%;
+  ascent-override: 68.4%;
+  descent-override: 24.7%;
   line-gap-override: 0%;
 }
 @font-face {
   font-family: 'Instrument Sans Fallback';
   src: local('Arial'), local('ArialMT'), local('Helvetica');
-  size-adjust: 97%;
-  ascent-override: 100%;
-  descent-override: 25.8%;
+  size-adjust: 100.3%;
+  ascent-override: 96.7%;
+  descent-override: 24.9%;
   line-gap-override: 0%;
 }
 
